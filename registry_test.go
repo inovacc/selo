@@ -3,6 +3,9 @@ package brdoc
 import (
 	"errors"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // fakeDoc is a controllable Document for registry tests.
@@ -72,5 +75,27 @@ func TestRegistry_KindsSorted(t *testing.T) {
 		if ks[i-1] >= ks[i] {
 			t.Fatalf("Kinds() not strictly sorted at %d: %q >= %q", i, ks[i-1], ks[i])
 		}
+	}
+}
+
+func TestRegistry_M2A_Registered(t *testing.T) {
+	for _, k := range []Kind{KindPIS, KindRenavam, KindCNH} {
+		t.Run(string(k), func(t *testing.T) {
+			gen, err := Generate(k)
+			require.NoError(t, err)
+			ok, err := Validate(k, gen)
+			require.NoError(t, err)
+			assert.True(t, ok, "registry-generated %s must validate: %q", k, gen)
+			formatted, err := Format(k, gen)
+			require.NoError(t, err)
+			assert.NotEmpty(t, formatted)
+		})
+	}
+}
+
+func TestRegistry_M2A_KindsListed(t *testing.T) {
+	got := Kinds()
+	for _, want := range []Kind{KindPIS, KindRenavam, KindCNH} {
+		assert.Contains(t, got, want)
 	}
 }
