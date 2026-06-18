@@ -26,16 +26,12 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"io"
 	"os"
-	"path/filepath"
 	"strings"
 
 	sdk "github.com/inovacc/brdoc"
 	"github.com/spf13/cobra"
 )
-
-const maxLine = 1024 * 1024
 
 func main() {
 	if err := rootCmd.Execute(); err != nil {
@@ -46,7 +42,6 @@ func main() {
 }
 
 var (
-	buf          = make([]byte, 0, 64*1024)
 	cpfGenerate  bool
 	cpfValidate  string
 	cpfFrom      string
@@ -142,36 +137,17 @@ var cpfCmd = &cobra.Command{
 				defer closeFn()
 			}
 
-			scanner := bufio.NewScanner(r)
-			// Increase buf in case of long lines
-			scanner.Buffer(buf, maxLine)
-
-			w := bufio.NewWriter(cmd.OutOrStdout())
-			defer func(w *bufio.Writer) {
-				if err := w.Flush(); err != nil {
-					panic(err)
+			anyInvalid, err := streamValidate(r, cmd.OutOrStdout(), func(value string) (string, bool) {
+				if !c.Validate(value) {
+					return "", false
 				}
-			}(w)
-
-			anyInvalid := false
-			for scanner.Scan() {
-				line := strings.TrimSpace(scanner.Text())
-				if line == "" || strings.HasPrefix(line, "#") {
-					continue
+				formatted, err := c.Format(value)
+				if err != nil {
+					return "", true
 				}
-				if c.Validate(line) {
-					if formatted, err := c.Format(line); err == nil {
-						_, _ = fmt.Fprintf(w, "valid\t%s\n", formatted)
-					} else {
-						_, _ = fmt.Fprintln(w, "valid")
-					}
-				} else {
-					anyInvalid = true
-					_, _ = fmt.Fprintf(w, "invalid\t%s\n", line)
-				}
-			}
-
-			if err := scanner.Err(); err != nil {
+				return formatted, true
+			})
+			if err != nil {
 				return err
 			}
 
@@ -263,36 +239,17 @@ var cnpjCmd = &cobra.Command{
 				defer closeFn()
 			}
 
-			scanner := bufio.NewScanner(r)
-			scanner.Buffer(buf, maxLine)
-
-			w := bufio.NewWriter(cmd.OutOrStdout())
-			defer func(w *bufio.Writer) {
-				if err := w.Flush(); err != nil {
-					panic(err)
+			anyInvalid, err := streamValidate(r, cmd.OutOrStdout(), func(value string) (string, bool) {
+				if !c.Validate(value) {
+					return "", false
 				}
-			}(w)
-
-			anyInvalid := false
-			for scanner.Scan() {
-				line := strings.TrimSpace(scanner.Text())
-				if line == "" || strings.HasPrefix(line, "#") {
-					continue
+				formatted, err := c.Format(value)
+				if err != nil {
+					return "", true
 				}
-
-				if c.Validate(line) {
-					if formatted, err := c.Format(line); err == nil {
-						_, _ = fmt.Fprintf(w, "valid\t%s\n", formatted)
-					} else {
-						_, _ = fmt.Fprintln(w, "valid")
-					}
-				} else {
-					anyInvalid = true
-					_, _ = fmt.Fprintf(w, "invalid\t%s\n", line)
-				}
-			}
-
-			if err := scanner.Err(); err != nil {
+				return formatted, true
+			})
+			if err != nil {
 				return err
 			}
 
@@ -320,24 +277,3 @@ var cnpjCmd = &cobra.Command{
 	},
 }
 
-// openReader returns an io.Reader for the given path. If a path is "-", it returns stdin.
-// The second return value is a close function for file readers (nil for stdin).
-func openReader(path string) (io.Reader, func(), error) {
-	if path == "-" {
-		return os.Stdin, nil, nil
-	}
-
-	fullPath, err := filepath.Abs(path)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	f, err := os.Open(fullPath)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	closeFn := func() { _ = f.Close() }
-
-	return f, closeFn, nil
-}
