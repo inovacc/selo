@@ -11,8 +11,9 @@ import (
 
 // Package mcp adapts the brdoc registry to a Model Context Protocol server.
 //
-// It exposes five tools (validate_document, generate_document,
-// format_document, detect_document, list_document_types) over stdio.
+// It exposes six tools (validate_document, generate_document,
+// format_document, detect_document, list_document_types, generate_person)
+// over stdio.
 // Every tool is derived from the brdoc registry, so adding a new document
 // type to the registry automatically widens the MCP surface with no edits
 // here.
@@ -69,6 +70,20 @@ type ListInput struct{}
 // ListOutput is the typed output for the list_document_types tool.
 type ListOutput struct {
 	Kinds []string `json:"kinds" jsonschema:"all document kinds the server supports"`
+}
+
+// PersonInput is the typed input for the generate_person tool.
+type PersonInput struct {
+	UF          string `json:"uf,omitempty" jsonschema:"federative unit to pin (e.g. SP); random if omitted"`
+	Count       int    `json:"count,omitempty" jsonschema:"how many people to generate, defaults to 1"`
+	WithVehicle bool   `json:"with_vehicle,omitempty" jsonschema:"also generate a linked vehicle (plate + renavam)"`
+	WithCompany bool   `json:"with_company,omitempty" jsonschema:"also generate a linked company (cnpj)"`
+	Formatted   bool   `json:"formatted,omitempty" jsonschema:"return documents in canonical masked form"`
+}
+
+// PersonOutput is the typed output for the generate_person tool.
+type PersonOutput struct {
+	People []selo.Person `json:"people" jsonschema:"synthetic identities; all documents valid and UF-consistent"`
 }
 
 // kindEnum returns one enum value per registered kind, for the jsonschema
@@ -174,7 +189,38 @@ func listHandler(_ context.Context, _ *mcp.CallToolRequest, _ ListInput) (*mcp.C
 	return &mcp.CallToolResult{StructuredContent: out}, out, nil
 }
 
-// NewServer builds an MCP server with all five brdoc tools registered.
+func personHandler(_ context.Context, _ *mcp.CallToolRequest, in PersonInput) (*mcp.CallToolResult, PersonOutput, error) {
+	count := in.Count
+	if count <= 0 {
+		count = 1
+	}
+	var opts []selo.PersonOption
+	if in.UF != "" {
+		uf := selo.UF(in.UF)
+		if !uf.Valid() {
+			return errResult[PersonOutput](fmt.Sprintf("invalid uf %q", in.UF))
+		}
+		opts = append(opts, selo.WithUF(uf))
+	}
+	if in.WithVehicle {
+		opts = append(opts, selo.WithVehicle())
+	}
+	if in.WithCompany {
+		opts = append(opts, selo.WithCompany())
+	}
+	if in.Formatted {
+		opts = append(opts, selo.Formatted())
+	}
+
+	people := make([]selo.Person, count)
+	for i := range people {
+		people[i] = selo.GeneratePerson(opts...)
+	}
+	out := PersonOutput{People: people}
+	return &mcp.CallToolResult{StructuredContent: out}, out, nil
+}
+
+// NewServer builds an MCP server with all six selo tools registered.
 // version is stamped into the server Implementation (use build info).
 func NewServer(version string) *mcp.Server {
 	if version == "" {
@@ -211,6 +257,11 @@ func NewServer(version string) *mcp.Server {
 		Name:        "list_document_types",
 		Description: "List every Brazilian document kind this server supports.",
 	}, listHandler)
+
+	mcp.AddTool(srv, &mcp.Tool{
+		Name:        "generate_person",
+		Description: "Generate coherent synthetic Brazilian identities: all documents valid and UF-consistent. Synthetic test data only — never real PII.",
+	}, personHandler)
 
 	return srv
 }

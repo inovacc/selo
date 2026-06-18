@@ -211,3 +211,35 @@ func TestKindEnumMatchesRegistry(t *testing.T) {
 	require.Len(t, enum, len(selo.Kinds()))
 	assert.Equal(t, selo.Kinds()[0].String(), enum[0])
 }
+
+func TestGeneratePersonTool(t *testing.T) {
+	ctx, cs := newTestSession(t)
+
+	res, err := cs.CallTool(ctx, &mcp.CallToolParams{
+		Name:      "generate_person",
+		Arguments: map[string]any{"uf": "SP", "count": 2, "with_vehicle": true, "with_company": true},
+	})
+	require.NoError(t, err)
+
+	var out PersonOutput
+	decodeResult(t, res, &out)
+	require.Len(t, out.People, 2)
+	for _, p := range out.People {
+		assert.Equal(t, selo.UFSP, p.UF)
+		assert.Truef(t, selo.NewCPF().Validate(p.CPF), "CPF %q", p.CPF)
+		cepUF, err := selo.NewCEP().Origin(p.CEP)
+		assert.NoError(t, err)
+		assert.Equal(t, "SP", cepUF)
+		require.NotNil(t, p.Vehicle)
+		require.NotNil(t, p.Company)
+		assert.True(t, selo.NewCNPJ().Validate(p.Company.CNPJ))
+	}
+
+	// Invalid UF yields an error result (not a transport error).
+	bad, err := cs.CallTool(ctx, &mcp.CallToolParams{
+		Name:      "generate_person",
+		Arguments: map[string]any{"uf": "ZZ"},
+	})
+	require.NoError(t, err)
+	assert.True(t, bad.IsError, "invalid uf should yield an error result")
+}
