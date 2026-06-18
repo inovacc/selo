@@ -83,15 +83,29 @@ func TestVoterIDFormat(t *testing.T) {
 func TestVoterIDOrigin(t *testing.T) {
 	v := NewVoterID()
 
+	// Valid voter IDs built as seq+uf → compute dv1,dv2 so Origin receives a
+	// well-formed 12-digit string for each UF code under test.
 	tests := []struct {
 		name    string
 		input   string
 		want    string
 		wantErr error
 	}{
+		// Boundary: first valid code
 		{name: "SP code 01", input: "106438700108", want: "São Paulo"},
+		// Mid-range spot checks — one per ~5-code band to catch transposition typos
+		{name: "BA code 05", input: "200000010523", want: "Bahia"},
+		{name: "GO code 10", input: "876543211023", want: "Goiás"},
+		{name: "PI code 15", input: "300000011546", want: "Piauí"},
+		{name: "MS code 19", input: "400000011961", want: "Mato Grosso do Sul"},
+		{name: "DF code 20", input: "500000012089", want: "Distrito Federal"},
+		{name: "AM code 22", input: "111111122291", want: "Amazonas"},
+		{name: "TO code 27", input: "600000012704", want: "Tocantins"},
+		// Boundary: last valid code (exterior/abroad)
 		{name: "exterior code 28", input: "389901862852", want: "Exterior"},
+		// Error paths
 		{name: "wrong length", input: "10643870", wantErr: ErrInvalidLength},
+		{name: "invalid format", input: "999999990017", wantErr: ErrInvalidFormat},
 	}
 
 	for _, tt := range tests {
@@ -99,7 +113,7 @@ func TestVoterIDOrigin(t *testing.T) {
 			got, err := v.Origin(tt.input)
 			if tt.wantErr != nil {
 				require.Error(t, err)
-				assert.True(t, errors.Is(err, tt.wantErr))
+				assert.True(t, errors.Is(err, tt.wantErr), "want %v, got %v", tt.wantErr, err)
 				return
 			}
 
