@@ -10,8 +10,9 @@ const CepLength = 8
 
 // cepPrefixRanges maps each UF to the inclusive [from,to] range of the
 // first-three-digit CEP prefix (cep / 100000). Source: Correios allocation.
-// AM has two blocks (690–692 and 694–698); both are listed so Generate can
-// pick either and Origin can resolve both.
+// Some UFs have multiple disjoint blocks, all listed so Generate can pick any
+// and Origin can resolve every block: AM (690–692 and 694–698) and DF
+// (700–727 and 730–736, with GO interleaved at 728–729 and 737–767).
 var cepPrefixRanges = []struct {
 	uf       UF
 	from, to int
@@ -22,7 +23,8 @@ var cepPrefixRanges = []struct {
 	{UFRN, 590, 599}, {UFCE, 600, 639}, {UFPI, 640, 649},
 	{UFMA, 650, 659}, {UFPA, 660, 688}, {UFAP, 689, 689},
 	{UFAM, 690, 692}, {UFRR, 693, 693}, {UFAM, 694, 698},
-	{UFAC, 699, 699}, {UFDF, 700, 727}, {UFGO, 728, 767},
+	{UFAC, 699, 699}, {UFDF, 700, 727}, {UFGO, 728, 729},
+	{UFDF, 730, 736}, {UFGO, 737, 767}, {UFRO, 768, 769},
 	{UFTO, 770, 779}, {UFMT, 780, 788}, {UFMS, 790, 799},
 	{UFPR, 800, 879}, {UFSC, 880, 899}, {UFRS, 900, 999},
 }

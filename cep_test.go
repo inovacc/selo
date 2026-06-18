@@ -29,6 +29,10 @@ func TestCEPValidate(t *testing.T) {
 		{"valid RJ", "20040-002", true},
 		{"valid MG", "30140-071", true},
 		{"valid AM secondary block", "69400-000", true},
+		{"valid DF first block", "70000-000", true},
+		{"valid DF second block", "73100-000", true},
+		{"valid GO", "74000-000", true},
+		{"valid RO Porto Velho", "76800-000", true},
 		{"too short", "0131010", false},
 		{"too long", "013101000", false},
 		{"non digit", "0131A100", false},
@@ -74,6 +78,24 @@ func TestCEPOrigin(t *testing.T) {
 	uf, err = c.Origin("69400-000")
 	require.NoError(t, err)
 	assert.Equal(t, "AM", uf)
+
+	// DF has two disjoint blocks (700-727 and 730-736) interleaved with GO.
+	uf, err = c.Origin("70000-000")
+	require.NoError(t, err)
+	assert.Equal(t, "DF", uf)
+
+	uf, err = c.Origin("73100-000")
+	require.NoError(t, err)
+	assert.Equal(t, "DF", uf)
+
+	uf, err = c.Origin("74000-000")
+	require.NoError(t, err)
+	assert.Equal(t, "GO", uf)
+
+	// Rondônia (768-769) — previously missing from the table entirely.
+	uf, err = c.Origin("76800-000")
+	require.NoError(t, err)
+	assert.Equal(t, "RO", uf)
 
 	_, err = c.Origin("0131010")
 	assert.ErrorIs(t, err, ErrInvalidLength)
