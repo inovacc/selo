@@ -62,6 +62,7 @@ func newRootCmd() *cobra.Command {
 	root.SilenceErrors = true
 
 	registerKindCommands(root)
+	root.AddCommand(newDetectCmd())
 
 	return root
 }
