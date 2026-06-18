@@ -43,10 +43,13 @@ func TestAllUFs_Count(t *testing.T) {
 	}
 }
 
-func TestStubTables_Empty(t *testing.T) {
-	if len(cepRanges) != 0 {
-		t.Fatalf("cepRanges expected empty stub, got %d entries", len(cepRanges))
+func TestStubTables(t *testing.T) {
+	// cepRanges is populated by cep.go init(); expect one entry per UF
+	// (26 primary ranges — AM has two blocks but only the first is stored).
+	if len(cepRanges) == 0 {
+		t.Fatal("cepRanges must not be empty after CEP init()")
 	}
+	// dddToUF is still a stub; phone.go task will populate it.
 	if len(dddToUF) != 0 {
 		t.Fatalf("dddToUF expected empty stub, got %d entries", len(dddToUF))
 	}
