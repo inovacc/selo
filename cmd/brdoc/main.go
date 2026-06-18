@@ -30,16 +30,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// errInvalidInput is the sentinel returned by main() when a document fails
-// validation. RunE handlers do NOT return this — they print "invalid" and
-// return nil so that usage is not printed on invalid-document paths. main()
-// uses this sentinel to set exit code 1.
+// errInvalidInput is the sentinel returned by RunE handlers when a document
+// fails validation. The handler prints "invalid" to stdout first, then returns
+// this error so that main() exits with code 1. Because SilenceErrors is set
+// on the root command, Cobra will not print it; main() also suppresses it so
+// the only output is the "invalid" line already written to stdout.
 var errInvalidInput = errors.New("invalid input")
 
 func main() {
 	root := newRootCmd()
 	if err := root.Execute(); err != nil {
-		_, _ = fmt.Fprintln(os.Stderr, err)
+		if !errors.Is(err, errInvalidInput) {
+			_, _ = fmt.Fprintln(os.Stderr, err)
+		}
 		os.Exit(1)
 	}
 }

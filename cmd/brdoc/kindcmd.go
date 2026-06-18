@@ -169,7 +169,7 @@ func runFrom(cmd *cobra.Command, doc sdk.Document, from string) error {
 	}
 
 	if anyInvalid {
-		cmd.SilenceUsage = true
+		return errInvalidInput
 	}
 
 	return nil
@@ -208,12 +208,7 @@ func runValidate(cmd *cobra.Command, doc sdk.Document, value, uf string) error {
 	valid := docValidate(doc, value, uf)
 	if !valid {
 		_, _ = fmt.Fprintln(cmd.OutOrStdout(), "invalid")
-		cmd.SilenceUsage = true
-		// Return nil: exit-code 1 for invalid input is handled by main() via
-		// the errInvalidInput sentinel returned from Execute() in non-test paths.
-		// Tests assert NoError here because RunE itself does not error on invalid
-		// documents — that is an expected, non-exceptional outcome.
-		return nil
+		return errInvalidInput
 	}
 
 	if formatted, err := doc.Format(value); err == nil {

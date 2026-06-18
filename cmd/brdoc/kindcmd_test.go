@@ -2,11 +2,13 @@ package main
 
 import (
 	"bytes"
+	"errors"
+	"os"
 	"strings"
 	"testing"
 
-	"github.com/spf13/cobra"
 	sdk "github.com/inovacc/brdoc"
+	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -45,8 +47,35 @@ func TestKindCmdValidateValidCPF(t *testing.T) {
 
 func TestKindCmdValidateInvalidCPF(t *testing.T) {
 	out, err := runCmd(t, "cpf", "--validate", "123.456.789-00")
-	require.NoError(t, err) // exit handled in main(); RunE returns nil
+	require.Error(t, err)
+	assert.True(t, errors.Is(err, errInvalidInput), "expected errInvalidInput, got %v", err)
 	assert.Equal(t, "invalid\n", out)
+}
+
+func TestKindCmdFromBulkWithInvalid(t *testing.T) {
+	// Write a temp file containing one valid and one invalid CPF.
+	f, err := os.CreateTemp(t.TempDir(), "cpfs-*.txt")
+	require.NoError(t, err)
+	_, _ = f.WriteString("529.982.247-25\n123.456.789-00\n")
+	require.NoError(t, f.Close())
+
+	out, cmdErr := runCmd(t, "cpf", "--from", f.Name())
+	require.Error(t, cmdErr)
+	assert.True(t, errors.Is(cmdErr, errInvalidInput), "expected errInvalidInput, got %v", cmdErr)
+	// Both lines must still be printed.
+	assert.Contains(t, out, "valid")
+	assert.Contains(t, out, "invalid")
+}
+
+func TestKindCmdFromBulkAllValid(t *testing.T) {
+	f, err := os.CreateTemp(t.TempDir(), "cpfs-*.txt")
+	require.NoError(t, err)
+	_, _ = f.WriteString("529.982.247-25\n")
+	require.NoError(t, f.Close())
+
+	out, cmdErr := runCmd(t, "cpf", "--from", f.Name())
+	require.NoError(t, cmdErr)
+	assert.Contains(t, out, "valid")
 }
 
 func TestKindCmdFormatCNPJ(t *testing.T) {
