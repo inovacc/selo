@@ -49,8 +49,8 @@ func TestStubTables(t *testing.T) {
 	if len(cepRanges) == 0 {
 		t.Fatal("cepRanges must not be empty after CEP init()")
 	}
-	// dddToUF is still a stub; phone.go task will populate it.
-	if len(dddToUF) != 0 {
-		t.Fatalf("dddToUF expected empty stub, got %d entries", len(dddToUF))
+	// dddToUF is populated by phone.go init() — one entry per valid DDD.
+	if len(dddToUF) == 0 {
+		t.Fatal("dddToUF must not be empty after Phone init()")
 	}
 }
