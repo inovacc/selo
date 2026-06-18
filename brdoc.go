@@ -43,8 +43,9 @@ func init() {
 		notAcceptedCPF = append(notAcceptedCPF, value)
 	}
 
-	// Self-register CPF as a Document/OriginResolver singleton.
+	// Self-register CPF and CNPJ as Document singletons.
 	Register(&CPF{})
+	Register(&CNPJ{})
 }
 
 // ============================================================================
@@ -370,6 +371,9 @@ func (c *CNPJ) Format(value string) (string, error) {
 
 	return string(out[:]), nil
 }
+
+// Kind returns KindCNPJ, identifying this type in the registry.
+func (c *CNPJ) Kind() Kind { return KindCNPJ }
 
 // Private CNPJ methods
 
