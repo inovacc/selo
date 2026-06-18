@@ -2,11 +2,10 @@ package brdoc
 
 import (
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 	"slices"
 	"strconv"
 	"strings"
-	"time"
 )
 
 const (
@@ -25,10 +24,7 @@ const (
 	IsDigit9 = "Paraná and Santa Catarina"
 )
 
-var (
-	notAcceptedCPF []string
-	rng            *rand.Rand
-)
+var notAcceptedCPF []string
 
 // Conversion map for alphanumeric CNPJ (ASCII - 48)
 var charToValue = map[rune]int{
@@ -39,9 +35,6 @@ var charToValue = map[rune]int{
 }
 
 func init() {
-	// Initialize random number generator
-	rng = rand.New(rand.NewSource(time.Now().UnixNano()))
-
 	// Initialize non-accepted CPFs (all digits equal)
 	notAcceptedCPF = make([]string, 0, 10)
 
@@ -49,6 +42,9 @@ func init() {
 		value := strings.Repeat(strconv.Itoa(i), 11)
 		notAcceptedCPF = append(notAcceptedCPF, value)
 	}
+
+	// Self-register CPF as a Document/OriginResolver singleton.
+	Register(&CPF{})
 }
 
 // ============================================================================
@@ -70,7 +66,7 @@ func (c *CPF) Generate() string {
 	number := []int{0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 	for i := range 9 {
-		number[i] = rng.Intn(10)
+		number[i] = rand.IntN(10)
 	}
 
 	number = append(number, c.calculateFirstDigit(number))
@@ -140,6 +136,19 @@ func (c *CPF) CheckOrigin(value string) string {
 	default:
 		return ""
 	}
+}
+
+// Kind returns KindCPF, identifying this type in the registry.
+func (c *CPF) Kind() Kind { return KindCPF }
+
+// Origin returns the issuing region for value, satisfying OriginResolver.
+// It wraps CheckOrigin; an empty origin (value too short) yields ErrInvalidLength.
+func (c *CPF) Origin(value string) (string, error) {
+	origin := c.CheckOrigin(value)
+	if origin == "" {
+		return "", ErrInvalidLength
+	}
+	return origin, nil
 }
 
 // Private CPF methods
@@ -370,14 +379,14 @@ func (c *CNPJ) generateDigits(legacy bool) string {
 
 	if legacy {
 		for i := range 12 {
-			base[i] = byte('0' + rng.Intn(10))
+			base[i] = byte('0' + rand.IntN(10))
 		}
 	} else {
 		for i := range 12 {
-			if rng.Intn(2) == 0 {
-				base[i] = byte('0' + rng.Intn(10))
+			if rand.IntN(2) == 0 {
+				base[i] = byte('0' + rand.IntN(10))
 			} else {
-				base[i] = byte('A' + rng.Intn(26))
+				base[i] = byte('A' + rand.IntN(26))
 			}
 		}
 	}
