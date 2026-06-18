@@ -4,11 +4,31 @@ version: '3'
 
 tasks:
   test:
+    desc: Fast unit tests (-short)
+    cmds:
+      - go test -short ./...
+
+  test:full:
+    desc: Full suite — race, fuzz seed corpus, benchmarks
+    cmds:
+      - go test -race -p=1 ./...
+      - go test -run Fuzz ./...
+      - go test -race -bench=. -benchmem -run=^$ ./...
+
+  lint:
+    desc: Format and lint
     cmds:
       - golangci-lint fmt
-      - golangci-lint run
-      - go test -race -p=1 ./...
-      - go test -race -v -bench=. -benchmem ./...
+      - golangci-lint run --timeout=5m
+
+  cover:
+    desc: Coverage profile written to the system temp dir (datetime-stamped)
+    cmds:
+      - |
+        f="${TMPDIR:-${TEMP:-/tmp}}/brdoc_coverage_$(date +%Y%m%d_%H%M%S).out"
+        go test -covermode=atomic -coverprofile="$f" ./...
+        go tool cover -func="$f" | tail -n 1
+        echo "coverage profile: $f"
 
   upgrade:
     cmds:
