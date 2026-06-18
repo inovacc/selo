@@ -85,6 +85,17 @@ selo.DetectPIXKind("+5511998765432")            // ("phone", true)
 selo.NewPIX().Generate()                        // a random EVP (UUIDv4) key
 ```
 
+### Synthetic people (GenPerson)
+
+Generate one coherent fake identity carrying **every** document type — all valid and
+sharing the same UF (CPF region, Voter-ID code, phone DDD, and CEP all agree). For
+test data / fixtures only (synthetic, never real PII):
+
+```go
+p := selo.GeneratePerson(selo.WithUF(selo.UFSP), selo.WithVehicle(), selo.WithCompany())
+// p.CPF, p.RG, p.CNH, p.PIS, p.Renavam, p.VoterID, p.CNS, p.CEP, p.Phone, p.PIXKeys, p.Vehicle, p.Company
+```
+
 ## 🖥️ CLI
 
 The CLI derives one subcommand per registered kind automatically:
@@ -98,6 +109,7 @@ go run ./cmd/selo rg --validate 24.678.131-2 --uf SP
 go run ./cmd/selo cpf --validate --from cpfs.txt  # bulk; '-' reads stdin
 go run ./cmd/selo detect 529.982.247-25           # auto-detect kind
 go run ./cmd/selo version
+go run ./cmd/selo person --uf SP --count 5 --json   # synthetic people
 ```
 
 Flags per kind: `-g/--generate`, `-v/--validate`, `--format`, `--origin` (geolocatable kinds),
@@ -113,7 +125,7 @@ go run ./cmd/selo mcp
 ```
 
 Tools (kind enums sourced from the registry): `validate_document`, `generate_document`,
-`format_document`, `detect_document`, `list_document_types`. Logs go to stderr; the protocol
+`format_document`, `detect_document`, `list_document_types`, `generate_person`. Logs go to stderr; the protocol
 runs on stdin/stdout.
 
 ## 🔁 Migrating from `paemuri/brdoc`
@@ -145,9 +157,8 @@ check-digit type, and runnable godoc examples.
 
 ## 🗺️ Roadmap
 
-See [`docs/BACKLOG.md`](docs/BACKLOG.md). Highlights: a **fake-person generator** (one coherent
-synthetic identity carrying every document type), **Inscrição Estadual** (per-UF), and
-**multi-state RG**.
+See [`docs/BACKLOG.md`](docs/BACKLOG.md). Highlights: **Inscrição Estadual** (per-UF) and **multi-state RG**; plus reproducible
+`GenPerson` output via a seed (see BACKLOG). The `GenPerson` generator itself is **shipped**.
 
 ## 📄 License
 

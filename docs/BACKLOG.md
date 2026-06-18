@@ -7,7 +7,7 @@ Future work and tech debt for the `brdoc` toolkit. Items are grouped by type;
 
 ## Planned Features
 
-### ⭐ Fake Person Generator — `GenPerson` (synthetic Brazilian identity)
+### ✅ SHIPPED: Fake Person Generator — `GenPerson` (synthetic Brazilian identity)
 
 **Goal:** Generate a complete, internally **consistent** fake Brazilian person that
 carries *every* document type this toolkit supports, so it can be used as
@@ -74,6 +74,14 @@ func GeneratePerson(opts ...PersonOption) Person
 consistency engine, the `Person`/options API, and the 3 surfaces + tests).
 **Value:** H (flagship test-data feature; no Go BR-doc library offers a coherent
 multi-document fake-person generator).
+
+**Status:** SHIPPED across library (`GeneratePerson`), CLI (`selo person`), and MCP
+(`generate_person`), with UF-consistency verified across all 27 UFs.
+
+**Remaining enhancement — `WithSeed` (reproducible output):** the per-document
+generators use the goroutine-safe global `math/rand/v2`, which cannot be seeded
+per-call. Deterministic fixtures need the generators to accept a `*rand.Rand` source
+(or a parallel seeded construction path). Deferred. **Value: M, Effort: M.**
 
 **Depends on:** nothing blocking; multi-state RG (v2) would let `Person.RG` cover all
 states instead of SP/RJ.
