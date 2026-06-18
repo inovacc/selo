@@ -1,4 +1,4 @@
-package brdoc
+package selo
 
 import (
 	"fmt"
@@ -77,7 +77,7 @@ func (c *CEP) Validate(value string) bool {
 func (c *CEP) Format(value string) (string, error) {
 	d := onlyDigits(value)
 	if len(d) != CepLength {
-		return "", fmt.Errorf("brdoc: cep needs %d digits, got %d: %w", CepLength, len(d), ErrInvalidLength)
+		return "", fmt.Errorf("selo: cep needs %d digits, got %d: %w", CepLength, len(d), ErrInvalidLength)
 	}
 	return d[0:5] + "-" + d[5:8], nil
 }
@@ -88,12 +88,12 @@ func (c *CEP) Format(value string) (string, error) {
 func (c *CEP) Origin(value string) (string, error) {
 	d := onlyDigits(value)
 	if len(d) != CepLength {
-		return "", fmt.Errorf("brdoc: cep needs %d digits, got %d: %w", CepLength, len(d), ErrInvalidLength)
+		return "", fmt.Errorf("selo: cep needs %d digits, got %d: %w", CepLength, len(d), ErrInvalidLength)
 	}
 	prefix := int(d[0]-'0')*100 + int(d[1]-'0')*10 + int(d[2]-'0')
 	uf, ok := cepRangeFor(prefix)
 	if !ok {
-		return "", fmt.Errorf("brdoc: cep prefix %03d has no UF: %w", prefix, ErrInvalidFormat)
+		return "", fmt.Errorf("selo: cep prefix %03d has no UF: %w", prefix, ErrInvalidFormat)
 	}
 	return uf.String(), nil
 }

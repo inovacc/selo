@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"runtime/debug"
 
-	sdk "github.com/inovacc/brdoc"
+	sdk "github.com/inovacc/selo"
 	"github.com/spf13/cobra"
 )
 

@@ -27,7 +27,7 @@ import (
 	"fmt"
 	"os"
 
-	sdk "github.com/inovacc/brdoc"
+	sdk "github.com/inovacc/selo"
 	"github.com/spf13/cobra"
 )
 
@@ -56,7 +56,7 @@ func newRootCmd() *cobra.Command {
 	root := &cobra.Command{
 		Use:   sdk.CLIUse,
 		Short: sdk.CLIShort,
-		Long:  "brdoc generates, validates, formats, and inspects Brazilian documents. Subcommands are derived from the document registry.",
+		Long:  "selo generates, validates, formats, and inspects Brazilian documents. Subcommands are derived from the document registry.",
 	}
 
 	root.CompletionOptions.DisableDefaultCmd = true

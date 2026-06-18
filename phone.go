@@ -1,4 +1,4 @@
-package brdoc
+package selo
 
 import (
 	"fmt"
@@ -110,11 +110,11 @@ func (p *Phone) Validate(value string) bool {
 func (p *Phone) Format(value string) (string, error) {
 	d, ok := nationalNumber(onlyDigits(value))
 	if !ok || (len(d) != 10 && len(d) != 11) {
-		return "", fmt.Errorf("brdoc: phone needs 10 or 11 national digits: %w", ErrInvalidLength)
+		return "", fmt.Errorf("selo: phone needs 10 or 11 national digits: %w", ErrInvalidLength)
 	}
 	ddd := int(d[0]-'0')*10 + int(d[1]-'0')
 	if _, known := dddUFTable[ddd]; !known {
-		return "", fmt.Errorf("brdoc: phone DDD %02d unknown: %w", ddd, ErrInvalidFormat)
+		return "", fmt.Errorf("selo: phone DDD %02d unknown: %w", ddd, ErrInvalidFormat)
 	}
 	sub := d[2:]
 	if len(sub) == 9 {
@@ -129,12 +129,12 @@ func (p *Phone) Format(value string) (string, error) {
 func (p *Phone) Origin(value string) (string, error) {
 	d, ok := nationalNumber(onlyDigits(value))
 	if !ok || (len(d) != 10 && len(d) != 11) {
-		return "", fmt.Errorf("brdoc: phone needs 10 or 11 national digits: %w", ErrInvalidLength)
+		return "", fmt.Errorf("selo: phone needs 10 or 11 national digits: %w", ErrInvalidLength)
 	}
 	ddd := int(d[0]-'0')*10 + int(d[1]-'0')
 	uf, known := dddUFTable[ddd]
 	if !known {
-		return "", fmt.Errorf("brdoc: phone DDD %02d unknown: %w", ddd, ErrInvalidFormat)
+		return "", fmt.Errorf("selo: phone DDD %02d unknown: %w", ddd, ErrInvalidFormat)
 	}
 	return uf.String(), nil
 }

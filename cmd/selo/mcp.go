@@ -1,21 +1,21 @@
 package main
 
 import (
-	mcpserver "github.com/inovacc/brdoc/mcp"
+	mcpserver "github.com/inovacc/selo/mcp"
 	"github.com/spf13/cobra"
 	"os/signal"
 	"syscall"
 )
 
-// newMCPCmd builds the top-level "mcp" command, which runs the brdoc MCP
+// newMCPCmd builds the top-level "mcp" command, which runs the selo MCP
 // server over stdio. It matches the M1-4 factory style (newDetectCmd /
 // newVersionCmd); the version string is resolved from the shared version()
 // helper defined in version.go (M1-4).
 func newMCPCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "mcp",
-		Short: "Run brdoc as a Model Context Protocol server over stdio",
-		Long: "Start an MCP server exposing brdoc's validate, generate, format, " +
+		Short: "Run selo as a Model Context Protocol server over stdio",
+		Long: "Start an MCP server exposing selo's validate, generate, format, " +
 			"detect, and list tools to agents over stdin/stdout. Logs go to stderr.",
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {

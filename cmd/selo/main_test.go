@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	sdk "github.com/inovacc/selo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -12,8 +13,8 @@ import (
 func TestVersionCmd(t *testing.T) {
 	out, err := runCmd(t, "version")
 	require.NoError(t, err)
-	assert.True(t, strings.HasPrefix(out, "brdoc "), "got %q", out)
-	assert.NotEmpty(t, strings.TrimSpace(strings.TrimPrefix(out, "brdoc ")))
+	assert.True(t, strings.HasPrefix(out, sdk.AppName+" "), "got %q", out)
+	assert.NotEmpty(t, strings.TrimSpace(strings.TrimPrefix(out, sdk.AppName+" ")))
 }
 
 func TestVersionFuncDefault(t *testing.T) {

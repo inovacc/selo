@@ -3,7 +3,7 @@ package mcp
 import (
 	"context"
 	"encoding/json"
-	brdoc "github.com/inovacc/brdoc"
+	"github.com/inovacc/selo"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -47,8 +47,8 @@ func TestValidateDocumentTool(t *testing.T) {
 	ctx, cs := newTestSession(t)
 
 	// A freshly generated CPF is always valid; use the registry to source one.
-	cpf := brdoc.NewCPF().Generate()
-	require.True(t, brdoc.NewCPF().Validate(cpf), "generated CPF must validate")
+	cpf := selo.NewCPF().Generate()
+	require.True(t, selo.NewCPF().Validate(cpf), "generated CPF must validate")
 
 	tests := []struct {
 		name      string
@@ -111,7 +111,7 @@ func TestGenerateDocumentTool(t *testing.T) {
 	decodeResult(t, res, &out)
 	require.Len(t, out.Values, 3)
 	for _, v := range out.Values {
-		assert.True(t, brdoc.NewCPF().Validate(v), "generated %q must validate", v)
+		assert.True(t, selo.NewCPF().Validate(v), "generated %q must validate", v)
 	}
 
 	// count omitted -> defaults to 1.
@@ -197,8 +197,8 @@ func TestListDocumentTypesTool(t *testing.T) {
 	var out ListOutput
 	decodeResult(t, res, &out)
 
-	want := make([]string, 0, len(brdoc.Kinds()))
-	for _, k := range brdoc.Kinds() {
+	want := make([]string, 0, len(selo.Kinds()))
+	for _, k := range selo.Kinds() {
 		want = append(want, k.String())
 	}
 	assert.Equal(t, want, out.Kinds)
@@ -208,6 +208,6 @@ func TestListDocumentTypesTool(t *testing.T) {
 
 func TestKindEnumMatchesRegistry(t *testing.T) {
 	enum := kindEnum()
-	require.Len(t, enum, len(brdoc.Kinds()))
-	assert.Equal(t, brdoc.Kinds()[0].String(), enum[0])
+	require.Len(t, enum, len(selo.Kinds()))
+	assert.Equal(t, selo.Kinds()[0].String(), enum[0])
 }

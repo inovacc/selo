@@ -1,4 +1,4 @@
-package brdoc
+package selo
 
 import (
 	"errors"
@@ -15,10 +15,10 @@ func TestCNH_Validate(t *testing.T) {
 		value string
 		want  bool
 	}{
-		{"valid offset path", "02345678929", true}, // base 023456789, DV1=2 DV2=9
-		{"valid no offset", "12345678900", true},   // base 123456789, DV1=0 DV2=0
+		{"valid offset path", "02345678929", true},   // base 023456789, DV1=2 DV2=9
+		{"valid no offset", "12345678900", true},     // base 123456789, DV1=0 DV2=0
 		{"valid leading zeros", "00000000119", true}, // base 000000001, DV1=1 DV2=9
-		{"valid sample four", "64040501110", true}, // base 640405011, DV1=1 DV2=0
+		{"valid sample four", "64040501110", true},   // base 640405011, DV1=1 DV2=0
 		{"all equal rejected", "11111111111", false},
 		{"all zeros rejected", "00000000000", false},
 		{"off-by-one dv2", "02345678920", false},

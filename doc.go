@@ -76,5 +76,5 @@
 //   - Check digit calculation: modulo 11
 //   - Special rule: If remainder is 0 or 1, check digit is 0
 //
-// For more information, see: https://github.com/inovacc/brdoc
-package brdoc
+// For more information, see: https://github.com/inovacc/selo
+package selo

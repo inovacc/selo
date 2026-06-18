@@ -3,7 +3,7 @@ package mcp
 import (
 	"context"
 	"fmt"
-	brdoc "github.com/inovacc/brdoc"
+	"github.com/inovacc/selo"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"log/slog"
 	"os"
@@ -74,7 +74,7 @@ type ListOutput struct {
 // kindEnum returns one enum value per registered kind, for the jsonschema
 // "kind" field. Sourced from the registry so it stays in sync automatically.
 func kindEnum() []any {
-	kinds := brdoc.Kinds()
+	kinds := selo.Kinds()
 	out := make([]any, 0, len(kinds))
 	for _, k := range kinds {
 		out = append(out, k.String())
@@ -93,32 +93,32 @@ func errResult[Out any](msg string) (*mcp.CallToolResult, Out, error) {
 }
 
 func validateHandler(_ context.Context, _ *mcp.CallToolRequest, in ValidateInput) (*mcp.CallToolResult, ValidateOutput, error) {
-	kind := brdoc.Kind(in.Kind)
-	doc, ok := brdoc.Get(kind)
+	kind := selo.Kind(in.Kind)
+	doc, ok := selo.Get(kind)
 	if !ok {
 		return errResult[ValidateOutput](fmt.Sprintf("unknown document kind %q", in.Kind))
 	}
 
 	var out ValidateOutput
 	if in.UF != "" {
-		scoped, isScoped := doc.(brdoc.UFScoped)
+		scoped, isScoped := doc.(selo.UFScoped)
 		if !isScoped {
 			return errResult[ValidateOutput](fmt.Sprintf("kind %q does not accept a uf", in.Kind))
 		}
-		valid, err := scoped.ValidateUF(in.Value, brdoc.UF(in.UF))
+		valid, err := scoped.ValidateUF(in.Value, selo.UF(in.UF))
 		if err != nil {
 			return errResult[ValidateOutput](err.Error())
 		}
 		out.Valid = valid
 	} else {
-		valid, err := brdoc.Validate(kind, in.Value)
+		valid, err := selo.Validate(kind, in.Value)
 		if err != nil {
 			return errResult[ValidateOutput](err.Error())
 		}
 		out.Valid = valid
 	}
 
-	if res, hasOrigin := doc.(brdoc.OriginResolver); hasOrigin && out.Valid {
+	if res, hasOrigin := doc.(selo.OriginResolver); hasOrigin && out.Valid {
 		if origin, err := res.Origin(in.Value); err == nil {
 			out.Origin = origin
 		}
@@ -135,7 +135,7 @@ func generateHandler(_ context.Context, _ *mcp.CallToolRequest, in GenerateInput
 
 	values := make([]string, 0, count)
 	for i := 0; i < count; i++ {
-		v, err := brdoc.Generate(brdoc.Kind(in.Kind))
+		v, err := selo.Generate(selo.Kind(in.Kind))
 		if err != nil {
 			return errResult[GenerateOutput](err.Error())
 		}
@@ -147,7 +147,7 @@ func generateHandler(_ context.Context, _ *mcp.CallToolRequest, in GenerateInput
 }
 
 func formatHandler(_ context.Context, _ *mcp.CallToolRequest, in FormatInput) (*mcp.CallToolResult, FormatOutput, error) {
-	formatted, err := brdoc.Format(brdoc.Kind(in.Kind), in.Value)
+	formatted, err := selo.Format(selo.Kind(in.Kind), in.Value)
 	if err != nil {
 		return errResult[FormatOutput](err.Error())
 	}
@@ -156,7 +156,7 @@ func formatHandler(_ context.Context, _ *mcp.CallToolRequest, in FormatInput) (*
 }
 
 func detectHandler(_ context.Context, _ *mcp.CallToolRequest, in DetectInput) (*mcp.CallToolResult, DetectOutput, error) {
-	kind, ok := brdoc.Detect(in.Value)
+	kind, ok := selo.Detect(in.Value)
 	out := DetectOutput{Kind: kind.String(), Valid: ok}
 	if !ok {
 		out.Kind = ""
@@ -165,7 +165,7 @@ func detectHandler(_ context.Context, _ *mcp.CallToolRequest, in DetectInput) (*
 }
 
 func listHandler(_ context.Context, _ *mcp.CallToolRequest, _ ListInput) (*mcp.CallToolResult, ListOutput, error) {
-	kinds := brdoc.Kinds()
+	kinds := selo.Kinds()
 	names := make([]string, 0, len(kinds))
 	for _, k := range kinds {
 		names = append(names, k.String())
@@ -183,7 +183,7 @@ func NewServer(version string) *mcp.Server {
 
 	logger := slog.New(slog.NewTextHandler(os.Stderr, nil))
 	srv := mcp.NewServer(
-		&mcp.Implementation{Name: brdoc.MCPServerName, Version: version},
+		&mcp.Implementation{Name: selo.MCPServerName, Version: version},
 		&mcp.ServerOptions{Logger: logger},
 	)
 

@@ -1,4 +1,4 @@
-package brdoc
+package selo
 
 import (
 	"testing"

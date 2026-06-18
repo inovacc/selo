@@ -1,4 +1,4 @@
-package brdoc
+package selo
 
 import (
 	"crypto/rand"
@@ -99,7 +99,7 @@ func (p *PIX) Validate(value string) bool {
 func (p *PIX) Format(value string) (string, error) {
 	v := strings.TrimSpace(value)
 	if _, ok := DetectPIXKind(v); !ok {
-		return "", fmt.Errorf("brdoc: %q is not a valid PIX key: %w", value, ErrInvalidLength)
+		return "", fmt.Errorf("selo: %q is not a valid PIX key: %w", value, ErrInvalidLength)
 	}
 	return v, nil
 }

@@ -1,4 +1,4 @@
-package brdoc
+package selo
 
 // onlyDigits returns a string containing only the ASCII digit characters from s.
 // Used by Detect and other helpers that need to inspect raw numeric length.

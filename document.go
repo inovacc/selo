@@ -1,4 +1,4 @@
-package brdoc
+package selo
 
 // Kind is the stable identifier for a document type, e.g. "cpf".
 type Kind string

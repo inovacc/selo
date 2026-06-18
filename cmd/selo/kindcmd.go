@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	sdk "github.com/inovacc/brdoc"
+	sdk "github.com/inovacc/selo"
 	"github.com/spf13/cobra"
 )
 
@@ -39,12 +39,12 @@ func newKindCmd(kind sdk.Kind) *cobra.Command {
 		Use:   name,
 		Short: fmt.Sprintf("Generate, validate, or format %s", upper),
 		Example: strings.Join([]string{
-			fmt.Sprintf("brdoc %s --generate", name),
-			fmt.Sprintf("brdoc %s --generate --count 10", name),
-			fmt.Sprintf("brdoc %s --validate <value>", name),
-			fmt.Sprintf("brdoc %s --format <value>", name),
-			fmt.Sprintf("brdoc %s --from values.txt", name),
-			fmt.Sprintf("type values.txt | brdoc %s --from -", name),
+			fmt.Sprintf("selo %s --generate", name),
+			fmt.Sprintf("selo %s --generate --count 10", name),
+			fmt.Sprintf("selo %s --validate <value>", name),
+			fmt.Sprintf("selo %s --format <value>", name),
+			fmt.Sprintf("selo %s --from values.txt", name),
+			fmt.Sprintf("type values.txt | selo %s --from -", name),
 		}, "\n"),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runKind(cmd, doc, f)

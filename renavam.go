@@ -1,4 +1,4 @@
-package brdoc
+package selo
 
 import (
 	"math/rand/v2"

@@ -1,4 +1,4 @@
-package brdoc
+package selo
 
 import (
 	"fmt"
@@ -96,5 +96,5 @@ func (p *Plate) Format(value string) (string, error) {
 		v = strings.ReplaceAll(v, "-", "")
 		return v[0:3] + "-" + v[3:7], nil
 	}
-	return "", fmt.Errorf("brdoc: %q is not a valid plate: %w", value, ErrInvalidFormat)
+	return "", fmt.Errorf("selo: %q is not a valid plate: %w", value, ErrInvalidFormat)
 }
