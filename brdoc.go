@@ -494,21 +494,24 @@ func (c *CNPJ) digits(value string) string {
 // Utility Functions
 // ============================================================================
 
-// ValidateDocument automatically identifies and validates CPF or CNPJ
+// ValidateDocument automatically identifies and validates a CPF or CNPJ.
+//
+// Deprecated: use Detect to identify the Kind and Validate(kind, value) to
+// validate, e.g. k, ok := brdoc.Detect(s); the typed Kind ("cpf"/"cnpj") is
+// richer than the legacy "CPF"/"CNPJ"/"UNKNOWN" strings. This wrapper will be
+// removed after 2026-07-18.
 func ValidateDocument(doc string) (docType string, isValid bool) {
-	cleaned := strings.ReplaceAll(doc, ".", "")
-	cleaned = strings.ReplaceAll(cleaned, "-", "")
-	cleaned = strings.ReplaceAll(cleaned, "/", "")
-	cleaned = strings.ToUpper(cleaned)
-
-	// Identifica pelo tamanho
-	if len(cleaned) == CpfLength {
-		cpf := NewCPF()
-		return "CPF", cpf.Validate(doc)
-	} else if len(cleaned) == CnpjLength {
-		cnpj := NewCNPJ()
-		return "CNPJ", cnpj.Validate(doc)
+	// Preserve legacy length-based labelling: an 11/14-length value keeps its
+	// label even when invalid (parity with the original implementation).
+	// CPF length is measured over digits only; CNPJ length over the
+	// alphanumeric (0-9, A-Z) cleaned form, matching the legacy semantics.
+	if len(onlyDigits(doc)) == CpfLength {
+		ok, _ := Validate(KindCPF, doc)
+		return "CPF", ok
 	}
-
+	if len((&CNPJ{}).digits(doc)) == CnpjLength {
+		ok, _ := Validate(KindCNPJ, doc)
+		return "CNPJ", ok
+	}
 	return "UNKNOWN", false
 }
