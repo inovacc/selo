@@ -22,6 +22,10 @@ func TestCNSValidate(t *testing.T) {
 		want  bool
 	}{
 		{name: "generated valid", input: def, want: true},
+		// Ground-truth definitive (prefix 1): 1×15 + 7×1 = 22, 22%11=0
+		{name: "hardcoded definitive", input: "100000000000007", want: true},
+		// Ground-truth provisional (prefix 9): 9×15 + 8×1 = 143, 143%11=0
+		{name: "hardcoded provisional", input: "900000000000008", want: true},
 		{name: "wrong length short", input: "29807085064000", want: false},
 		{name: "wrong length long", input: "2980708506400070", want: false},
 		{name: "all equal", input: "111111111111111", want: false},
@@ -84,10 +88,6 @@ func TestCNSFormat(t *testing.T) {
 
 func TestCNSImplementsDocument(t *testing.T) {
 	var _ Document = NewCNS()
-}
-
-func TestVoterIDImplementsDocument(t *testing.T) {
-	var _ Document = NewVoterID()
 }
 
 func BenchmarkCNSValidate(b *testing.B) {

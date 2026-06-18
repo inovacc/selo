@@ -123,6 +123,10 @@ func TestVoterIDOrigin(t *testing.T) {
 	}
 }
 
+func TestVoterIDImplementsDocument(t *testing.T) {
+	var _ Document = NewVoterID()
+}
+
 func TestVoterIDImplementsOriginResolver(t *testing.T) {
 	var _ OriginResolver = NewVoterID()
 }
