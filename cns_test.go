@@ -2,6 +2,7 @@ package brdoc
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -111,4 +112,28 @@ func BenchmarkCNSGenerate(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		_ = c.Generate()
 	}
+}
+
+// M2B-9: fuzz — arbitrary input must never panic Validate
+
+func FuzzCNSValidate(f *testing.F) {
+	c := NewCNS()
+	f.Add("100000000000007")
+	f.Add("900000000000008")
+	f.Add("")
+	f.Add("111111111111111")
+	f.Add("xyz")
+
+	f.Fuzz(func(t *testing.T, s string) {
+		// Must never panic for any input.
+		_ = c.Validate(s)
+	})
+}
+
+// M2B-10: deterministic godoc example (fixed, verified-valid literal only)
+
+func ExampleCNS_Validate() {
+	c := NewCNS()
+	fmt.Println(c.Validate("100000000000007"))
+	// Output: true
 }

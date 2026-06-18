@@ -2,6 +2,8 @@ package brdoc
 
 import (
 	"errors"
+	"fmt"
+	"slices"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -152,4 +154,55 @@ func BenchmarkVoterIDGenerate(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		_ = v.Generate()
 	}
+}
+
+// M2B-8: registry integration
+
+func TestVoterIDAndCNSRegistered(t *testing.T) {
+	kinds := Kinds()
+	require.True(t, slices.Contains(kinds, KindVoterID), "voter_id must be registered")
+	require.True(t, slices.Contains(kinds, KindCNS), "cns must be registered")
+
+	for _, k := range []Kind{KindVoterID, KindCNS} {
+		doc, ok := Get(k)
+		require.True(t, ok, "Get(%q) must succeed", k)
+		require.Equal(t, k, doc.Kind())
+
+		gen, err := Generate(k)
+		require.NoError(t, err)
+
+		valid, err := Validate(k, gen)
+		require.NoError(t, err)
+		assert.True(t, valid, "registry-generated %q value %q must validate", k, gen)
+	}
+}
+
+// M2B-9: fuzz — arbitrary input must never panic Validate
+
+func FuzzVoterIDValidate(f *testing.F) {
+	v := NewVoterID()
+	f.Add("106438700108")
+	f.Add("389901862852")
+	f.Add("")
+	f.Add("abc")
+
+	f.Fuzz(func(t *testing.T, s string) {
+		// Must never panic for any input.
+		_ = v.Validate(s)
+	})
+}
+
+// M2B-10: deterministic godoc examples (fixed, verified-valid literals only)
+
+func ExampleVoterID_Validate() {
+	v := NewVoterID()
+	fmt.Println(v.Validate("106438700108"))
+	// Output: true
+}
+
+func ExampleVoterID_Origin() {
+	v := NewVoterID()
+	origin, _ := v.Origin("106438700108")
+	fmt.Println(origin)
+	// Output: São Paulo
 }
