@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 
+	sdk "github.com/inovacc/brdoc"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -54,29 +55,23 @@ func TestBulkFromMissingFile(t *testing.T) {
 	assert.False(t, errors.Is(err, errInvalidInput), "missing-file error is an I/O error, not invalid-input")
 }
 
-// TestBulkFromAcrossKinds iterates every registered kind, generates one value
-// via the CLI, writes it to a temp file, and asserts that --from validates it
-// with exit 0. This locks in that the shared streamValidate path is reused
-// across all kinds without any kind-specific wiring gaps.
+// TestBulkFromAcrossKinds iterates every registered kind via sdk.Kinds(),
+// generates one value using the registry, writes it to a temp file, and asserts
+// that --from validates it with exit 0. This locks in that the shared
+// streamValidate path is reused across all kinds without any kind-specific
+// wiring gaps, and future kinds cannot be silently skipped.
 func TestBulkFromAcrossKinds(t *testing.T) {
-	t.Helper()
-
-	root := newRootCmd()
-	for _, sub := range root.Commands() {
-		name := sub.Name()
-		// Only exercise document-kind subcommands (skip detect, version, etc.).
-		if sub.Flags().Lookup("generate") == nil {
-			continue
-		}
+	for _, kind := range sdk.Kinds() {
+		kind := kind // capture for parallel subtest
+		name := kind.String()
 
 		t.Run(name, func(t *testing.T) {
-			// Generate one value.
-			genOut, err := runCmd(t, name, "--generate")
-			require.NoError(t, err, "generate %s", name)
-			value := strings.TrimSpace(genOut)
+			// Generate one value via the registry (no CLI round-trip needed).
+			value, err := sdk.Generate(kind)
+			require.NoError(t, err, "sdk.Generate(%s)", name)
 			require.NotEmpty(t, value)
 
-			// Write to a temp file.
+			// Write raw (unformatted) value to a temp file.
 			dir := t.TempDir()
 			path := filepath.Join(dir, name+".txt")
 			require.NoError(t, os.WriteFile(path, []byte(value+"\n"), 0o600))
@@ -84,7 +79,13 @@ func TestBulkFromAcrossKinds(t *testing.T) {
 			// Validate via --from; generated values must be all-valid → exit 0.
 			out, fromErr := runCmd(t, name, "--from", path)
 			require.NoError(t, fromErr, "--from %s exited non-zero; output: %q", name, out)
-			assert.True(t, strings.HasPrefix(out, "valid\t"), "expected valid\t prefix, got %q", out)
+
+			// Determine expected formatted value; fall back to raw if Format errors.
+			formatted, fmtErr := sdk.Format(kind, value)
+			if fmtErr != nil {
+				formatted = value
+			}
+			assert.Equal(t, "valid\t"+formatted+"\n", out, "unexpected --from output for %s", name)
 		})
 	}
 }
