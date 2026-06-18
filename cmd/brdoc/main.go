@@ -27,6 +27,7 @@ import (
 	"fmt"
 	"os"
 
+	sdk "github.com/inovacc/brdoc"
 	"github.com/spf13/cobra"
 )
 
@@ -47,22 +48,25 @@ func main() {
 	}
 }
 
-// newRootCmd constructs and returns a fresh root Cobra command with all
-// per-kind subcommands registered. Using a constructor (rather than a package-
-// level var) makes the command tree re-entrant and safe for parallel tests.
+// newRootCmd assembles the Cobra root command: registry-driven per-kind
+// subcommands plus the top-level detect and version commands. UX niceties from
+// the original CLI are preserved (SilenceUsage/SilenceErrors, no default
+// completion command).
 func newRootCmd() *cobra.Command {
 	root := &cobra.Command{
-		Use:   "brdoc",
-		Short: "Brazilian documents utilities",
-		Long:  "brdoc is a small CLI to generate and validate Brazilian documents like CPF and CNPJ.",
+		Use:   sdk.CLIUse,
+		Short: sdk.CLIShort,
+		Long:  "brdoc generates, validates, formats, and inspects Brazilian documents. Subcommands are derived from the document registry.",
 	}
 
 	root.CompletionOptions.DisableDefaultCmd = true
+	// Errors are printed (or suppressed) by main(); avoid duplicate usage/error output.
 	root.SilenceUsage = true
 	root.SilenceErrors = true
 
 	registerKindCommands(root)
 	root.AddCommand(newDetectCmd())
+	root.AddCommand(newVersionCmd())
 
 	return root
 }
