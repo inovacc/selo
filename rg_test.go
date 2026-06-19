@@ -1,0 +1,241 @@
+package selo
+
+import (
+	"errors"
+	"fmt"
+	"testing"
+)
+
+func TestRG_Kind(t *testing.T) {
+	r := NewRG()
+	if got := r.Kind(); got != KindRG {
+		t.Fatalf("Kind() = %q, want %q", got, KindRG)
+	}
+}
+
+func TestRG_Registered(t *testing.T) {
+	d, ok := Get(KindRG)
+	if !ok {
+		t.Fatal("RG not registered in registry")
+	}
+	if d.Kind() != KindRG {
+		t.Fatalf("registered Kind() = %q, want %q", d.Kind(), KindRG)
+	}
+}
+func TestRG_parse(t *testing.T) {
+	r := NewRG()
+	tests := []struct {
+		name      string
+		in        string
+		wantCheck int
+		wantOK    bool
+		wantBase0 int // first base digit (least-significant position, index 0)
+	}{
+		{"formatted with X check", "24.678.131-4", 4, true, 2},
+		{"X check char upper", "11.111.111-X", 10, true, 1},
+		{"x check char lower", "11.111.111-x", 10, true, 1},
+		{"zero means eleven", "11.111.111-0", 11, true, 1},
+		{"bare digits", "246781314", 4, true, 2},
+		{"too short", "1234567", 0, false, 0},
+		{"too long", "1234567890", 0, false, 0},
+		{"non-digit base", "ab.cde.fgh-1", 0, false, 0},
+		{"empty", "", 0, false, 0},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			base, check, ok := r.parse(tt.in)
+			if ok != tt.wantOK {
+				t.Fatalf("parse(%q) ok = %v, want %v", tt.in, ok, tt.wantOK)
+			}
+			if !ok {
+				return
+			}
+			if check != tt.wantCheck {
+				t.Errorf("parse(%q) check = %d, want %d", tt.in, check, tt.wantCheck)
+			}
+			if base[0] != tt.wantBase0 {
+				t.Errorf("parse(%q) base[0] = %d, want %d", tt.in, base[0], tt.wantBase0)
+			}
+		})
+	}
+}
+
+func TestRG_ValidateUF(t *testing.T) {
+	r := NewRG()
+	// 24.678.131-2 is a canonical valid SP RG sample (check digit 2).
+	tests := []struct {
+		name    string
+		value   string
+		uf      UF
+		want    bool
+		wantErr error
+	}{
+		{"valid SP formatted", "24.678.131-2", UFSP, true, nil},
+		{"valid SP bare", "246781312", UFSP, true, nil},
+		{"valid RJ (same algo)", "24.678.131-2", UFRJ, true, nil},
+		{"wrong check digit SP", "24.678.131-5", UFSP, false, nil},
+		{"wrong length SP", "1234567", UFSP, false, ErrInvalidFormat},
+		{"unimplemented UF MG", "24.678.131-4", UFMG, false, ErrUFNotImplemented},
+		{"unimplemented UF BA", "246781314", UFBA, false, ErrUFNotImplemented},
+		{"invalid UF zz", "246781314", UF("ZZ"), false, ErrUFNotImplemented},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := r.ValidateUF(tt.value, tt.uf)
+			if got != tt.want {
+				t.Errorf("ValidateUF(%q,%q) = %v, want %v", tt.value, tt.uf, got, tt.want)
+			}
+			if tt.wantErr == nil {
+				if err != nil {
+					t.Errorf("ValidateUF(%q,%q) err = %v, want nil", tt.value, tt.uf, err)
+				}
+				return
+			}
+			if !errors.Is(err, tt.wantErr) {
+				t.Errorf("ValidateUF(%q,%q) err = %v, want errors.Is %v", tt.value, tt.uf, err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestRG_ImplementedUFs(t *testing.T) {
+	r := NewRG()
+	ufs := r.ImplementedUFs()
+	want := map[UF]bool{UFSP: true, UFRJ: true}
+	if len(ufs) != len(want) {
+		t.Fatalf("ImplementedUFs() len = %d, want %d (%v)", len(ufs), len(want), ufs)
+	}
+	for _, u := range ufs {
+		if !want[u] {
+			t.Errorf("ImplementedUFs() returned unexpected UF %q", u)
+		}
+	}
+}
+func TestRG_Validate(t *testing.T) {
+	r := NewRG()
+	tests := []struct {
+		name  string
+		value string
+		want  bool
+	}{
+		{"valid SP formatted", "24.678.131-2", true},
+		{"valid bare", "246781312", true},
+		{"valid X check", "10.000.006-X", true}, // computed-X sample (DV=10)
+		{"wrong check digit", "24.678.131-5", false},
+		{"too short", "1234567", false},
+		{"too long", "1234567890", false},
+		{"garbage", "abcdefghi", false},
+		{"empty", "", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := r.Validate(tt.value); got != tt.want {
+				t.Errorf("Validate(%q) = %v, want %v", tt.value, got, tt.want)
+			}
+		})
+	}
+}
+func TestRG_Format(t *testing.T) {
+	r := NewRG()
+	tests := []struct {
+		name    string
+		in      string
+		want    string
+		wantErr error
+	}{
+		{"bare digit check", "246781314", "24.678.131-4", nil},
+		{"already formatted", "24.678.131-4", "24.678.131-4", nil},
+		{"X check normalized", "11111111x", "11.111.111-X", nil},
+		{"zero check", "111111110", "11.111.111-0", nil},
+		{"too short", "1234567", "", ErrInvalidFormat},
+		{"too long", "1234567890", "", ErrInvalidFormat},
+		{"non-digit base", "ab.cde.fgh-1", "", ErrInvalidFormat},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := r.Format(tt.in)
+			if tt.wantErr != nil {
+				if !errors.Is(err, tt.wantErr) {
+					t.Fatalf("Format(%q) err = %v, want errors.Is %v", tt.in, err, tt.wantErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("Format(%q) unexpected err: %v", tt.in, err)
+			}
+			if got != tt.want {
+				t.Errorf("Format(%q) = %q, want %q", tt.in, got, tt.want)
+			}
+		})
+	}
+}
+func TestRG_GenerateRoundTrip(t *testing.T) {
+	r := NewRG()
+	for i := 0; i < 1000; i++ {
+		v := r.Generate()
+		if !r.Validate(v) {
+			t.Fatalf("Generate() produced invalid RG: %q", v)
+		}
+		// Generated value must be in masked form XX.XXX.XXX-C.
+		if len(v) != 12 || v[2] != '.' || v[6] != '.' || v[10] != '-' {
+			t.Fatalf("Generate() not masked correctly: %q", v)
+		}
+	}
+}
+
+func BenchmarkRGValidate(b *testing.B) {
+	r := NewRG()
+	const sample = "24.678.131-4"
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = r.Validate(sample)
+	}
+}
+
+func BenchmarkRGGenerate(b *testing.B) {
+	r := NewRG()
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = r.Generate()
+	}
+}
+
+func FuzzRGValidate(f *testing.F) {
+	r := NewRG()
+	f.Add("24.678.131-4")
+	f.Add("246781314")
+	f.Add("11.111.111-X")
+	f.Add("")
+	f.Add("garbage-input")
+	f.Fuzz(func(t *testing.T, s string) {
+		// Must never panic; result is ignored.
+		_ = r.Validate(s)
+		_, _ = r.Format(s)
+		_, _ = r.ValidateUF(s, UFSP)
+	})
+}
+
+// Compile-time interface conformance.
+var (
+	_ Document = (*RG)(nil)
+	_ UFScoped = (*RG)(nil)
+)
+
+func TestRG_RegistryDispatch(t *testing.T) {
+	// Registry-level Validate must route to RG via Kind.
+	ok, err := Validate(KindRG, "24.678.131-2")
+	if err != nil {
+		t.Fatalf("Validate(KindRG, ...) err = %v", err)
+	}
+	if !ok {
+		t.Fatal("Validate(KindRG, valid sample) = false, want true")
+	}
+}
+
+func ExampleRG_Validate() {
+	r := NewRG()
+	fmt.Println(r.Validate("24.678.131-2"))
+	// Output: true
+}

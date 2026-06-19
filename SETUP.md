@@ -1,17 +1,17 @@
-# 🚀 brdoc - Setup Guide
+# 🚀 selo - Setup Guide
 
 ## 📦 Package Contents
 
-This repository contains the complete **brdoc** library for validating, generating, and formatting Brazilian fiscal documents (CPF and CNPJ), plus a CLI.
+This repository contains the complete **selo** library for validating, generating, and formatting Brazilian fiscal documents (CPF and CNPJ), plus a CLI.
 
 ### 📂 Project Structure
 
 ```
-brdoc/
+selo/
 ├── cmd/
-│   └── brdoc/
+│   └── selo/
 │       └── main.go             # Cobra CLI (generate/validate, bulk support)
-├── brdoc.go                    # Main implementation
+├── selo.go                    # Main implementation
 ├── brdoc_test.go               # Test suite
 ├── doc.go                      # Package documentation
 ├── CHANGELOG.md                # Version history
@@ -29,8 +29,8 @@ brdoc/
 
 ```bash
 # Extract the ZIP
-git clone https://github.com/inovacc/brdoc.git
-cd brdoc
+git clone https://github.com/inovacc/selo.git
+cd selo
 ```
 
 ### 2. Verify Installation
@@ -50,23 +50,23 @@ go test -cover
 
 ```bash
 # Install the CLI
-go install github.com/inovacc/brdoc/cmd/brdoc@latest
+go install github.com/inovacc/selo/cmd/selo@latest
 
 # Single operations
-brdoc cpf  --generate
-brdoc cnpj --generate
-brdoc cpf  --validate 123.456.789-09
-brdoc cnpj --validate 12.ABC.345/01DE-35
+selo cpf  --generate
+selo cnpj --generate
+selo cpf  --validate 123.456.789-09
+selo cnpj --validate 12.ABC.345/01DE-35
 
 # Bulk validation
-brdoc cpf  --validate --from cpfs.txt
-brdoc cnpj --validate --from cnpjs.txt
-type cpfs.txt  | brdoc cpf  --validate --from -
-type cnpjs.txt | brdoc cnpj --validate --from -
+selo cpf  --validate --from cpfs.txt
+selo cnpj --validate --from cnpjs.txt
+type cpfs.txt  | selo cpf  --validate --from -
+type cnpjs.txt | selo cnpj --validate --from -
 
 # Generate many
-brdoc cpf  --generate --count 10
-brdoc cnpj --generate --count 5
+selo cpf  --generate --count 10
+selo cnpj --generate --count 5
 ```
 
 ## 📚 Usage in Your Project
@@ -74,7 +74,7 @@ brdoc cnpj --generate --count 5
 ### Install the package
 
 ```bash
-go get github.com/inovacc/brdoc
+go get github.com/inovacc/selo
 ```
 
 ### Import and use
@@ -84,16 +84,16 @@ package main
 
 import (
   "fmt"
-  "github.com/inovacc/brdoc"
+  "github.com/inovacc/selo"
 )
 
 func main() {
   // CPF
-  cpf := brdoc.NewCPF()
+  cpf := selo.NewCPF()
   fmt.Println(cpf.Validate("123.456.789-09")) // true or false
 
   // CNPJ
-  cnpj := brdoc.NewCNPJ()
+  cnpj := selo.NewCNPJ()
   fmt.Println(cnpj.Validate("12.ABC.345/01DE-35")) // true or false
 }
 ```
@@ -139,14 +139,14 @@ go test -bench=. -benchmem
 
 ```bash
 godoc -http=:6060
-# Visit: http://localhost:6060/pkg/github.com/inovacc/brdoc/
+# Visit: http://localhost:6060/pkg/github.com/inovacc/selo/
 ```
 
 ### View online
 
 After pushing to GitHub:
 
-- https://pkg.go.dev/github.com/inovacc/brdoc
+- https://pkg.go.dev/github.com/inovacc/selo
 
 ## 🔐 Security
 
@@ -176,7 +176,7 @@ go list -json -m all | nancy sleuth
 
 ## 🎯 Next Steps
 
-1. ✅ Upload to GitHub: `https://github.com/inovacc/brdoc`
+1. ✅ Upload to GitHub: `https://github.com/inovacc/selo`
 2. ✅ Enable GitHub Actions (CI will run automatically)
 3. ✅ Add repository description and topics
 4. ✅ Create first release (v0.1.0)
@@ -188,8 +188,8 @@ go list -json -m all | nancy sleuth
 Add these to your README (after first release):
 
 ```markdown
-[![Go Reference](https://pkg.go.dev/badge/github.com/inovacc/brdoc.svg)](https://pkg.go.dev/github.com/inovacc/brdoc)
-[![Go Report Card](https://goreportcard.com/badge/github.com/inovacc/brdoc)](https://goreportcard.com/report/github.com/inovacc/brdoc)
+[![Go Reference](https://pkg.go.dev/badge/github.com/inovacc/selo.svg)](https://pkg.go.dev/github.com/inovacc/selo)
+[![Go Report Card](https://goreportcard.com/badge/github.com/inovacc/selo)](https://goreportcard.com/report/github.com/inovacc/selo)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 ```
 
@@ -199,8 +199,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
 ## 📞 Support
 
-- 🐛 Issues: https://github.com/inovacc/brdoc/issues
-- 💬 Discussions: https://github.com/inovacc/brdoc/discussions
+- 🐛 Issues: https://github.com/inovacc/selo/issues
+- 💬 Discussions: https://github.com/inovacc/selo/discussions
 
 ## 📄 License
 
@@ -210,4 +210,4 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 **Made with ❤️ by INOVACLOUD CONSULTORIA LTDA**
 
-Repository: https://github.com/inovacc/brdoc
+Repository: https://github.com/inovacc/selo

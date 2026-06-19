@@ -1,12 +1,11 @@
-package brdoc
+package selo
 
 import (
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 	"slices"
 	"strconv"
 	"strings"
-	"time"
 )
 
 const (
@@ -25,10 +24,7 @@ const (
 	IsDigit9 = "Paraná and Santa Catarina"
 )
 
-var (
-	notAcceptedCPF []string
-	rng            *rand.Rand
-)
+var notAcceptedCPF []string
 
 // Conversion map for alphanumeric CNPJ (ASCII - 48)
 var charToValue = map[rune]int{
@@ -39,9 +35,6 @@ var charToValue = map[rune]int{
 }
 
 func init() {
-	// Initialize random number generator
-	rng = rand.New(rand.NewSource(time.Now().UnixNano()))
-
 	// Initialize non-accepted CPFs (all digits equal)
 	notAcceptedCPF = make([]string, 0, 10)
 
@@ -49,6 +42,10 @@ func init() {
 		value := strings.Repeat(strconv.Itoa(i), 11)
 		notAcceptedCPF = append(notAcceptedCPF, value)
 	}
+
+	// Self-register CPF and CNPJ as Document singletons.
+	Register(&CPF{})
+	Register(&CNPJ{})
 }
 
 // ============================================================================
@@ -70,7 +67,7 @@ func (c *CPF) Generate() string {
 	number := []int{0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 	for i := range 9 {
-		number[i] = rng.Intn(10)
+		number[i] = rand.IntN(10)
 	}
 
 	number = append(number, c.calculateFirstDigit(number))
@@ -140,6 +137,19 @@ func (c *CPF) CheckOrigin(value string) string {
 	default:
 		return ""
 	}
+}
+
+// Kind returns KindCPF, identifying this type in the registry.
+func (c *CPF) Kind() Kind { return KindCPF }
+
+// Origin returns the issuing region for value, satisfying OriginResolver.
+// It wraps CheckOrigin; an empty origin (value too short) yields ErrInvalidLength.
+func (c *CPF) Origin(value string) (string, error) {
+	origin := c.CheckOrigin(value)
+	if origin == "" {
+		return "", ErrInvalidLength
+	}
+	return origin, nil
 }
 
 // Private CPF methods
@@ -362,6 +372,9 @@ func (c *CNPJ) Format(value string) (string, error) {
 	return string(out[:]), nil
 }
 
+// Kind returns KindCNPJ, identifying this type in the registry.
+func (c *CNPJ) Kind() Kind { return KindCNPJ }
+
 // Private CNPJ methods
 
 func (c *CNPJ) generateDigits(legacy bool) string {
@@ -370,14 +383,14 @@ func (c *CNPJ) generateDigits(legacy bool) string {
 
 	if legacy {
 		for i := range 12 {
-			base[i] = byte('0' + rng.Intn(10))
+			base[i] = byte('0' + rand.IntN(10))
 		}
 	} else {
 		for i := range 12 {
-			if rng.Intn(2) == 0 {
-				base[i] = byte('0' + rng.Intn(10))
+			if rand.IntN(2) == 0 {
+				base[i] = byte('0' + rand.IntN(10))
 			} else {
-				base[i] = byte('A' + rng.Intn(26))
+				base[i] = byte('A' + rand.IntN(26))
 			}
 		}
 	}
@@ -481,21 +494,24 @@ func (c *CNPJ) digits(value string) string {
 // Utility Functions
 // ============================================================================
 
-// ValidateDocument automatically identifies and validates CPF or CNPJ
+// ValidateDocument automatically identifies and validates a CPF or CNPJ.
+//
+// Deprecated: use Detect to identify the Kind and Validate(kind, value) to
+// validate, e.g. k, ok := brdoc.Detect(s); the typed Kind ("cpf"/"cnpj") is
+// richer than the legacy "CPF"/"CNPJ"/"UNKNOWN" strings. This wrapper will be
+// removed after 2026-07-18.
 func ValidateDocument(doc string) (docType string, isValid bool) {
-	cleaned := strings.ReplaceAll(doc, ".", "")
-	cleaned = strings.ReplaceAll(cleaned, "-", "")
-	cleaned = strings.ReplaceAll(cleaned, "/", "")
-	cleaned = strings.ToUpper(cleaned)
-
-	// Identifica pelo tamanho
-	if len(cleaned) == CpfLength {
-		cpf := NewCPF()
-		return "CPF", cpf.Validate(doc)
-	} else if len(cleaned) == CnpjLength {
-		cnpj := NewCNPJ()
-		return "CNPJ", cnpj.Validate(doc)
+	// Preserve legacy length-based labelling: an 11/14-length value keeps its
+	// label even when invalid (parity with the original implementation).
+	// CPF length is measured over digits only; CNPJ length over the
+	// alphanumeric (0-9, A-Z) cleaned form, matching the legacy semantics.
+	if len(onlyDigits(doc)) == CpfLength {
+		ok, _ := Validate(KindCPF, doc)
+		return "CPF", ok
 	}
-
+	if len((&CNPJ{}).digits(doc)) == CnpjLength {
+		ok, _ := Validate(KindCNPJ, doc)
+		return "CNPJ", ok
+	}
 	return "UNKNOWN", false
 }

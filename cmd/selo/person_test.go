@@ -1,0 +1,50 @@
+package main
+
+import (
+	"encoding/json"
+	"strings"
+	"testing"
+
+	sdk "github.com/inovacc/selo"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+)
+
+func TestPersonCmd_JSONSingle(t *testing.T) {
+	out, err := runCmd(t, "person", "--uf", "SP", "--json")
+	require.NoError(t, err)
+
+	var p sdk.Person
+	require.NoError(t, json.Unmarshal([]byte(out), &p))
+	assert.Equal(t, sdk.UFSP, p.UF)
+	assert.True(t, sdk.NewCPF().Validate(p.CPF), "CPF %q must validate", p.CPF)
+	cepUF, err := sdk.NewCEP().Origin(p.CEP)
+	require.NoError(t, err)
+	assert.Equal(t, "SP", cepUF)
+}
+
+func TestPersonCmd_JSONArray(t *testing.T) {
+	out, err := runCmd(t, "person", "--count", "3", "--uf", "MG", "--json")
+	require.NoError(t, err)
+
+	var people []sdk.Person
+	require.NoError(t, json.Unmarshal([]byte(out), &people))
+	require.Len(t, people, 3)
+	for _, p := range people {
+		assert.Equal(t, sdk.UFMG, p.UF)
+	}
+}
+
+func TestPersonCmd_TextWithExtras(t *testing.T) {
+	out, err := runCmd(t, "person", "--uf", "RJ", "--with-vehicle", "--with-company")
+	require.NoError(t, err)
+	assert.Contains(t, out, "RJ")
+	assert.Contains(t, out, "Vehicle:")
+	assert.Contains(t, out, "Company:")
+	assert.Contains(t, strings.ToLower(out), "cpf:")
+}
+
+func TestPersonCmd_InvalidUF(t *testing.T) {
+	_, err := runCmd(t, "person", "--uf", "ZZ")
+	require.Error(t, err)
+}
