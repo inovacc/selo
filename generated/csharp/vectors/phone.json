@@ -1,0 +1,180 @@
+{
+  "kind": "phone",
+  "group": "F",
+  "validate": [
+    {
+      "input": "14904101803",
+      "valid": true
+    },
+    {
+      "input": "3756738711",
+      "valid": true
+    },
+    {
+      "input": "4436814210",
+      "valid": true
+    },
+    {
+      "input": "41979233504",
+      "valid": true
+    },
+    {
+      "input": "37944299215",
+      "valid": true
+    },
+    {
+      "input": "7737966926",
+      "valid": true
+    },
+    {
+      "input": "4152091973",
+      "valid": true
+    },
+    {
+      "input": "38993696755",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "(00) 1234-5678",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "0099999999",
+      "valid": false
+    },
+    {
+      "input": "11111111111",
+      "valid": false
+    },
+    {
+      "input": "11912345",
+      "valid": false
+    },
+    {
+      "input": "375673871",
+      "valid": false
+    },
+    {
+      "input": "415209197",
+      "valid": false
+    },
+    {
+      "input": "443681421",
+      "valid": false
+    },
+    {
+      "input": "773796692",
+      "valid": false
+    },
+    {
+      "input": "999999999999",
+      "valid": false
+    },
+    {
+      "input": "Z152091973",
+      "valid": false
+    },
+    {
+      "input": "Z436814210",
+      "valid": false
+    },
+    {
+      "input": "Z737966926",
+      "valid": false
+    },
+    {
+      "input": "Z756738711",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "14904101803",
+      "output": "(14) 90410-1803"
+    },
+    {
+      "input": "3756738711",
+      "output": "(37) 5673-8711"
+    },
+    {
+      "input": "4436814210",
+      "output": "(44) 3681-4210"
+    },
+    {
+      "input": "41979233504",
+      "output": "(41) 97923-3504"
+    },
+    {
+      "input": "37944299215",
+      "output": "(37) 94429-9215"
+    },
+    {
+      "input": "7737966926",
+      "output": "(77) 3796-6926"
+    },
+    {
+      "input": "4152091973",
+      "output": "(41) 5209-1973"
+    },
+    {
+      "input": "38993696755",
+      "output": "(38) 99369-6755"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidLength"
+    }
+  ],
+  "origin": [
+    {
+      "input": "14904101803",
+      "output": "SP"
+    },
+    {
+      "input": "3756738711",
+      "output": "MG"
+    },
+    {
+      "input": "4436814210",
+      "output": "PR"
+    },
+    {
+      "input": "41979233504",
+      "output": "PR"
+    },
+    {
+      "input": "37944299215",
+      "output": "MG"
+    },
+    {
+      "input": "7737966926",
+      "output": "BA"
+    },
+    {
+      "input": "4152091973",
+      "output": "PR"
+    },
+    {
+      "input": "38993696755",
+      "output": "MG"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

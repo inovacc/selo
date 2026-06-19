@@ -45,7 +45,12 @@ func TestEmitterRegistry_TSRegistered(t *testing.T) {
 	require.True(t, ok, "TypeScript emitter should be registered in M2")
 	assert.Equal(t, codegen.LangTS, ts.Lang())
 
-	for _, l := range []codegen.Lang{codegen.LangJS, codegen.LangRuby, codegen.LangJava, codegen.LangCSharp} {
+	// C# emitter is registered in M6.
+	cs, csOK := codegen.EmitterFor(codegen.LangCSharp)
+	require.True(t, csOK, "C# emitter should be registered in M6")
+	assert.Equal(t, codegen.LangCSharp, cs.Lang())
+
+	for _, l := range []codegen.Lang{codegen.LangJS, codegen.LangRuby, codegen.LangJava} {
 		_, regd := codegen.EmitterFor(l)
 		assert.Falsef(t, regd, "no emitter should be registered for %q yet", l)
 

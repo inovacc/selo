@@ -1,0 +1,194 @@
+{
+  "kind": "cnh",
+  "group": "A",
+  "validate": [
+    {
+      "input": "29606940450",
+      "valid": true
+    },
+    {
+      "input": "12714532784",
+      "valid": true
+    },
+    {
+      "input": "64037857465",
+      "valid": true
+    },
+    {
+      "input": "87410518696",
+      "valid": true
+    },
+    {
+      "input": "89386215553",
+      "valid": true
+    },
+    {
+      "input": "18927301101",
+      "valid": true
+    },
+    {
+      "input": "18332850374",
+      "valid": true
+    },
+    {
+      "input": "23755254560",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "11111111111",
+      "valid": false
+    },
+    {
+      "input": "1271453278",
+      "valid": false
+    },
+    {
+      "input": "12714532785",
+      "valid": false
+    },
+    {
+      "input": "1833285037",
+      "valid": false
+    },
+    {
+      "input": "18332850375",
+      "valid": false
+    },
+    {
+      "input": "1892730110",
+      "valid": false
+    },
+    {
+      "input": "18927301102",
+      "valid": false
+    },
+    {
+      "input": "2375525456",
+      "valid": false
+    },
+    {
+      "input": "23755254561",
+      "valid": false
+    },
+    {
+      "input": "2960694045",
+      "valid": false
+    },
+    {
+      "input": "29606940451",
+      "valid": false
+    },
+    {
+      "input": "6403785746",
+      "valid": false
+    },
+    {
+      "input": "64037857466",
+      "valid": false
+    },
+    {
+      "input": "8741051869",
+      "valid": false
+    },
+    {
+      "input": "87410518697",
+      "valid": false
+    },
+    {
+      "input": "8938621555",
+      "valid": false
+    },
+    {
+      "input": "89386215554",
+      "valid": false
+    },
+    {
+      "input": "Z2714532784",
+      "valid": false
+    },
+    {
+      "input": "Z3755254560",
+      "valid": false
+    },
+    {
+      "input": "Z4037857465",
+      "valid": false
+    },
+    {
+      "input": "Z7410518696",
+      "valid": false
+    },
+    {
+      "input": "Z8332850374",
+      "valid": false
+    },
+    {
+      "input": "Z8927301101",
+      "valid": false
+    },
+    {
+      "input": "Z9386215553",
+      "valid": false
+    },
+    {
+      "input": "Z9606940450",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "29606940450",
+      "output": "29606940450"
+    },
+    {
+      "input": "12714532784",
+      "output": "12714532784"
+    },
+    {
+      "input": "64037857465",
+      "output": "64037857465"
+    },
+    {
+      "input": "87410518696",
+      "output": "87410518696"
+    },
+    {
+      "input": "89386215553",
+      "output": "89386215553"
+    },
+    {
+      "input": "18927301101",
+      "output": "18927301101"
+    },
+    {
+      "input": "18332850374",
+      "output": "18332850374"
+    },
+    {
+      "input": "23755254560",
+      "output": "23755254560"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidLength"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

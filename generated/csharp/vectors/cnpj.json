@@ -1,0 +1,226 @@
+{
+  "kind": "cnpj",
+  "group": "C",
+  "validate": [
+    {
+      "input": "39.591.842/0000-10",
+      "valid": true
+    },
+    {
+      "input": "624NFEI7KZ7D06",
+      "valid": true
+    },
+    {
+      "input": "99HQPJV61JT330",
+      "valid": true
+    },
+    {
+      "input": "06RI3WN6356514",
+      "valid": true
+    },
+    {
+      "input": "D5V4E56Q493992",
+      "valid": true
+    },
+    {
+      "input": "L9348CYUR27U00",
+      "valid": true
+    },
+    {
+      "input": "1557X851J76S54",
+      "valid": true
+    },
+    {
+      "input": "Q806QP8A41J289",
+      "valid": true
+    },
+    {
+      "input": "7A3936DMT5LL08",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "06RI3WN635651",
+      "valid": false
+    },
+    {
+      "input": "06RI3WN6356515",
+      "valid": false
+    },
+    {
+      "input": "1111111",
+      "valid": false
+    },
+    {
+      "input": "11111111",
+      "valid": false
+    },
+    {
+      "input": "111111111",
+      "valid": false
+    },
+    {
+      "input": "1111111111",
+      "valid": false
+    },
+    {
+      "input": "11111111111",
+      "valid": false
+    },
+    {
+      "input": "11111111111111",
+      "valid": false
+    },
+    {
+      "input": "1557X851J76S5",
+      "valid": false
+    },
+    {
+      "input": "1557X851J76S55",
+      "valid": false
+    },
+    {
+      "input": "39.591.842/0000-1",
+      "valid": false
+    },
+    {
+      "input": "39.591.842/0000-11",
+      "valid": false
+    },
+    {
+      "input": "624NFEI7KZ7D0",
+      "valid": false
+    },
+    {
+      "input": "624NFEI7KZ7D07",
+      "valid": false
+    },
+    {
+      "input": "7A3936DMT5LL0",
+      "valid": false
+    },
+    {
+      "input": "7A3936DMT5LL09",
+      "valid": false
+    },
+    {
+      "input": "99HQPJV61JT33",
+      "valid": false
+    },
+    {
+      "input": "99HQPJV61JT331",
+      "valid": false
+    },
+    {
+      "input": "D5V4E56Q49399",
+      "valid": false
+    },
+    {
+      "input": "D5V4E56Q493993",
+      "valid": false
+    },
+    {
+      "input": "DZV4E56Q493992",
+      "valid": false
+    },
+    {
+      "input": "L9348CYUR27U0",
+      "valid": false
+    },
+    {
+      "input": "L9348CYUR27U01",
+      "valid": false
+    },
+    {
+      "input": "Q806QP8A41J28",
+      "valid": false
+    },
+    {
+      "input": "Q806QP8A41J280",
+      "valid": false
+    },
+    {
+      "input": "QZ06QP8A41J289",
+      "valid": false
+    },
+    {
+      "input": "Z24NFEI7KZ7D06",
+      "valid": false
+    },
+    {
+      "input": "Z557X851J76S54",
+      "valid": false
+    },
+    {
+      "input": "Z6RI3WN6356514",
+      "valid": false
+    },
+    {
+      "input": "Z9.591.842/0000-10",
+      "valid": false
+    },
+    {
+      "input": "ZA3936DMT5LL08",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "39.591.842/0000-10",
+      "output": "39.591.842/0000-10"
+    },
+    {
+      "input": "624NFEI7KZ7D06",
+      "output": "62.4NF.EI7/KZ7D-06"
+    },
+    {
+      "input": "99HQPJV61JT330",
+      "output": "99.HQP.JV6/1JT3-30"
+    },
+    {
+      "input": "06RI3WN6356514",
+      "output": "06.RI3.WN6/3565-14"
+    },
+    {
+      "input": "D5V4E56Q493992",
+      "output": "D5.V4E.56Q/4939-92"
+    },
+    {
+      "input": "L9348CYUR27U00",
+      "output": "L9.348.CYU/R27U-00"
+    },
+    {
+      "input": "1557X851J76S54",
+      "output": "15.57X.851/J76S-54"
+    },
+    {
+      "input": "Q806QP8A41J289",
+      "output": "Q8.06Q.P8A/41J2-89"
+    },
+    {
+      "input": "7A3936DMT5LL08",
+      "output": "7A.393.6DM/T5LL-08"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalid"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}
