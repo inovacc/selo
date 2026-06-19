@@ -272,7 +272,7 @@ func NewServer(version string) *mcp.Server {
 func Serve(ctx context.Context, version string) error {
 	srv := NewServer(version)
 	if err := srv.Run(ctx, &mcp.StdioTransport{}); err != nil {
-		return fmt.Errorf("brdoc mcp: %w", err)
+		return fmt.Errorf("selo mcp: %w", err)
 	}
 	return nil
 }
