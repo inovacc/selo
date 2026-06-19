@@ -38,25 +38,15 @@ func TestKindStrings(t *testing.T) {
 	}
 }
 
-// TestEmitterRegistry_TSAndJSRegistered asserts the TypeScript (M2) and
-// JavaScript (M3) emitters are registered, while the remaining languages
-// remain unregistered until their milestones.
-func TestEmitterRegistry_TSAndJSRegistered(t *testing.T) {
-	ts, ok := codegen.EmitterFor(codegen.LangTS)
-	require.True(t, ok, "TypeScript emitter should be registered in M2")
-	assert.Equal(t, codegen.LangTS, ts.Lang())
-
-	js, ok := codegen.EmitterFor(codegen.LangJS)
-	require.True(t, ok, "JavaScript emitter should be registered in M3")
-	assert.Equal(t, codegen.LangJS, js.Lang())
-
-	for _, l := range []codegen.Lang{codegen.LangRuby, codegen.LangJava, codegen.LangCSharp} {
-		_, regd := codegen.EmitterFor(l)
-		assert.Falsef(t, regd, "no emitter should be registered for %q yet", l)
-
-		_, err := codegen.Generate(l, selo.KindCPF)
-		require.Error(t, err)
-		assert.Contains(t, err.Error(), "not yet registered")
+// TestEmitterRegistry_AllRegistered asserts every target language's emitter is
+// registered (M2–M6: ts, js, ruby, java, csharp).
+func TestEmitterRegistry_AllRegistered(t *testing.T) {
+	for _, l := range []codegen.Lang{
+		codegen.LangTS, codegen.LangJS, codegen.LangRuby, codegen.LangJava, codegen.LangCSharp,
+	} {
+		e, ok := codegen.EmitterFor(l)
+		require.Truef(t, ok, "emitter should be registered for %q", l)
+		assert.Equalf(t, l, e.Lang(), "EmitterFor(%q).Lang() mismatch", l)
 	}
 }
 

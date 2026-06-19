@@ -1,0 +1,81 @@
+name: Codegen Targets
+
+# Verifies the generated multi-language validators against their golden vectors,
+# using each language's real toolchain (which the dev machine may lack). This is
+# the correctness gate for the non-Go targets: a wrong port fails its vector
+# tests here. Scoped to codegen-relevant paths so it does not run on every push.
+on:
+  push:
+    branches: ["**"]
+    paths:
+      - 'internal/codegen/**'
+      - 'generated/**'
+      - 'cmd/selo/gen.go'
+      - '.github/workflows/codegen.yml'
+  pull_request:
+    paths:
+      - 'internal/codegen/**'
+      - 'generated/**'
+      - 'cmd/selo/gen.go'
+      - '.github/workflows/codegen.yml'
+
+jobs:
+  verify:
+    name: verify ${{ matrix.lang }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: [ts, js, ruby, java, csharp]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node (ts/js)
+        if: ${{ matrix.lang == 'ts' || matrix.lang == 'js' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Set up Ruby
+        if: ${{ matrix.lang == 'ruby' }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+
+      - name: Set up Java
+        if: ${{ matrix.lang == 'java' }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up .NET
+        if: ${{ matrix.lang == 'csharp' }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Verify TypeScript vectors
+        if: ${{ matrix.lang == 'ts' }}
+        working-directory: generated/typescript
+        run: npm install && npx vitest run
+
+      - name: Verify JavaScript vectors
+        if: ${{ matrix.lang == 'js' }}
+        working-directory: generated/javascript
+        run: npm install && npx vitest run
+
+      - name: Verify Ruby vectors
+        if: ${{ matrix.lang == 'ruby' }}
+        working-directory: generated/ruby
+        run: bundle install && bundle exec rake test
+
+      - name: Verify Java vectors
+        if: ${{ matrix.lang == 'java' }}
+        working-directory: generated/java
+        run: mvn -B --no-transfer-progress test
+
+      - name: Verify C# vectors
+        if: ${{ matrix.lang == 'csharp' }}
+        working-directory: generated/csharp
+        run: dotnet test --nologo

@@ -276,17 +276,18 @@ func TestGenerateCodeTool(t *testing.T) {
 
 	assert.True(t, hasModule, "ts/cpf should include src/cpf.ts")
 
-	// A language whose emitter is not registered yet yields a clean error result.
-	notReady, err := cs.CallTool(ctx, &mcp.CallToolParams{
+	// All five language emitters are registered (M2–M6), so ruby/cpf also
+	// returns real files via MCP.
+	rubyRes, err := cs.CallTool(ctx, &mcp.CallToolParams{
 		Name:      "generate_code",
 		Arguments: map[string]any{"lang": "ruby", "kind": "cpf"},
 	})
 	require.NoError(t, err)
-	require.True(t, notReady.IsError, "an unregistered lang should report a clean error result")
-	require.NotEmpty(t, notReady.Content)
-	tc, ok := notReady.Content[0].(*mcp.TextContent)
-	require.True(t, ok)
-	assert.Contains(t, tc.Text, "not yet registered")
+	require.Falsef(t, rubyRes.IsError, "generate_code(ruby, cpf) should succeed: %+v", rubyRes.Content)
+
+	var rubyOut GenerateCodeOutput
+	decodeResult(t, rubyRes, &rubyOut)
+	require.NotEmpty(t, rubyOut.Files, "ruby/cpf should produce files")
 
 	// Unsupported language is a clean error result.
 	bad, err := cs.CallTool(ctx, &mcp.CallToolParams{

@@ -74,3 +74,60 @@ tasks:
           else
             echo "node not found; skipping vitest (generated JS still emitted)"
           fi
+
+  gen:ruby:
+    desc: Emit the Ruby target into generated/ruby (all 13 kinds)
+    cmds:
+      - go run ./cmd/selo gen --lang ruby --kind all --out generated/ruby
+
+  gen:verify:ruby:
+    desc: Emit the Ruby target, then run the Minitest suite (needs ruby + bundler)
+    cmds:
+      - task: gen:ruby
+      - cmd: |
+          if command -v ruby >/dev/null 2>&1; then
+            cd generated/ruby && bundle install && bundle exec rake test
+          else
+            echo "ruby not found; skipping Minitest (generated Ruby still emitted)"
+          fi
+
+  gen:java:
+    desc: Emit the Java target into generated/java (all 13 kinds)
+    cmds:
+      - go run ./cmd/selo gen --lang java --kind all --out generated/java
+
+  gen:verify:java:
+    desc: Emit the Java target, then run the JUnit suite (needs Maven)
+    cmds:
+      - task: gen:java
+      - cmd: |
+          if command -v mvn >/dev/null 2>&1; then
+            cd generated/java && mvn -B --no-transfer-progress test
+          else
+            echo "mvn not found; skipping JUnit (generated Java still emitted)"
+          fi
+
+  gen:csharp:
+    desc: Emit the C# target into generated/csharp (all 13 kinds)
+    cmds:
+      - go run ./cmd/selo gen --lang csharp --kind all --out generated/csharp
+
+  gen:verify:csharp:
+    desc: Emit the C# target, then run the xUnit suite (needs the .NET SDK)
+    cmds:
+      - task: gen:csharp
+      - cmd: |
+          if command -v dotnet >/dev/null 2>&1; then
+            cd generated/csharp && dotnet test --nologo
+          else
+            echo "dotnet not found; skipping xUnit (generated C# still emitted)"
+          fi
+
+  gen:all:
+    desc: Emit all five language targets
+    cmds:
+      - task: gen:ts
+      - task: gen:js
+      - task: gen:ruby
+      - task: gen:java
+      - task: gen:csharp

@@ -50,10 +50,20 @@ func TestGenMissingLangExitsNonZero(t *testing.T) {
 // TestGenSupportedLangNoEmitter asserts that a supported language whose emitter
 // is not registered yet (e.g. ruby, pending its milestone) fails cleanly rather
 // than silently succeeding.
-func TestGenSupportedLangNoEmitter(t *testing.T) {
-	_, err := runCmd(t, "gen", "--lang", "ruby", "--kind", "cpf", "--out", t.TempDir())
-	require.Error(t, err)
-	assert.Contains(t, err.Error(), "not yet registered")
+// TestGenAllLangsWriteFiles asserts every registered emitter (ts/js/ruby/java/
+// csharp) generates files via the CLI. Emitters are pure Go, so no language
+// toolchain is needed to emit; the generated code's correctness is verified by
+// the CI matrix (and locally by vitest for ts/js).
+func TestGenAllLangsWriteFiles(t *testing.T) {
+	for _, lang := range []string{"ts", "js", "ruby", "java", "csharp"} {
+		dir := t.TempDir()
+		_, err := runCmd(t, "gen", "--lang", lang, "--kind", "cpf", "--out", dir)
+		require.NoErrorf(t, err, "gen --lang %s", lang)
+
+		entries, derr := os.ReadDir(dir)
+		require.NoErrorf(t, derr, "%s: read out dir", lang)
+		require.NotEmptyf(t, entries, "%s: gen should write files", lang)
+	}
 }
 
 // TestGenTSWritesFiles asserts the registered TypeScript emitter (M2) writes the
