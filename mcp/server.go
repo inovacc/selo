@@ -109,17 +109,21 @@ type GenerateCodeOutput struct {
 // "kind" field. Sourced from the registry so it stays in sync automatically.
 func kindEnum() []any {
 	kinds := selo.Kinds()
+
 	out := make([]any, 0, len(kinds))
 	for _, k := range kinds {
 		out = append(out, k.String())
 	}
+
 	return out
 }
 
 // errResult builds a tool result flagged as an error with a human-readable
-// message. The typed Out zero value is returned alongside.
-func errResult[Out any](msg string) (*mcp.CallToolResult, Out, error) {
+// message. The typed Out zero value is returned alongside to satisfy the
+// three-value handler signature required by mcp.AddTool.
+func errResult[Out any](msg string) (*mcp.CallToolResult, Out, error) { //nolint:unparam // Out is always zero but required by the generic handler signature
 	var zero Out
+
 	return &mcp.CallToolResult{
 		IsError: true,
 		Content: []mcp.Content{&mcp.TextContent{Text: msg}},
@@ -128,27 +132,32 @@ func errResult[Out any](msg string) (*mcp.CallToolResult, Out, error) {
 
 func validateHandler(_ context.Context, _ *mcp.CallToolRequest, in ValidateInput) (*mcp.CallToolResult, ValidateOutput, error) {
 	kind := selo.Kind(in.Kind)
+
 	doc, ok := selo.Get(kind)
 	if !ok {
 		return errResult[ValidateOutput](fmt.Sprintf("unknown document kind %q", in.Kind))
 	}
 
 	var out ValidateOutput
+
 	if in.UF != "" {
 		scoped, isScoped := doc.(selo.UFScoped)
 		if !isScoped {
 			return errResult[ValidateOutput](fmt.Sprintf("kind %q does not accept a uf", in.Kind))
 		}
+
 		valid, err := scoped.ValidateUF(in.Value, selo.UF(in.UF))
 		if err != nil {
 			return errResult[ValidateOutput](err.Error())
 		}
+
 		out.Valid = valid
 	} else {
 		valid, err := selo.Validate(kind, in.Value)
 		if err != nil {
 			return errResult[ValidateOutput](err.Error())
 		}
+
 		out.Valid = valid
 	}
 
@@ -173,10 +182,12 @@ func generateHandler(_ context.Context, _ *mcp.CallToolRequest, in GenerateInput
 		if err != nil {
 			return errResult[GenerateOutput](err.Error())
 		}
+
 		values = append(values, v)
 	}
 
 	out := GenerateOutput{Values: values}
+
 	return &mcp.CallToolResult{StructuredContent: out}, out, nil
 }
 
@@ -185,26 +196,33 @@ func formatHandler(_ context.Context, _ *mcp.CallToolRequest, in FormatInput) (*
 	if err != nil {
 		return errResult[FormatOutput](err.Error())
 	}
+
 	out := FormatOutput{Formatted: formatted}
+
 	return &mcp.CallToolResult{StructuredContent: out}, out, nil
 }
 
 func detectHandler(_ context.Context, _ *mcp.CallToolRequest, in DetectInput) (*mcp.CallToolResult, DetectOutput, error) {
 	kind, ok := selo.Detect(in.Value)
+
 	out := DetectOutput{Kind: kind.String(), Valid: ok}
 	if !ok {
 		out.Kind = ""
 	}
+
 	return &mcp.CallToolResult{StructuredContent: out}, out, nil
 }
 
 func listHandler(_ context.Context, _ *mcp.CallToolRequest, _ ListInput) (*mcp.CallToolResult, ListOutput, error) {
 	kinds := selo.Kinds()
+
 	names := make([]string, 0, len(kinds))
 	for _, k := range kinds {
 		names = append(names, k.String())
 	}
+
 	out := ListOutput{Kinds: names}
+
 	return &mcp.CallToolResult{StructuredContent: out}, out, nil
 }
 
@@ -213,20 +231,26 @@ func personHandler(_ context.Context, _ *mcp.CallToolRequest, in PersonInput) (*
 	if count <= 0 {
 		count = 1
 	}
+
 	var opts []selo.PersonOption
+
 	if in.UF != "" {
 		uf := selo.UF(in.UF)
 		if !uf.Valid() {
 			return errResult[PersonOutput](fmt.Sprintf("invalid uf %q", in.UF))
 		}
+
 		opts = append(opts, selo.WithUF(uf))
 	}
+
 	if in.WithVehicle {
 		opts = append(opts, selo.WithVehicle())
 	}
+
 	if in.WithCompany {
 		opts = append(opts, selo.WithCompany())
 	}
+
 	if in.Formatted {
 		opts = append(opts, selo.Formatted())
 	}
@@ -235,7 +259,9 @@ func personHandler(_ context.Context, _ *mcp.CallToolRequest, in PersonInput) (*
 	for i := range people {
 		people[i] = selo.GeneratePerson(opts...)
 	}
+
 	out := PersonOutput{People: people}
+
 	return &mcp.CallToolResult{StructuredContent: out}, out, nil
 }
 
@@ -249,6 +275,7 @@ func generateCodeHandler(_ context.Context, _ *mcp.CallToolRequest, in GenerateC
 		return errResult[GenerateCodeOutput](fmt.Sprintf(
 			"unsupported language %q (supported: %s)", in.Lang, strings.Join(codegen.SupportedLangStrings(), ", ")))
 	}
+
 	kind := selo.Kind(in.Kind)
 	if _, ok := codegen.PlanFor(kind); !ok {
 		return errResult[GenerateCodeOutput](fmt.Sprintf("unknown document kind %q", in.Kind))
@@ -264,6 +291,7 @@ func generateCodeHandler(_ context.Context, _ *mcp.CallToolRequest, in GenerateC
 	for _, f := range files {
 		out.Files = append(out.Files, GenerateCodeFile{Path: f.Path, Content: string(f.Content)})
 	}
+
 	return &mcp.CallToolResult{StructuredContent: out}, out, nil
 }
 
@@ -326,5 +354,6 @@ func Serve(ctx context.Context, version string) error {
 	if err := srv.Run(ctx, &mcp.StdioTransport{}); err != nil {
 		return fmt.Errorf("selo mcp: %w", err)
 	}
+
 	return nil
 }

@@ -13,7 +13,7 @@ import (
 // originFnName returns the TS origin function name for kind, or "" when the kind
 // has no origin resolution.
 func originFnName(kind selo.Kind) string {
-	switch kind {
+	switch kind { //nolint:exhaustive // only origin-capable kinds return a non-empty name; all others fall through to ""
 	case selo.KindCPF, selo.KindCEP, selo.KindPhone, selo.KindVoterID:
 		return "origin" + tsName(kind)
 	default:
@@ -22,13 +22,14 @@ func originFnName(kind selo.Kind) string {
 }
 
 // renderTest emits test/<kind>.test.ts driven by vectors/<kind>.json.
-func (e tsEmitter) renderTest(kind selo.Kind, plan KindPlan, _ Vector) string {
+func (e tsEmitter) renderTest(kind selo.Kind, _ KindPlan, _ Vector) string {
 	name := tsName(kind)
 	validateFn := "validate" + name
 	formatFn := "format" + name
 	originFn := originFnName(kind)
 
 	var imports []string
+
 	imports = append(imports, validateFn, formatFn)
 	if originFn != "" {
 		imports = append(imports, originFn)
@@ -88,5 +89,6 @@ func (e tsEmitter) renderTest(kind selo.Kind, plan KindPlan, _ Vector) string {
 	}
 
 	b.WriteString("});\n")
+
 	return b.String()
 }

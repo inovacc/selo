@@ -90,6 +90,7 @@ func Vectors(k selo.Kind) (Vector, error) {
 	if !ok {
 		return Vector{}, fmt.Errorf("codegen: no plan for kind %q", k)
 	}
+
 	doc, ok := selo.Get(k)
 	if !ok {
 		return Vector{}, fmt.Errorf("codegen: kind %q not registered with selo", k)
@@ -114,6 +115,7 @@ func Vectors(k selo.Kind) (Vector, error) {
 	for _, in := range valids {
 		v.Validate = append(v.Validate, ValidateCase{Input: in, Valid: true})
 	}
+
 	for _, in := range buildInvalid(k, valids) {
 		v.Validate = append(v.Validate, ValidateCase{Input: in, Valid: false})
 	}
@@ -129,21 +131,26 @@ func WriteVectors(dir string) error {
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return fmt.Errorf("codegen: mkdir %q: %w", dir, err)
 	}
+
 	for _, k := range selo.Kinds() {
 		vec, err := Vectors(k)
 		if err != nil {
 			return err
 		}
+
 		data, err := json.MarshalIndent(vec, "", "  ")
 		if err != nil {
 			return fmt.Errorf("codegen: marshal %q vector: %w", k, err)
 		}
+
 		data = append(data, '\n')
+
 		path := filepath.Join(dir, k.String()+".json")
 		if err := os.WriteFile(path, data, 0o644); err != nil {
 			return fmt.Errorf("codegen: write %q: %w", path, err)
 		}
 	}
+
 	return nil
 }
 
@@ -151,15 +158,19 @@ func WriteVectors(dir string) error {
 // selo.Generate output, deduplicated and order-stable.
 func buildValid(k selo.Kind) []string {
 	seen := make(map[string]bool)
+
 	var out []string
+
 	add := func(s string) {
 		if s == "" || seen[s] {
 			return
 		}
+
 		ok, err := selo.Validate(k, s)
 		if err != nil || !ok {
 			return
 		}
+
 		seen[s] = true
 		out = append(out, s)
 	}
@@ -174,8 +185,10 @@ func buildValid(k selo.Kind) []string {
 		if err != nil {
 			break
 		}
+
 		add(g)
 	}
+
 	return out
 }
 
@@ -184,15 +197,19 @@ func buildValid(k selo.Kind) []string {
 // valid samples (for check-digit kinds), keeping only inputs selo rejects.
 func buildInvalid(k selo.Kind, valids []string) []string {
 	seen := make(map[string]bool)
+
 	var out []string
+
 	add := func(s string) {
 		if s == "" || seen[s] {
 			return
 		}
+
 		ok, err := selo.Validate(k, s)
 		if err != nil || ok { // keep only the genuinely invalid
 			return
 		}
+
 		seen[s] = true
 		out = append(out, s)
 	}
@@ -200,6 +217,7 @@ func buildInvalid(k selo.Kind, valids []string) []string {
 	for _, s := range curatedInvalid[k] {
 		add(s)
 	}
+
 	for _, base := range valids {
 		for _, m := range mutations(base) {
 			add(m)
@@ -211,7 +229,9 @@ func buildInvalid(k selo.Kind, valids []string) []string {
 	for _, junk := range []string{"", "0", "abc", "!!!!!!!!!!!", "000000000000000000"} {
 		add(junk)
 	}
+
 	sort.SliceStable(out, func(i, j int) bool { return out[i] < out[j] })
+
 	return out
 }
 
@@ -220,6 +240,7 @@ func buildInvalid(k selo.Kind, valids []string) []string {
 // by the caller against selo so accidentally-valid mutations are dropped.
 func mutations(in string) []string {
 	var out []string
+
 	digits := onlyDigits(in)
 
 	// Wrong last digit: bump the final digit (mod 10) — flips the check digit.
@@ -231,6 +252,7 @@ func mutations(in string) []string {
 				runes[i] = '0' + (orig-'0'+1)%10
 				out = append(out, string(runes))
 				runes[i] = orig
+
 				break
 			}
 		}
@@ -257,18 +279,22 @@ func mutations(in string) []string {
 
 // buildFormat returns format vectors: every valid input mapped to its canonical
 // selo.Format output, plus one error case mapped to its sentinel name.
-func buildFormat(k selo.Kind, doc selo.Document, valids []string) []FormatCase {
+func buildFormat(_ selo.Kind, doc selo.Document, valids []string) []FormatCase {
 	var out []FormatCase
+
 	seen := make(map[string]bool)
 	for _, in := range valids {
 		if seen[in] {
 			continue
 		}
+
 		seen[in] = true
+
 		formatted, err := doc.Format(in)
 		if err != nil {
 			continue
 		}
+
 		out = append(out, FormatCase{Input: in, Output: formatted})
 	}
 
@@ -277,32 +303,40 @@ func buildFormat(k selo.Kind, doc selo.Document, valids []string) []FormatCase {
 	if _, err := doc.Format("1"); err != nil {
 		out = append(out, FormatCase{Input: "1", Error: sentinelName(err)})
 	}
+
 	return out
 }
 
 // buildOrigin returns origin vectors for kinds that resolve origin, mapping each
 // valid input to its selo Origin output.
-func buildOrigin(k selo.Kind, plan KindPlan, doc selo.Document, valids []string) []OriginCase {
+func buildOrigin(_ selo.Kind, plan KindPlan, doc selo.Document, valids []string) []OriginCase {
 	if plan.Origin == OriginNone {
 		return nil
 	}
+
 	res, ok := doc.(selo.OriginResolver)
 	if !ok {
 		return nil
 	}
+
 	var out []OriginCase
+
 	seen := make(map[string]bool)
 	for _, in := range valids {
 		if seen[in] {
 			continue
 		}
+
 		seen[in] = true
+
 		origin, err := res.Origin(in)
 		if err != nil || origin == "" {
 			continue
 		}
+
 		out = append(out, OriginCase{Input: in, Output: origin})
 	}
+
 	return out
 }
 
@@ -326,10 +360,12 @@ func sentinelName(err error) string {
 // onlyDigits returns the ASCII digits of s (local copy; selo's is unexported).
 func onlyDigits(s string) string {
 	var b strings.Builder
+
 	for i := 0; i < len(s); i++ {
 		if s[i] >= '0' && s[i] <= '9' {
 			b.WriteByte(s[i])
 		}
 	}
+
 	return b.String()
 }

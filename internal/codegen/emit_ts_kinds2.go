@@ -25,9 +25,11 @@ func writeHeader(b *strings.Builder, _modPath, dataImports string) {
 	b.WriteString("  onlyDigits,\n")
 	b.WriteString("  allEqual,\n")
 	b.WriteString("} from \"./mod11.js\";\n")
+
 	if dataImports != "" {
 		fmt.Fprintf(b, "import { %s } from \"./data.js\";\n", dataImports)
 	}
+
 	b.WriteString("\n")
 }
 
@@ -37,24 +39,32 @@ func writeHeader(b *strings.Builder, _modPath, dataImports string) {
 func tsMaskExpr(mask, v string) string {
 	var b strings.Builder
 	b.WriteString("`")
+
 	pos := 0
+
 	i := 0
 	for i < len(mask) {
 		c := mask[i]
 		if c == '#' || c == 'X' {
 			start := pos
+
 			for i < len(mask) && (mask[i] == '#' || mask[i] == 'X') {
 				i++
 				pos++
 			}
+
 			fmt.Fprintf(&b, "${%s.slice(%d, %d)}", v, start, pos)
+
 			continue
 		}
 		// literal separator
 		b.WriteByte(c)
+
 		i++
 	}
+
 	b.WriteString("`")
+
 	return b.String()
 }
 
@@ -117,6 +127,7 @@ export function formatRG(value: string): string {
   return `+"`${d.slice(0, 2)}.${d.slice(2, 5)}.${d.slice(5, 8)}-${checkChar}`"+`;
 }
 `, dv, ufs, formatErrorThrow("ErrInvalidFormat"))
+
 	return b.String()
 }
 
@@ -167,11 +178,12 @@ export function formatIE(value: string): string {
   %s
 }
 `, dv1, dv2, ufs, formatErrorThrow("ErrInvalidFormat"))
+
 	return b.String()
 }
 
 // renderPlate emits the regex-only plate module (national + Mercosul).
-func (e tsEmitter) renderPlate(plan KindPlan) string {
+func (e tsEmitter) renderPlate(_ KindPlan) string {
 	var b strings.Builder
 	b.WriteString(headerComment())
 	b.WriteString("\n")
@@ -194,12 +206,13 @@ export function formatPlate(value: string): string {
   ` + formatErrorThrow("ErrInvalidFormat") + `
 }
 `)
+
 	return b.String()
 }
 
 // renderPIX emits the composite PIX module: dispatch EVP -> email -> phone ->
 // CPF -> CNPJ, reusing the CPF/CNPJ validators.
-func (e tsEmitter) renderPIX(plan KindPlan) string {
+func (e tsEmitter) renderPIX(_ KindPlan) string {
 	var b strings.Builder
 	b.WriteString(headerComment())
 	b.WriteString("\n")
@@ -233,12 +246,13 @@ export function formatPIX(value: string): string {
   return v;
 }
 `)
+
 	return b.String()
 }
 
 // renderCEP emits the table-lookup CEP module: prefix-range validation, mask
 // format, and UF origin from the embedded CEP_RANGES table.
-func (e tsEmitter) renderCEP(plan KindPlan) string {
+func (e tsEmitter) renderCEP(_ KindPlan) string {
 	var b strings.Builder
 	writeHeader(&b, "src/mod11.js", "CEP_RANGES")
 	b.WriteString(`/** cepRangeFor returns the UF whose prefix range contains prefix, or null. */
@@ -273,12 +287,13 @@ export function originCEP(value: string): string {
   return uf;
 }
 `)
+
 	return b.String()
 }
 
 // renderPhone emits the table-lookup phone module: optional +55/0055 prefix,
 // DDD->UF validation, mobile/landline mask, and DDD origin.
-func (e tsEmitter) renderPhone(plan KindPlan) string {
+func (e tsEmitter) renderPhone(_ KindPlan) string {
 	var b strings.Builder
 	writeHeader(&b, "src/mod11.js", "DDD_TO_UF")
 	b.WriteString(`/** nationalNumber strips a +55/0055 country prefix, returning the rest. */
@@ -321,6 +336,7 @@ export function originPhone(value: string): string {
   return uf;
 }
 `)
+
 	return b.String()
 }
 
@@ -377,6 +393,7 @@ export function originVoterId(value: string): string {
 }
 `, dv1, dv2, formatErrorThrow("ErrInvalidLength"),
 		formatErrorThrow("ErrInvalidLength"), formatErrorThrow("ErrInvalidFormat"))
+
 	return b.String()
 }
 
@@ -387,5 +404,6 @@ func tsStringArray(_ KindPlan, fallback []string) string {
 	for i, s := range fallback {
 		quoted[i] = strconv.Quote(s)
 	}
+
 	return "[" + strings.Join(quoted, ", ") + "]"
 }

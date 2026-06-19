@@ -1,6 +1,6 @@
 package selo
 
-import "sort"
+import "slices"
 
 // The 27 Brazilian federative units (26 states + the Federal District).
 const (
@@ -61,7 +61,8 @@ func (u UF) Valid() bool {
 func AllUFs() []UF {
 	out := make([]UF, len(allUFs))
 	copy(out, allUFs)
-	sort.Slice(out, func(i, j int) bool { return out[i] < out[j] })
+	slices.Sort(out)
+
 	return out
 }
 
