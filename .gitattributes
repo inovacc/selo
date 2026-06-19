@@ -1,0 +1,12 @@
+# Enforce LF line endings repo-wide so checkouts are identical on every OS.
+# Without this, autocrlf=true on Windows yields CRLF working-tree files, which
+# diverge from the LF the toolchain (gofmt, golangci-lint, the code generator)
+# expects — causing local-vs-CI mismatches.
+* text=auto eol=lf
+
+# Explicit binary types (never normalize) — add more as needed.
+*.png binary
+*.ico binary
+*.icns binary
+*.gz binary
+*.zip binary
