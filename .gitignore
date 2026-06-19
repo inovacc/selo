@@ -47,3 +47,4 @@ fabric.properties
 # dependencies and lockfiles are not.
 generated/**/node_modules/
 generated/**/package-lock.json
+generated/**/target/

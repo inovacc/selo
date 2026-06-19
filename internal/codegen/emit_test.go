@@ -38,14 +38,17 @@ func TestKindStrings(t *testing.T) {
 	}
 }
 
-// TestEmitterRegistry_TSRegistered asserts the TypeScript emitter is registered
-// (M2) while the other languages remain unregistered until their milestones.
+// TestEmitterRegistry_TSRegistered asserts the TypeScript (M2) and Java (M5)
+// emitters are registered while the other languages remain unregistered until
+// their milestones.
 func TestEmitterRegistry_TSRegistered(t *testing.T) {
-	ts, ok := codegen.EmitterFor(codegen.LangTS)
-	require.True(t, ok, "TypeScript emitter should be registered in M2")
-	assert.Equal(t, codegen.LangTS, ts.Lang())
+	for _, l := range []codegen.Lang{codegen.LangTS, codegen.LangJava} {
+		e, ok := codegen.EmitterFor(l)
+		require.Truef(t, ok, "emitter for %q should be registered", l)
+		assert.Equal(t, l, e.Lang())
+	}
 
-	for _, l := range []codegen.Lang{codegen.LangJS, codegen.LangRuby, codegen.LangJava, codegen.LangCSharp} {
+	for _, l := range []codegen.Lang{codegen.LangJS, codegen.LangRuby, codegen.LangCSharp} {
 		_, regd := codegen.EmitterFor(l)
 		assert.Falsef(t, regd, "no emitter should be registered for %q yet", l)
 
