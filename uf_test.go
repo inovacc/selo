@@ -37,6 +37,7 @@ func TestAllUFs_Count(t *testing.T) {
 	}
 	// returned slice must be a copy (mutating it must not affect later calls)
 	got[0] = UF("ZZ")
+
 	again := AllUFs()
 	if again[0] == UF("ZZ") {
 		t.Fatal("AllUFs() leaks internal backing array")

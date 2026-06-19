@@ -10,6 +10,7 @@ import (
 
 func TestCNH_Validate(t *testing.T) {
 	c := NewCNH()
+
 	tests := []struct {
 		name  string
 		value string
@@ -36,7 +37,7 @@ func TestCNH_Validate(t *testing.T) {
 
 func TestCNH_Generate_RoundTrip(t *testing.T) {
 	c := NewCNH()
-	for i := 0; i < 1000; i++ {
+	for range 1000 {
 		got := c.Generate()
 		require.Len(t, got, CnhLength)
 		assert.True(t, c.Validate(got), "generated CNH must validate: %q", got)
@@ -50,6 +51,7 @@ func TestCNH_Kind(t *testing.T) {
 
 func TestCNH_Format(t *testing.T) {
 	c := NewCNH()
+
 	t.Run("11 digits identity", func(t *testing.T) {
 		got, err := c.Format("02345678929")
 		require.NoError(t, err)
@@ -69,19 +71,22 @@ func TestCNH_Format(t *testing.T) {
 
 func BenchmarkCNH_Validate(b *testing.B) {
 	c := NewCNH()
+
 	const sample = "02345678929"
+
 	b.ReportAllocs()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+
+	for b.Loop() {
 		_ = c.Validate(sample)
 	}
 }
 
 func BenchmarkCNH_Generate(b *testing.B) {
 	c := NewCNH()
+
 	b.ReportAllocs()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+
+	for b.Loop() {
 		_ = c.Generate()
 	}
 }

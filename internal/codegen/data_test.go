@@ -18,6 +18,7 @@ func cepUFForPrefix(prefix int) (string, bool) {
 			return r.UF, true
 		}
 	}
+
 	return "", false
 }
 
@@ -26,6 +27,7 @@ func cepUFForPrefix(prefix int) (string, bool) {
 func TestCEPRanges_MatchSeloOrigin(t *testing.T) {
 	cep, ok := selo.Get(selo.KindCEP)
 	require.True(t, ok)
+
 	origin := cep.(selo.OriginResolver)
 
 	samples := []struct {
@@ -56,9 +58,11 @@ func TestCEPRanges_MatchSeloOrigin(t *testing.T) {
 func TestDDDtoUF_MatchSeloOrigin(t *testing.T) {
 	phone, ok := selo.Get(selo.KindPhone)
 	require.True(t, ok)
+
 	origin := phone.(selo.OriginResolver)
 
 	ddd := codegen.DDDtoUF()
+
 	samples := []struct {
 		ddd  string
 		full string
@@ -93,6 +97,7 @@ func TestDDDList_SortedAndComplete(t *testing.T) {
 func TestCPFRegions_MatchSeloOrigin(t *testing.T) {
 	cpf, ok := selo.Get(selo.KindCPF)
 	require.True(t, ok)
+
 	origin := cpf.(selo.OriginResolver)
 
 	regions := codegen.CPFRegions()
@@ -105,6 +110,7 @@ func TestCPFRegions_MatchSeloOrigin(t *testing.T) {
 		for i := range base {
 			base[i] = '0'
 		}
+
 		base[8] = byte('0' + digit)
 		want, err := origin.Origin(string(base))
 		require.NoErrorf(t, err, "selo cpf origin for digit %d", digit)

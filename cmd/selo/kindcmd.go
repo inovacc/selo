@@ -103,6 +103,7 @@ func (f *kindFlags) validateCombo() error {
 	}
 
 	actions := 0
+
 	for _, on := range []bool{f.generate, f.validate != "", f.format != "", f.origin != "", f.from != ""} {
 		if on {
 			actions++
@@ -126,6 +127,7 @@ func runGenerate(cmd *cobra.Command, doc sdk.Document, count int) error {
 	}
 
 	w := bufio.NewWriter(cmd.OutOrStdout())
+
 	defer func() { _ = w.Flush() }()
 
 	for i := 0; i < count; i++ {

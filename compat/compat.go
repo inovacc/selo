@@ -1,6 +1,8 @@
 package compat
 
 import (
+	"slices"
+
 	"github.com/inovacc/selo"
 )
 
@@ -53,10 +55,12 @@ func IsCEP(s string) (bool, UF) {
 	if !c.Validate(s) {
 		return false, UF("")
 	}
+
 	origin, err := c.Origin(s)
 	if err != nil {
 		return false, UF("")
 	}
+
 	return true, UF(origin)
 }
 
@@ -67,15 +71,12 @@ func IsCEPFrom(s string, ufs ...UF) bool {
 	if !ok {
 		return false
 	}
+
 	if len(ufs) == 0 {
 		return true
 	}
-	for _, want := range ufs {
-		if uf == want {
-			return true
-		}
-	}
-	return false
+
+	return slices.Contains(ufs, uf)
 }
 
 // IsPhone reports whether s is a valid Brazilian phone number and, if so, the
@@ -86,10 +87,12 @@ func IsPhone(s string) (bool, UF) {
 	if !p.Validate(s) {
 		return false, UF("")
 	}
+
 	origin, err := p.Origin(s)
 	if err != nil {
 		return false, UF("")
 	}
+
 	return true, UF(origin)
 }
 
@@ -101,15 +104,12 @@ func IsPhoneFrom(s string, ufs ...UF) bool {
 	if !ok {
 		return false
 	}
+
 	if len(ufs) == 0 {
 		return true
 	}
-	for _, want := range ufs {
-		if uf == want {
-			return true
-		}
-	}
-	return false
+
+	return slices.Contains(ufs, uf)
 }
 
 // IsRG reports whether s is a valid RG for the given UF. The returned error is

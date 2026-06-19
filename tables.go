@@ -10,6 +10,8 @@ package selo
 // generation algorithm; each returns a fresh copy so callers cannot mutate the
 // underlying tables.
 
+import "maps"
+
 // CEPRange is one inclusive CEP prefix range and the UF it maps to. The bounds
 // are three-digit prefixes (cep / 100000); some UFs have multiple disjoint
 // blocks, all of which are returned by CEPRanges.
@@ -27,6 +29,7 @@ func CEPRanges() []CEPRange {
 	for _, r := range cepPrefixRanges {
 		out = append(out, CEPRange{UF: r.uf, From: r.from, To: r.to})
 	}
+
 	return out
 }
 
@@ -34,9 +37,8 @@ func CEPRanges() []CEPRange {
 // validator and origin resolver.
 func DDDtoUF() map[int]UF {
 	out := make(map[int]UF, len(dddUFTable))
-	for ddd, uf := range dddUFTable {
-		out[ddd] = uf
-	}
+	maps.Copy(out, dddUFTable)
+
 	return out
 }
 
@@ -62,8 +64,7 @@ func CPFRegions() map[int]string {
 // map used by the voter-ID origin resolver.
 func VoterUFNames() map[int]string {
 	out := make(map[int]string, len(voterUFNames))
-	for code, name := range voterUFNames {
-		out[code] = name
-	}
+	maps.Copy(out, voterUFNames)
+
 	return out
 }

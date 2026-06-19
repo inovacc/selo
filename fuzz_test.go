@@ -7,9 +7,11 @@ import "testing"
 // the Generate->Validate round-trip invariant; this guards robustness.
 func fuzzNoPanic(f *testing.F, d Document, seeds ...string) {
 	f.Helper()
+
 	for _, s := range seeds {
 		f.Add(s)
 	}
+
 	f.Fuzz(func(_ *testing.T, s string) {
 		_ = d.Validate(s)
 		_, _ = d.Format(s)

@@ -33,6 +33,7 @@ func TestRegistry_RegisterGetDispatch(t *testing.T) {
 	if !ok {
 		t.Fatal("Get returned ok=false for a registered kind")
 	}
+
 	if got.Kind() != testKind {
 		t.Fatalf("Get returned wrong kind: %q", got.Kind())
 	}
@@ -58,12 +59,15 @@ func TestRegistry_UnknownKind(t *testing.T) {
 	if _, ok := Get(missing); ok {
 		t.Fatal("Get returned ok=true for an unregistered kind")
 	}
+
 	if _, err := Validate(missing, "x"); !errors.Is(err, ErrUnknownKind) {
 		t.Fatalf("Validate err = %v, want ErrUnknownKind", err)
 	}
+
 	if _, err := Generate(missing); !errors.Is(err, ErrUnknownKind) {
 		t.Fatalf("Generate err = %v, want ErrUnknownKind", err)
 	}
+
 	if _, err := Format(missing, "x"); !errors.Is(err, ErrUnknownKind) {
 		t.Fatalf("Format err = %v, want ErrUnknownKind", err)
 	}

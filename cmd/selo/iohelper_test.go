@@ -25,6 +25,7 @@ func TestOpenReaderFile(t *testing.T) {
 
 	r, closeFn, err := openReader(path)
 	require.NoError(t, err)
+
 	require.NotNil(t, closeFn)
 	defer closeFn()
 
@@ -48,6 +49,7 @@ func TestStreamValidate(t *testing.T) {
 		if value == "222" {
 			return "", false
 		}
+
 		return value + value, true
 	}
 

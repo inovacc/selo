@@ -18,12 +18,14 @@ func TestRG_Registered(t *testing.T) {
 	if !ok {
 		t.Fatal("RG not registered in registry")
 	}
+
 	if d.Kind() != KindRG {
 		t.Fatalf("registered Kind() = %q, want %q", d.Kind(), KindRG)
 	}
 }
 func TestRG_parse(t *testing.T) {
 	r := NewRG()
+
 	tests := []struct {
 		name      string
 		in        string
@@ -47,12 +49,15 @@ func TestRG_parse(t *testing.T) {
 			if ok != tt.wantOK {
 				t.Fatalf("parse(%q) ok = %v, want %v", tt.in, ok, tt.wantOK)
 			}
+
 			if !ok {
 				return
 			}
+
 			if check != tt.wantCheck {
 				t.Errorf("parse(%q) check = %d, want %d", tt.in, check, tt.wantCheck)
 			}
+
 			if base[0] != tt.wantBase0 {
 				t.Errorf("parse(%q) base[0] = %d, want %d", tt.in, base[0], tt.wantBase0)
 			}
@@ -85,12 +90,15 @@ func TestRG_ValidateUF(t *testing.T) {
 			if got != tt.want {
 				t.Errorf("ValidateUF(%q,%q) = %v, want %v", tt.value, tt.uf, got, tt.want)
 			}
+
 			if tt.wantErr == nil {
 				if err != nil {
 					t.Errorf("ValidateUF(%q,%q) err = %v, want nil", tt.value, tt.uf, err)
 				}
+
 				return
 			}
+
 			if !errors.Is(err, tt.wantErr) {
 				t.Errorf("ValidateUF(%q,%q) err = %v, want errors.Is %v", tt.value, tt.uf, err, tt.wantErr)
 			}
@@ -101,10 +109,12 @@ func TestRG_ValidateUF(t *testing.T) {
 func TestRG_ImplementedUFs(t *testing.T) {
 	r := NewRG()
 	ufs := r.ImplementedUFs()
+
 	want := map[UF]bool{UFSP: true, UFRJ: true}
 	if len(ufs) != len(want) {
 		t.Fatalf("ImplementedUFs() len = %d, want %d (%v)", len(ufs), len(want), ufs)
 	}
+
 	for _, u := range ufs {
 		if !want[u] {
 			t.Errorf("ImplementedUFs() returned unexpected UF %q", u)
@@ -113,6 +123,7 @@ func TestRG_ImplementedUFs(t *testing.T) {
 }
 func TestRG_Validate(t *testing.T) {
 	r := NewRG()
+
 	tests := []struct {
 		name  string
 		value string
@@ -148,7 +159,7 @@ func TestRG_Validate(t *testing.T) {
 // (sum(9..2) mod 11) == (11 - sum(2..9) mod 11) for every input.
 //
 // Sources:
-//   - 24.678.131-2 — "Tudo em AdvPL" (siga0984), "Algoritmos – Validação de RG"
+//   - 24.678.131-2 — "Tudo em AdvPL" (siga0984), "Algorithms – Validação de RG"
 //   - 29.465.327-2 — Bóson Treinamentos, "Validação de RG SSP/SP em Python"
 //
 // NOTE: these are authoritative-tutorial worked examples, not confirmed
@@ -156,6 +167,7 @@ func TestRG_Validate(t *testing.T) {
 // reasons); they independently exercise the published convention.
 func TestRG_AuthoritativeSamples(t *testing.T) {
 	r := NewRG()
+
 	samples := []struct {
 		value  string
 		source string
@@ -174,6 +186,7 @@ func TestRG_AuthoritativeSamples(t *testing.T) {
 
 func TestRG_Format(t *testing.T) {
 	r := NewRG()
+
 	tests := []struct {
 		name    string
 		in      string
@@ -195,11 +208,14 @@ func TestRG_Format(t *testing.T) {
 				if !errors.Is(err, tt.wantErr) {
 					t.Fatalf("Format(%q) err = %v, want errors.Is %v", tt.in, err, tt.wantErr)
 				}
+
 				return
 			}
+
 			if err != nil {
 				t.Fatalf("Format(%q) unexpected err: %v", tt.in, err)
 			}
+
 			if got != tt.want {
 				t.Errorf("Format(%q) = %q, want %q", tt.in, got, tt.want)
 			}
@@ -208,7 +224,7 @@ func TestRG_Format(t *testing.T) {
 }
 func TestRG_GenerateRoundTrip(t *testing.T) {
 	r := NewRG()
-	for i := 0; i < 1000; i++ {
+	for range 1000 {
 		v := r.Generate()
 		if !r.Validate(v) {
 			t.Fatalf("Generate() produced invalid RG: %q", v)
@@ -222,25 +238,29 @@ func TestRG_GenerateRoundTrip(t *testing.T) {
 
 func BenchmarkRGValidate(b *testing.B) {
 	r := NewRG()
+
 	const sample = "24.678.131-4"
+
 	b.ReportAllocs()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+
+	for b.Loop() {
 		_ = r.Validate(sample)
 	}
 }
 
 func BenchmarkRGGenerate(b *testing.B) {
 	r := NewRG()
+
 	b.ReportAllocs()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+
+	for b.Loop() {
 		_ = r.Generate()
 	}
 }
 
 func FuzzRGValidate(f *testing.F) {
 	r := NewRG()
+
 	f.Add("24.678.131-4")
 	f.Add("246781314")
 	f.Add("11.111.111-X")
@@ -266,6 +286,7 @@ func TestRG_RegistryDispatch(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Validate(KindRG, ...) err = %v", err)
 	}
+
 	if !ok {
 		t.Fatal("Validate(KindRG, valid sample) = false, want true")
 	}

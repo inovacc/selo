@@ -20,6 +20,7 @@ func newDetectCmd() *cobra.Command {
 			if !ok {
 				_, _ = fmt.Fprintln(cmd.OutOrStdout(), "unknown")
 				cmd.SilenceUsage = true
+
 				return errInvalidInput
 			}
 

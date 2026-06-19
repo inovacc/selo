@@ -22,6 +22,7 @@ func newMCPCmd() *cobra.Command {
 			// Cancel on SIGINT/SIGTERM so the stdio loop exits cleanly.
 			ctx, stop := signal.NotifyContext(cmd.Context(), syscall.SIGINT, syscall.SIGTERM)
 			defer stop()
+
 			return mcpserver.Serve(ctx, version())
 		},
 	}

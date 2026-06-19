@@ -14,6 +14,7 @@ import (
 // and returns a connected client session. Cleanup is registered on t.
 func newTestSession(t *testing.T) (context.Context, *mcp.ClientSession) {
 	t.Helper()
+
 	ctx := context.Background()
 
 	st, ct := mcp.NewInMemoryTransports()
@@ -110,6 +111,7 @@ func TestGenerateDocumentTool(t *testing.T) {
 	var out GenerateOutput
 	decodeResult(t, res, &out)
 	require.Len(t, out.Values, 3)
+
 	for _, v := range out.Values {
 		assert.True(t, selo.NewCPF().Validate(v), "generated %q must validate", v)
 	}
@@ -120,6 +122,7 @@ func TestGenerateDocumentTool(t *testing.T) {
 		Arguments: map[string]any{"kind": "cnpj"},
 	})
 	require.NoError(t, err)
+
 	var one GenerateOutput
 	decodeResult(t, res, &one)
 	assert.Len(t, one.Values, 1)
@@ -201,6 +204,7 @@ func TestListDocumentTypesTool(t *testing.T) {
 	for _, k := range selo.Kinds() {
 		want = append(want, k.String())
 	}
+
 	assert.Equal(t, want, out.Kinds)
 	assert.Contains(t, out.Kinds, "cpf")
 	assert.Contains(t, out.Kinds, "cnpj")
@@ -224,6 +228,7 @@ func TestGeneratePersonTool(t *testing.T) {
 	var out PersonOutput
 	decodeResult(t, res, &out)
 	require.Len(t, out.People, 2)
+
 	for _, p := range out.People {
 		assert.Equal(t, selo.UFSP, p.UF)
 		assert.Truef(t, selo.NewCPF().Validate(p.CPF), "CPF %q", p.CPF)
@@ -254,16 +259,21 @@ func TestGenerateCodeTool(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.Falsef(t, res.IsError, "M2 generate_code(ts, cpf) should succeed: %+v", res.Content)
+
 	var codeOut GenerateCodeOutput
 	decodeResult(t, res, &codeOut)
 	require.NotEmpty(t, codeOut.Files, "ts/cpf should produce files")
+
 	var hasModule bool
+
 	for _, f := range codeOut.Files {
 		if f.Path == "src/cpf.ts" {
 			hasModule = true
+
 			assert.Contains(t, f.Content, "export function validateCPF")
 		}
 	}
+
 	assert.True(t, hasModule, "ts/cpf should include src/cpf.ts")
 
 	// A language whose emitter is not registered yet yields a clean error result.

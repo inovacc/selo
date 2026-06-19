@@ -15,18 +15,21 @@ import (
 
 func runCmd(t *testing.T, args ...string) (string, error) {
 	t.Helper()
+
 	root := newRootCmd()
 	out := new(bytes.Buffer)
 	root.SetOut(out)
 	root.SetErr(out)
 	root.SetArgs(args)
 	err := root.Execute()
+
 	return out.String(), err
 }
 
 func TestKindCmdGenerateCPF(t *testing.T) {
 	out, err := runCmd(t, "cpf", "--generate")
 	require.NoError(t, err)
+
 	got := strings.TrimSpace(out)
 	assert.True(t, sdk.NewCPF().Validate(got), "generated CPF must validate: %q", got)
 }
@@ -34,6 +37,7 @@ func TestKindCmdGenerateCPF(t *testing.T) {
 func TestKindCmdGenerateCount(t *testing.T) {
 	out, err := runCmd(t, "cpf", "--generate", "--count", "3")
 	require.NoError(t, err)
+
 	lines := strings.Split(strings.TrimSpace(out), "\n")
 	assert.Len(t, lines, 3)
 }
@@ -56,6 +60,7 @@ func TestKindCmdFromBulkWithInvalid(t *testing.T) {
 	// Write a temp file containing one valid and one invalid CPF.
 	f, err := os.CreateTemp(t.TempDir(), "cpfs-*.txt")
 	require.NoError(t, err)
+
 	_, _ = f.WriteString("529.982.247-25\n123.456.789-00\n")
 	require.NoError(t, f.Close())
 
@@ -70,6 +75,7 @@ func TestKindCmdFromBulkWithInvalid(t *testing.T) {
 func TestKindCmdFromBulkAllValid(t *testing.T) {
 	f, err := os.CreateTemp(t.TempDir(), "cpfs-*.txt")
 	require.NoError(t, err)
+
 	_, _ = f.WriteString("529.982.247-25\n")
 	require.NoError(t, f.Close())
 
@@ -129,5 +135,6 @@ func findCmd(root *cobra.Command, name string) *cobra.Command {
 			return c
 		}
 	}
+
 	return nil
 }

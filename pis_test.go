@@ -10,6 +10,7 @@ import (
 
 func TestPIS_Validate(t *testing.T) {
 	p := NewPIS()
+
 	tests := []struct {
 		name  string
 		value string
@@ -36,7 +37,7 @@ func TestPIS_Validate(t *testing.T) {
 
 func TestPIS_Generate_RoundTrip(t *testing.T) {
 	p := NewPIS()
-	for i := 0; i < 1000; i++ {
+	for range 1000 {
 		got := p.Generate()
 		require.Len(t, got, PisLength)
 		assert.True(t, p.Validate(got), "generated PIS must validate: %q", got)
@@ -50,6 +51,7 @@ func TestPIS_Kind(t *testing.T) {
 
 func TestPIS_Format(t *testing.T) {
 	p := NewPIS()
+
 	t.Run("unformatted to mask", func(t *testing.T) {
 		got, err := p.Format("12001234564")
 		require.NoError(t, err)
@@ -69,19 +71,22 @@ func TestPIS_Format(t *testing.T) {
 
 func BenchmarkPIS_Validate(b *testing.B) {
 	p := NewPIS()
+
 	const sample = "12001234564"
+
 	b.ReportAllocs()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+
+	for b.Loop() {
 		_ = p.Validate(sample)
 	}
 }
 
 func BenchmarkPIS_Generate(b *testing.B) {
 	p := NewPIS()
+
 	b.ReportAllocs()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+
+	for b.Loop() {
 		_ = p.Generate()
 	}
 }

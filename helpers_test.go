@@ -28,6 +28,7 @@ func TestValidateDocument_DelegatesToDetect(t *testing.T) {
 	if dt, ok := ValidateDocument("123.456.789-09"); dt != "CPF" || !ok {
 		t.Fatalf("ValidateDocument(valid CPF) = (%q, %v), want (CPF, true)", dt, ok)
 	}
+
 	if dt, ok := ValidateDocument("12.ABC.345/01DE-35"); dt != "CNPJ" || !ok {
 		t.Fatalf("ValidateDocument(valid CNPJ) = (%q, %v), want (CNPJ, true)", dt, ok)
 	}
@@ -35,6 +36,7 @@ func TestValidateDocument_DelegatesToDetect(t *testing.T) {
 	if dt, ok := ValidateDocument("123.456.789-00"); dt != "CPF" || ok {
 		t.Fatalf("ValidateDocument(invalid CPF) = (%q, %v), want (CPF, false)", dt, ok)
 	}
+
 	if dt, ok := ValidateDocument("12345"); dt != "UNKNOWN" || ok {
 		t.Fatalf("ValidateDocument(garbage) = (%q, %v), want (UNKNOWN, false)", dt, ok)
 	}

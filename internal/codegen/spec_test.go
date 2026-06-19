@@ -26,9 +26,11 @@ func TestPlans_NoExtraKinds(t *testing.T) {
 	for _, k := range selo.Kinds() {
 		known[k] = true
 	}
+
 	for k := range codegen.Plans {
 		assert.Truef(t, known[k], "codegen plan for unknown kind %q", k)
 	}
+
 	assert.Len(t, codegen.Plans, len(selo.Kinds()), "plan count must equal kind count")
 }
 
@@ -37,6 +39,7 @@ func TestPlans_NoExtraKinds(t *testing.T) {
 // set). Group is always one of A–F.
 func TestPlans_ShapeIsValid(t *testing.T) {
 	validGroups := map[string]bool{"A": true, "B": true, "C": true, "D": true, "E": true, "F": true}
+
 	for _, k := range selo.Kinds() {
 		p, ok := codegen.PlanFor(k)
 		require.Truef(t, ok, "missing plan for %q", k)

@@ -30,9 +30,11 @@ func (p *PIS) Validate(value string) bool {
 	if len(d) != PisLength {
 		return false
 	}
+
 	if pisAllEqual(d) {
 		return false
 	}
+
 	return int(d[10]-'0') == pisCheckDigit(d)
 }
 
@@ -41,10 +43,12 @@ func (p *PIS) Validate(value string) bool {
 func (p *PIS) Generate() string {
 	for {
 		var b [PisLength]byte
-		for i := 0; i < 10; i++ {
+		for i := range 10 {
 			b[i] = byte('0' + rand.IntN(10))
 		}
+
 		b[10] = byte('0' + pisCheckDigit(string(b[:10])))
+
 		out := string(b[:])
 		if !pisAllEqual(out) {
 			return out
@@ -59,19 +63,22 @@ func (p *PIS) Format(value string) (string, error) {
 	if len(d) != PisLength {
 		return "", fmt.Errorf("pis: got %d digits, want %d: %w", len(d), PisLength, ErrInvalidLength)
 	}
+
 	return d[0:3] + "." + d[3:8] + "." + d[8:10] + "-" + d[10:11], nil
 }
 
 // pisCheckDigit computes the single mod-11 check digit over the first 10 digits.
 func pisCheckDigit(d string) int {
 	sum := 0
-	for i := 0; i < 10; i++ {
+	for i := range 10 {
 		sum += int(d[i]-'0') * pisWeights[i]
 	}
+
 	mod := sum % 11
 	if mod <= 1 {
 		return 0
 	}
+
 	return 11 - mod
 }
 
@@ -82,5 +89,6 @@ func pisAllEqual(d string) bool {
 			return false
 		}
 	}
+
 	return true
 }

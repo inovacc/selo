@@ -47,6 +47,7 @@ func (c *CNS) Generate() string {
 
 	for {
 		var d [CNSLength]byte
+
 		d[0] = prefixes[rand.IntN(len(prefixes))]
 
 		for i := 1; i < CNSLength-1; i++ {
@@ -55,7 +56,7 @@ func (c *CNS) Generate() string {
 
 		// Sum of the first 14 positions (weights 15..2); position 15 has weight 1.
 		partial := 0
-		for i := 0; i < CNSLength-1; i++ {
+		for i := range CNSLength - 1 {
 			partial += int(d[i]-'0') * (CNSLength - i)
 		}
 
@@ -97,7 +98,7 @@ func cnsValidPrefix(b byte) bool {
 // cnsWeightedSum computes Σ dᵢ·wᵢ with descending weights 15..1.
 func cnsWeightedSum(d string) int {
 	sum := 0
-	for i := 0; i < CNSLength; i++ {
+	for i := range CNSLength {
 		sum += int(d[i]-'0') * (CNSLength - i)
 	}
 

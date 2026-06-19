@@ -55,7 +55,9 @@ func (e *IE) ImplementedUFs() []UF {
 	for uf := range ieTable {
 		ufs = append(ufs, uf)
 	}
+
 	slices.Sort(ufs)
+
 	return ufs
 }
 
@@ -68,10 +70,12 @@ func (e *IE) ValidateUF(value string, uf UF) (bool, error) {
 	if !ok {
 		return false, fmt.Errorf("%w: %s", ErrUFNotImplemented, uf)
 	}
+
 	d := onlyDigits(value)
 	if !slices.Contains(algo.lengths, len(d)) {
 		return false, ErrInvalidFormat
 	}
+
 	return algo.validate(d), nil
 }
 
@@ -83,6 +87,7 @@ func (e *IE) Validate(value string) bool {
 			return true
 		}
 	}
+
 	return false
 }
 
@@ -92,12 +97,14 @@ func (e *IE) Validate(value string) bool {
 // UF, which is inferred here from which algorithm accepts the value.)
 func (e *IE) Format(value string) (string, error) {
 	d := onlyDigits(value)
+
 	for _, uf := range e.ImplementedUFs() {
 		algo := ieTable[uf]
 		if slices.Contains(algo.lengths, len(d)) && algo.validate(d) {
 			return algo.mask(d), nil
 		}
 	}
+
 	return "", ErrInvalidFormat
 }
 
@@ -106,14 +113,17 @@ func (e *IE) Format(value string) (string, error) {
 // only if no implemented UF supports generation (not the case while SP ships).
 func (e *IE) Generate() string {
 	var gen []UF
+
 	for _, uf := range e.ImplementedUFs() {
 		if ieTable[uf].generate != nil {
 			gen = append(gen, uf)
 		}
 	}
+
 	if len(gen) == 0 {
 		return ""
 	}
+
 	return ieTable[gen[rand.IntN(len(gen))]].generate()
 }
 
@@ -125,6 +135,7 @@ func ieRightmostDV(d string, weights []int) int {
 	for i, w := range weights {
 		sum += int(d[i]-'0') * w
 	}
+
 	return (sum % 11) % 10
 }
 
@@ -145,9 +156,11 @@ func ieSPValidate(d string) bool {
 	if len(d) != ieSPLength {
 		return false
 	}
+
 	if ieRightmostDV(d, ieSPWeights1) != int(d[8]-'0') {
 		return false
 	}
+
 	return ieRightmostDV(d, ieSPWeights2) == int(d[11]-'0')
 }
 
@@ -155,17 +168,20 @@ func ieSPMask(d string) string {
 	if len(d) != ieSPLength {
 		return d
 	}
+
 	return d[0:3] + "." + d[3:6] + "." + d[6:9] + "." + d[9:12]
 }
 
 func ieSPGenerate() string {
 	var d [ieSPLength]byte
-	for i := 0; i < 8; i++ {
+	for i := range 8 {
 		d[i] = byte('0' + rand.IntN(10))
 	}
+
 	d[8] = byte('0' + ieRightmostDV(string(d[:8]), ieSPWeights1))
 	d[9] = byte('0' + rand.IntN(10))
 	d[10] = byte('0' + rand.IntN(10))
 	d[11] = byte('0' + ieRightmostDV(string(d[:11]), ieSPWeights2))
+
 	return ieSPMask(string(d[:]))
 }

@@ -47,7 +47,7 @@ func TestCNSValidate(t *testing.T) {
 func TestCNSGenerate(t *testing.T) {
 	c := NewCNS()
 
-	for i := 0; i < 2000; i++ {
+	for range 2000 {
 		got := c.Generate()
 		require.Len(t, got, CNSLength, "generated CNS must be 15 digits")
 		assert.True(t, cnsValidPrefix(got[0]), "generated CNS %q must have a valid prefix", got)
@@ -78,6 +78,7 @@ func TestCNSFormat(t *testing.T) {
 			if tt.wantErr != nil {
 				require.Error(t, err)
 				assert.True(t, errors.Is(err, tt.wantErr))
+
 				return
 			}
 
@@ -96,9 +97,8 @@ func BenchmarkCNSValidate(b *testing.B) {
 	sample := c.Generate()
 
 	b.ReportAllocs()
-	b.ResetTimer()
 
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		_ = c.Validate(sample)
 	}
 }
@@ -107,9 +107,8 @@ func BenchmarkCNSGenerate(b *testing.B) {
 	c := NewCNS()
 
 	b.ReportAllocs()
-	b.ResetTimer()
 
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		_ = c.Generate()
 	}
 }
@@ -118,6 +117,7 @@ func BenchmarkCNSGenerate(b *testing.B) {
 
 func FuzzCNSValidate(f *testing.F) {
 	c := NewCNS()
+
 	f.Add("100000000000007")
 	f.Add("900000000000008")
 	f.Add("")

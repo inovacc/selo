@@ -19,6 +19,7 @@ func TestSupportedLangs(t *testing.T) {
 	for _, l := range []string{"ts", "js", "ruby", "java", "csharp"} {
 		assert.Truef(t, codegen.IsSupportedLang(l), "expected %q supported", l)
 	}
+
 	assert.False(t, codegen.IsSupportedLang("python"))
 	assert.False(t, codegen.IsSupportedLang(""))
 }
@@ -27,6 +28,7 @@ func TestSupportedLangs(t *testing.T) {
 func TestKindStrings(t *testing.T) {
 	ks := codegen.KindStrings()
 	assert.Len(t, ks, 13)
+
 	for _, k := range selo.Kinds() {
 		assert.Containsf(t, ks, k.String(), "KindStrings missing %q", k)
 	}

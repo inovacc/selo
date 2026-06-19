@@ -28,10 +28,13 @@ func (c *CNH) Validate(value string) bool {
 	if len(d) != CnhLength {
 		return false
 	}
+
 	if cnhAllEqual(d) {
 		return false
 	}
+
 	dv1, dv2 := cnhCheckDigits(d[:9])
+
 	return dv1 == int(d[9]-'0') && dv2 == int(d[10]-'0')
 }
 
@@ -40,12 +43,14 @@ func (c *CNH) Validate(value string) bool {
 func (c *CNH) Generate() string {
 	for {
 		var b [CnhLength]byte
-		for i := 0; i < 9; i++ {
+		for i := range 9 {
 			b[i] = byte('0' + rand.IntN(10))
 		}
+
 		dv1, dv2 := cnhCheckDigits(string(b[:9]))
 		b[9] = byte('0' + dv1)
 		b[10] = byte('0' + dv2)
+
 		out := string(b[:])
 		if !cnhAllEqual(out) {
 			return out
@@ -60,6 +65,7 @@ func (c *CNH) Format(value string) (string, error) {
 	if len(d) != CnhLength {
 		return "", fmt.Errorf("cnh: got %d digits, want %d: %w", len(d), CnhLength, ErrInvalidLength)
 	}
+
 	return d, nil
 }
 
@@ -71,9 +77,10 @@ func cnhCheckDigits(base string) (dv1, dv2 int) {
 	dsc := 0
 
 	sum := 0
-	for i := 0; i < 9; i++ {
+	for i := range 9 {
 		sum += int(base[i]-'0') * (9 - i)
 	}
+
 	r := sum % 11
 	if r >= 10 {
 		dv1 = 0
@@ -83,18 +90,21 @@ func cnhCheckDigits(base string) (dv1, dv2 int) {
 	}
 
 	sum = 0
-	for i := 0; i < 9; i++ {
+	for i := range 9 {
 		sum += int(base[i]-'0') * (1 + i)
 	}
+
 	r = (sum % 11) - dsc
 	if r < 0 {
 		r += 11
 	}
+
 	if r >= 10 {
 		dv2 = 0
 	} else {
 		dv2 = r
 	}
+
 	return dv1, dv2
 }
 
@@ -105,5 +115,6 @@ func cnhAllEqual(d string) bool {
 			return false
 		}
 	}
+
 	return true
 }

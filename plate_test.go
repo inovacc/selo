@@ -69,7 +69,7 @@ func TestPlateFormat(t *testing.T) {
 
 func TestPlateGenerateRoundTrip(t *testing.T) {
 	nat := &Plate{Mercosul: false}
-	for i := 0; i < 300; i++ {
+	for range 300 {
 		got := nat.Generate()
 		assert.Len(t, got, 7, "national plate is 7 chars unformatted")
 		assert.True(t, IsNationalPlate(got), "generated national plate %q must match", got)
@@ -77,7 +77,7 @@ func TestPlateGenerateRoundTrip(t *testing.T) {
 	}
 
 	merc := &Plate{Mercosul: true}
-	for i := 0; i < 300; i++ {
+	for range 300 {
 		got := merc.Generate()
 		assert.Len(t, got, 7, "mercosul plate is 7 chars")
 		assert.True(t, IsMercosulPlate(got), "generated mercosul plate %q must match", got)
@@ -101,18 +101,20 @@ func TestPlateViaRegistry(t *testing.T) {
 
 func BenchmarkPlateValidate(b *testing.B) {
 	p := NewPlate()
+
 	b.ReportAllocs()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+
+	for b.Loop() {
 		_ = p.Validate("ABC1D23")
 	}
 }
 
 func BenchmarkPlateGenerate(b *testing.B) {
 	p := &Plate{Mercosul: true}
+
 	b.ReportAllocs()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+
+	for b.Loop() {
 		_ = p.Generate()
 	}
 }

@@ -49,6 +49,7 @@ func DetectPIXKind(value string) (string, bool) {
 		if pixEmailRe.MatchString(v) {
 			return PIXKindEmail, true
 		}
+
 		return "", false
 	}
 
@@ -57,6 +58,7 @@ func DetectPIXKind(value string) (string, bool) {
 		if pixPhoneRe.MatchString(v) {
 			return PIXKindPhone, true
 		}
+
 		return "", false
 	}
 
@@ -101,6 +103,7 @@ func (p *PIX) Format(value string) (string, error) {
 	if _, ok := DetectPIXKind(v); !ok {
 		return "", fmt.Errorf("selo: %q is not a valid PIX key: %w", value, ErrInvalidLength)
 	}
+
 	return v, nil
 }
 
@@ -119,13 +122,17 @@ func (p *PIX) Generate() string {
 	b[8] = (b[8] & 0x3f) | 0x80
 
 	const hexdigits = "0123456789abcdef"
+
 	var out [36]byte
+
 	pos := 0
+
 	for i, by := range b {
 		if i == 4 || i == 6 || i == 8 || i == 10 {
 			out[pos] = '-'
 			pos++
 		}
+
 		out[pos] = hexdigits[by>>4]
 		out[pos+1] = hexdigits[by&0x0f]
 		pos += 2

@@ -32,6 +32,7 @@ func TestGeneratePerson_Consistency(t *testing.T) {
 			phoneUF, err := NewPhone().Origin(p.Phone)
 			assert.NoError(t, err)
 			assert.Equal(t, string(uf), phoneUF, "phone origin")
+
 			cepUF, err := NewCEP().Origin(p.CEP)
 			assert.NoError(t, err)
 			assert.Equal(t, string(uf), cepUF, "cep origin")
@@ -46,9 +47,11 @@ func TestGeneratePerson_Consistency(t *testing.T) {
 
 			// PIX keys are all valid; identity fields populated.
 			require.Len(t, p.PIXKeys, 4)
+
 			for _, k := range p.PIXKeys {
 				assert.Truef(t, NewPIX().Validate(k), "pix key %q", k)
 			}
+
 			assert.NotEmpty(t, p.Name)
 			assert.Contains(t, p.Email, "@")
 		})
@@ -75,7 +78,7 @@ func TestGeneratePerson_Options(t *testing.T) {
 }
 
 func TestGeneratePerson_RandomUF(t *testing.T) {
-	for i := 0; i < 50; i++ {
+	for range 50 {
 		p := GeneratePerson()
 		assert.True(t, p.UF.Valid(), "chosen UF %q must be valid", p.UF)
 		assert.True(t, NewCPF().Validate(p.CPF))
