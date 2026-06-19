@@ -41,3 +41,9 @@ fabric.properties
 
 .scripts/
 .claude/
+
+# Generated-language toolchain artifacts: the source/test/vector/scaffold files
+# under generated/** ARE committed as the reference output, but installed
+# dependencies and lockfiles are not.
+generated/**/node_modules/
+generated/**/package-lock.json

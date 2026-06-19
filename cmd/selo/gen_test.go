@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -44,13 +46,28 @@ func TestGenMissingLangExitsNonZero(t *testing.T) {
 	assert.Contains(t, err.Error(), "--lang is required")
 }
 
-// TestGenSupportedLangNoEmitter asserts that a supported language with no
-// registered emitter (the M1 state) fails cleanly rather than silently
-// succeeding.
+// TestGenSupportedLangNoEmitter asserts that a supported language whose emitter
+// is not registered yet (e.g. js, pending its milestone) fails cleanly rather
+// than silently succeeding.
 func TestGenSupportedLangNoEmitter(t *testing.T) {
-	_, err := runCmd(t, "gen", "--lang", "ts", "--kind", "cpf", "--out", t.TempDir())
+	_, err := runCmd(t, "gen", "--lang", "js", "--kind", "cpf", "--out", t.TempDir())
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "not yet registered")
+}
+
+// TestGenTSWritesFiles asserts the registered TypeScript emitter (M2) writes the
+// expected module/test/vector/scaffold files for a kind.
+func TestGenTSWritesFiles(t *testing.T) {
+	dir := t.TempDir()
+	_, err := runCmd(t, "gen", "--lang", "ts", "--kind", "cpf", "--out", dir)
+	require.NoError(t, err)
+	for _, rel := range []string{
+		"src/cpf.ts", "test/cpf.test.ts", "vectors/cpf.json",
+		"src/mod11.ts", "package.json", "tsconfig.json", "vitest.config.ts",
+	} {
+		_, statErr := os.Stat(filepath.Join(dir, rel))
+		assert.NoErrorf(t, statErr, "expected generated file %q", rel)
+	}
 }
 
 // TestGenUnknownKindExitsNonZero asserts an unknown --kind errors.

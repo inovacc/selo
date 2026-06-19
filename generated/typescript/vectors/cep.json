@@ -1,0 +1,208 @@
+{
+  "kind": "cep",
+  "group": "F",
+  "validate": [
+    {
+      "input": "23113236",
+      "valid": true
+    },
+    {
+      "input": "14272264",
+      "valid": true
+    },
+    {
+      "input": "77279074",
+      "valid": true
+    },
+    {
+      "input": "77197018",
+      "valid": true
+    },
+    {
+      "input": "59509505",
+      "valid": true
+    },
+    {
+      "input": "69359302",
+      "valid": true
+    },
+    {
+      "input": "29530574",
+      "valid": true
+    },
+    {
+      "input": "65289933",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "00000-000",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "1234567",
+      "valid": false
+    },
+    {
+      "input": "123456789",
+      "valid": false
+    },
+    {
+      "input": "1427226",
+      "valid": false
+    },
+    {
+      "input": "2311323",
+      "valid": false
+    },
+    {
+      "input": "2953057",
+      "valid": false
+    },
+    {
+      "input": "5950950",
+      "valid": false
+    },
+    {
+      "input": "6528993",
+      "valid": false
+    },
+    {
+      "input": "6935930",
+      "valid": false
+    },
+    {
+      "input": "7719701",
+      "valid": false
+    },
+    {
+      "input": "7727907",
+      "valid": false
+    },
+    {
+      "input": "Z3113236",
+      "valid": false
+    },
+    {
+      "input": "Z4272264",
+      "valid": false
+    },
+    {
+      "input": "Z5289933",
+      "valid": false
+    },
+    {
+      "input": "Z7197018",
+      "valid": false
+    },
+    {
+      "input": "Z7279074",
+      "valid": false
+    },
+    {
+      "input": "Z9359302",
+      "valid": false
+    },
+    {
+      "input": "Z9509505",
+      "valid": false
+    },
+    {
+      "input": "Z9530574",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    },
+    {
+      "input": "abcdefgh",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "23113236",
+      "output": "23113-236"
+    },
+    {
+      "input": "14272264",
+      "output": "14272-264"
+    },
+    {
+      "input": "77279074",
+      "output": "77279-074"
+    },
+    {
+      "input": "77197018",
+      "output": "77197-018"
+    },
+    {
+      "input": "59509505",
+      "output": "59509-505"
+    },
+    {
+      "input": "69359302",
+      "output": "69359-302"
+    },
+    {
+      "input": "29530574",
+      "output": "29530-574"
+    },
+    {
+      "input": "65289933",
+      "output": "65289-933"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidLength"
+    }
+  ],
+  "origin": [
+    {
+      "input": "23113236",
+      "output": "RJ"
+    },
+    {
+      "input": "14272264",
+      "output": "SP"
+    },
+    {
+      "input": "77279074",
+      "output": "TO"
+    },
+    {
+      "input": "77197018",
+      "output": "TO"
+    },
+    {
+      "input": "59509505",
+      "output": "RN"
+    },
+    {
+      "input": "69359302",
+      "output": "RR"
+    },
+    {
+      "input": "29530574",
+      "output": "ES"
+    },
+    {
+      "input": "65289933",
+      "output": "MA"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

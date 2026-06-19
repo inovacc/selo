@@ -247,16 +247,34 @@ func TestGeneratePersonTool(t *testing.T) {
 func TestGenerateCodeTool(t *testing.T) {
 	ctx, cs := newTestSession(t)
 
-	// M1: no emitter registered, so a supported lang/kind yields a clean error
-	// result (not a transport error).
+	// M2: the TypeScript emitter is registered, so ts/cpf returns real files.
 	res, err := cs.CallTool(ctx, &mcp.CallToolParams{
 		Name:      "generate_code",
 		Arguments: map[string]any{"lang": "ts", "kind": "cpf"},
 	})
 	require.NoError(t, err)
-	require.True(t, res.IsError, "M1 generate_code should report a clean error result")
-	require.NotEmpty(t, res.Content)
-	tc, ok := res.Content[0].(*mcp.TextContent)
+	require.Falsef(t, res.IsError, "M2 generate_code(ts, cpf) should succeed: %+v", res.Content)
+	var codeOut GenerateCodeOutput
+	decodeResult(t, res, &codeOut)
+	require.NotEmpty(t, codeOut.Files, "ts/cpf should produce files")
+	var hasModule bool
+	for _, f := range codeOut.Files {
+		if f.Path == "src/cpf.ts" {
+			hasModule = true
+			assert.Contains(t, f.Content, "export function validateCPF")
+		}
+	}
+	assert.True(t, hasModule, "ts/cpf should include src/cpf.ts")
+
+	// A language whose emitter is not registered yet yields a clean error result.
+	notReady, err := cs.CallTool(ctx, &mcp.CallToolParams{
+		Name:      "generate_code",
+		Arguments: map[string]any{"lang": "js", "kind": "cpf"},
+	})
+	require.NoError(t, err)
+	require.True(t, notReady.IsError, "an unregistered lang should report a clean error result")
+	require.NotEmpty(t, notReady.Content)
+	tc, ok := notReady.Content[0].(*mcp.TextContent)
 	require.True(t, ok)
 	assert.Contains(t, tc.Text, "not yet registered")
 

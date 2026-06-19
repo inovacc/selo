@@ -1,0 +1,180 @@
+{
+  "kind": "phone",
+  "group": "F",
+  "validate": [
+    {
+      "input": "67926378871",
+      "valid": true
+    },
+    {
+      "input": "99917999682",
+      "valid": true
+    },
+    {
+      "input": "3329740210",
+      "valid": true
+    },
+    {
+      "input": "41953215039",
+      "valid": true
+    },
+    {
+      "input": "1342458148",
+      "valid": true
+    },
+    {
+      "input": "91904310106",
+      "valid": true
+    },
+    {
+      "input": "5156004535",
+      "valid": true
+    },
+    {
+      "input": "6927312897",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "(00) 1234-5678",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "0099999999",
+      "valid": false
+    },
+    {
+      "input": "11111111111",
+      "valid": false
+    },
+    {
+      "input": "11912345",
+      "valid": false
+    },
+    {
+      "input": "134245814",
+      "valid": false
+    },
+    {
+      "input": "332974021",
+      "valid": false
+    },
+    {
+      "input": "515600453",
+      "valid": false
+    },
+    {
+      "input": "692731289",
+      "valid": false
+    },
+    {
+      "input": "999999999999",
+      "valid": false
+    },
+    {
+      "input": "Z156004535",
+      "valid": false
+    },
+    {
+      "input": "Z329740210",
+      "valid": false
+    },
+    {
+      "input": "Z342458148",
+      "valid": false
+    },
+    {
+      "input": "Z927312897",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "67926378871",
+      "output": "(67) 92637-8871"
+    },
+    {
+      "input": "99917999682",
+      "output": "(99) 91799-9682"
+    },
+    {
+      "input": "3329740210",
+      "output": "(33) 2974-0210"
+    },
+    {
+      "input": "41953215039",
+      "output": "(41) 95321-5039"
+    },
+    {
+      "input": "1342458148",
+      "output": "(13) 4245-8148"
+    },
+    {
+      "input": "91904310106",
+      "output": "(91) 90431-0106"
+    },
+    {
+      "input": "5156004535",
+      "output": "(51) 5600-4535"
+    },
+    {
+      "input": "6927312897",
+      "output": "(69) 2731-2897"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidLength"
+    }
+  ],
+  "origin": [
+    {
+      "input": "67926378871",
+      "output": "MS"
+    },
+    {
+      "input": "99917999682",
+      "output": "MA"
+    },
+    {
+      "input": "3329740210",
+      "output": "MG"
+    },
+    {
+      "input": "41953215039",
+      "output": "PR"
+    },
+    {
+      "input": "1342458148",
+      "output": "SP"
+    },
+    {
+      "input": "91904310106",
+      "output": "PA"
+    },
+    {
+      "input": "5156004535",
+      "output": "RS"
+    },
+    {
+      "input": "6927312897",
+      "output": "RO"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

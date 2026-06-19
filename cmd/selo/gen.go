@@ -7,6 +7,9 @@ import (
 	"strings"
 
 	sdk "github.com/inovacc/selo"
+	// codegen drives generation; its language emitters self-register via init()
+	// (M2 registers the TypeScript emitter in emit_ts.go), so importing the
+	// package is what wires `selo gen --lang ts` end to end.
 	"github.com/inovacc/selo/internal/codegen"
 	"github.com/spf13/cobra"
 )

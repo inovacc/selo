@@ -42,3 +42,19 @@ tasks:
   build-prod:
     cmds:
       - goreleaser --snapshot --skip-publish --rm-dist
+
+  gen:ts:
+    desc: Emit the TypeScript target into generated/typescript (all 13 kinds)
+    cmds:
+      - go run ./cmd/selo gen --lang ts --kind all --out generated/typescript
+
+  gen:verify:ts:
+    desc: Emit the TS target, then install deps and run the vitest suite (needs node)
+    cmds:
+      - task: gen:ts
+      - cmd: |
+          if command -v node >/dev/null 2>&1; then
+            cd generated/typescript && npm install && npx vitest run
+          else
+            echo "node not found; skipping vitest (generated TS still emitted)"
+          fi

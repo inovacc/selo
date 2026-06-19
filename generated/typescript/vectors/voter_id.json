@@ -1,0 +1,240 @@
+{
+  "kind": "voter_id",
+  "group": "F",
+  "validate": [
+    {
+      "input": "177938420507",
+      "valid": true
+    },
+    {
+      "input": "840757692771",
+      "valid": true
+    },
+    {
+      "input": "243444571759",
+      "valid": true
+    },
+    {
+      "input": "420210522704",
+      "valid": true
+    },
+    {
+      "input": "762518941147",
+      "valid": true
+    },
+    {
+      "input": "679614811287",
+      "valid": true
+    },
+    {
+      "input": "235896400230",
+      "valid": true
+    },
+    {
+      "input": "450172930175",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "111111111111",
+      "valid": false
+    },
+    {
+      "input": "12345678",
+      "valid": false
+    },
+    {
+      "input": "1234567890123",
+      "valid": false
+    },
+    {
+      "input": "17793842050",
+      "valid": false
+    },
+    {
+      "input": "177938420508",
+      "valid": false
+    },
+    {
+      "input": "23589640023",
+      "valid": false
+    },
+    {
+      "input": "235896400231",
+      "valid": false
+    },
+    {
+      "input": "24344457175",
+      "valid": false
+    },
+    {
+      "input": "243444571750",
+      "valid": false
+    },
+    {
+      "input": "42021052270",
+      "valid": false
+    },
+    {
+      "input": "420210522705",
+      "valid": false
+    },
+    {
+      "input": "45017293017",
+      "valid": false
+    },
+    {
+      "input": "450172930176",
+      "valid": false
+    },
+    {
+      "input": "67961481128",
+      "valid": false
+    },
+    {
+      "input": "679614811288",
+      "valid": false
+    },
+    {
+      "input": "76251894114",
+      "valid": false
+    },
+    {
+      "input": "762518941148",
+      "valid": false
+    },
+    {
+      "input": "84075769277",
+      "valid": false
+    },
+    {
+      "input": "840757692772",
+      "valid": false
+    },
+    {
+      "input": "Z20210522704",
+      "valid": false
+    },
+    {
+      "input": "Z35896400230",
+      "valid": false
+    },
+    {
+      "input": "Z40757692771",
+      "valid": false
+    },
+    {
+      "input": "Z43444571759",
+      "valid": false
+    },
+    {
+      "input": "Z50172930175",
+      "valid": false
+    },
+    {
+      "input": "Z62518941147",
+      "valid": false
+    },
+    {
+      "input": "Z77938420507",
+      "valid": false
+    },
+    {
+      "input": "Z79614811287",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "177938420507",
+      "output": "1779 3842 0507"
+    },
+    {
+      "input": "840757692771",
+      "output": "8407 5769 2771"
+    },
+    {
+      "input": "243444571759",
+      "output": "2434 4457 1759"
+    },
+    {
+      "input": "420210522704",
+      "output": "4202 1052 2704"
+    },
+    {
+      "input": "762518941147",
+      "output": "7625 1894 1147"
+    },
+    {
+      "input": "679614811287",
+      "output": "6796 1481 1287"
+    },
+    {
+      "input": "235896400230",
+      "output": "2358 9640 0230"
+    },
+    {
+      "input": "450172930175",
+      "output": "4501 7293 0175"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidLength"
+    }
+  ],
+  "origin": [
+    {
+      "input": "177938420507",
+      "output": "Bahia"
+    },
+    {
+      "input": "840757692771",
+      "output": "Tocantins"
+    },
+    {
+      "input": "243444571759",
+      "output": "Alagoas"
+    },
+    {
+      "input": "420210522704",
+      "output": "Tocantins"
+    },
+    {
+      "input": "762518941147",
+      "output": "Maranhão"
+    },
+    {
+      "input": "679614811287",
+      "output": "Paraíba"
+    },
+    {
+      "input": "235896400230",
+      "output": "Minas Gerais"
+    },
+    {
+      "input": "450172930175",
+      "output": "São Paulo"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

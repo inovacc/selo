@@ -36,17 +36,21 @@ func TestKindStrings(t *testing.T) {
 	}
 }
 
-// TestEmitterRegistry_EmptyInM1 asserts no emitter is registered yet, so
-// Generate fails cleanly for a supported language.
-func TestEmitterRegistry_EmptyInM1(t *testing.T) {
-	for _, l := range codegen.SupportedLangs() {
-		_, ok := codegen.EmitterFor(l)
-		assert.Falsef(t, ok, "no emitter should be registered for %q in M1", l)
-	}
+// TestEmitterRegistry_TSRegistered asserts the TypeScript emitter is registered
+// (M2) while the other languages remain unregistered until their milestones.
+func TestEmitterRegistry_TSRegistered(t *testing.T) {
+	ts, ok := codegen.EmitterFor(codegen.LangTS)
+	require.True(t, ok, "TypeScript emitter should be registered in M2")
+	assert.Equal(t, codegen.LangTS, ts.Lang())
 
-	_, err := codegen.Generate(codegen.LangTS, selo.KindCPF)
-	require.Error(t, err)
-	assert.Contains(t, err.Error(), "not yet registered")
+	for _, l := range []codegen.Lang{codegen.LangJS, codegen.LangRuby, codegen.LangJava, codegen.LangCSharp} {
+		_, regd := codegen.EmitterFor(l)
+		assert.Falsef(t, regd, "no emitter should be registered for %q yet", l)
+
+		_, err := codegen.Generate(l, selo.KindCPF)
+		require.Error(t, err)
+		assert.Contains(t, err.Error(), "not yet registered")
+	}
 }
 
 // TestGenerate_UnsupportedLang asserts an unknown language is a clean error.
