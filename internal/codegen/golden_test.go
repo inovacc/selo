@@ -31,6 +31,14 @@ func isVectorPath(p string) bool {
 	return strings.HasPrefix(filepath.ToSlash(p), "vectors/") && strings.HasSuffix(p, ".json")
 }
 
+// normalizeEOL strips carriage returns so the snapshot compares content, not
+// line-ending encoding. git stores the committed reference as LF, but an
+// autocrlf=true checkout (Windows) yields CRLF in the working tree while the
+// emitter always writes LF; without this, the test would falsely report drift.
+func normalizeEOL(b []byte) string {
+	return strings.ReplaceAll(string(b), "\r", "")
+}
+
 // emitAllTS renders the full TS file set for every kind, keyed by slash path.
 func emitAllTS(t *testing.T) map[string][]byte {
 	t.Helper()
@@ -55,7 +63,7 @@ func TestGoldenTS_DeterministicFilesMatch(t *testing.T) {
 		}
 		committed, err := os.ReadFile(filepath.Join(goldenRoot, filepath.FromSlash(path)))
 		require.NoErrorf(t, err, "reading committed %s (regenerate generated/typescript?)", path)
-		assert.Equalf(t, string(committed), string(content),
+		assert.Equalf(t, normalizeEOL(committed), normalizeEOL(content),
 			"generated/typescript/%s drifted; re-run: go run ./cmd/selo gen --lang ts --kind all --out generated/typescript", path)
 	}
 }
