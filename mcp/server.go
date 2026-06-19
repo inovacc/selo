@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-// Package mcp adapts the brdoc registry to a Model Context Protocol server.
+// Package mcp adapts the selo registry to a Model Context Protocol server.
 //
 // It exposes six tools (validate_document, generate_document,
 // format_document, detect_document, list_document_types, generate_person)

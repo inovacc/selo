@@ -1,8 +1,14 @@
-// Package brdoc provides validation, generation, and formatting for Brazilian fiscal documents.
+// Package selo provides validation, generation, formatting, and geolocation for
+// Brazilian documents — CPF, CNPJ (incl. alphanumeric), CNH, PIS/PASEP/NIS,
+// RENAVAM, Título Eleitoral, CEP, phone, license plate, CNS, RG (SP/RJ),
+// Inscrição Estadual (SP), and PIX keys — behind a common Document interface and
+// a self-registering type registry. The CLI and MCP server derive their surfaces
+// from that registry; the compat subpackage mirrors paemuri/brdoc for drop-in
+// migration.
 //
 // This package implements official algorithms from SERPRO (Serviço Federal de Processamento de Dados)
 // for both CPF (Cadastro de Pessoas Físicas) and alphanumeric CNPJ (Cadastro Nacional de Pessoa Jurídica)
-// validation.
+// validation, alongside the per-type check-digit algorithms for the remaining kinds.
 //
 // # CPF Features
 //

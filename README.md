@@ -26,7 +26,12 @@ issuing federative unit (UF).
 | **License plate** (national + Mercosul) | ✅ | ✅ | dash | — |
 | **CNS** (health card) | ✅ | ✅ | identity | — |
 | **RG** (SP/RJ) | ✅ | ✅ | `##.###.###-#` | — |
+| **Inscrição Estadual** (SP) | ✅ | ✅ | `###.###.###.###` | — |
 | **PIX key** (CPF/CNPJ/email/phone/EVP) | ✅ | ✅ (EVP) | identity | — |
+
+`RG` and `Inscrição Estadual` are **UF-scoped** (`selo.UFScoped`): `ValidateUF(value, uf)` /
+`ImplementedUFs()`. RG ships SP/RJ; IE ships SP, with more states tracked in
+[`docs/IE-NOTES.md`](docs/IE-NOTES.md).
 
 ## 📦 Install
 
@@ -157,8 +162,10 @@ check-digit type, and runnable godoc examples.
 
 ## 🗺️ Roadmap
 
-See [`docs/BACKLOG.md`](docs/BACKLOG.md). Highlights: **Inscrição Estadual** (per-UF) and **multi-state RG**; plus reproducible
-`GenPerson` output via a seed (see BACKLOG). The `GenPerson` generator itself is **shipped**.
+See [`docs/ROADMAP.md`](docs/ROADMAP.md) and [`docs/BACKLOG.md`](docs/BACKLOG.md). **Inscrição
+Estadual** shipped its first state (SP) — remaining UFs are tracked in
+[`docs/IE-NOTES.md`](docs/IE-NOTES.md). Other highlights: **multi-state RG** and reproducible
+`GenPerson` output via a seed. The `GenPerson` generator itself is **shipped**.
 
 ## 📄 License
 
