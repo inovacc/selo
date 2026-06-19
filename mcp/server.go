@@ -14,7 +14,7 @@ import (
 // It exposes six tools (validate_document, generate_document,
 // format_document, detect_document, list_document_types, generate_person)
 // over stdio.
-// Every tool is derived from the brdoc registry, so adding a new document
+// Every tool is derived from the selo registry, so adding a new document
 // type to the registry automatically widens the MCP surface with no edits
 // here.
 

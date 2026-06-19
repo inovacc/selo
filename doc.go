@@ -32,7 +32,7 @@
 //
 // CPF validation example:
 //
-//	cpf := brdoc.NewCPF()
+//	cpf := selo.NewCPF()
 //	if cpf.Validate("123.456.789-09") {
 //	    fmt.Println("Valid CPF")
 //	    origin := cpf.CheckOrigin("123.456.789-09")
@@ -41,24 +41,24 @@
 //
 // CNPJ validation example:
 //
-//	cnpj := brdoc.NewCNPJ()
+//	cnpj := selo.NewCNPJ()
 //	if cnpj.Validate("12.ABC.345/01DE-35") {
 //	    fmt.Println("Valid CNPJ")
 //	}
 //
 // Auto-detection example:
 //
-//	docType, isValid := brdoc.ValidateDocument("123.456.789-09")
+//	docType, isValid := selo.ValidateDocument("123.456.789-09")
 //	fmt.Printf("Type: %s, Valid: %v\n", docType, isValid)
 //
 // # Generation
 //
 // Generate valid documents:
 //
-//	cpf := brdoc.NewCPF()
+//	cpf := selo.NewCPF()
 //	newCPF := cpf.Generate()  // Returns unformatted CPF
 //
-//	cnpj := brdoc.NewCNPJ()
+//	cnpj := selo.NewCNPJ()
 //	newCNPJ := cnpj.Generate()  // Returns unformatted alphanumeric CNPJ
 //
 //	// Legacy numeric-only (14 digits)
@@ -68,10 +68,10 @@
 //
 // Format documents to standard Brazilian format:
 //
-//	cpf := brdoc.NewCPF()
+//	cpf := selo.NewCPF()
 //	formatted := cpf.Format("12345678909")  // Returns "123.456.789-09"
 //
-//	cnpj := brdoc.NewCNPJ()
+//	cnpj := selo.NewCNPJ()
 //	formatted, err := cnpj.Format("12ABC34501DE35")  // Returns "12.ABC.345/01DE-35"
 //
 // # CNPJ Alphanumeric Specification

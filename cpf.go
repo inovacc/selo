@@ -282,7 +282,7 @@ func (c *CPF) length(value []int) bool {
 // ValidateDocument automatically identifies and validates a CPF or CNPJ.
 //
 // Deprecated: use Detect to identify the Kind and Validate(kind, value) to
-// validate, e.g. k, ok := brdoc.Detect(s); the typed Kind ("cpf"/"cnpj") is
+// validate, e.g. k, ok := selo.Detect(s); the typed Kind ("cpf"/"cnpj") is
 // richer than the legacy "CPF"/"CNPJ"/"UNKNOWN" strings. This wrapper will be
 // removed after 2026-07-18.
 func ValidateDocument(doc string) (docType string, isValid bool) {
