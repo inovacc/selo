@@ -17,6 +17,7 @@ const (
 	KindCNS     Kind = "cns"
 	KindRG      Kind = "rg"
 	KindPIX     Kind = "pix"
+	KindIE      Kind = "ie" // Inscrição Estadual (state tax registration)
 )
 
 // String returns the stable string identifier of the Kind.

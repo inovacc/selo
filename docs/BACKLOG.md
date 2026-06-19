@@ -92,8 +92,12 @@ states instead of SP/RJ.
 
 - **Inscrição Estadual** — per-UF state tax registration; 27 distinct algorithms.
   Biggest open gap in the Go ecosystem (paemuri/brdoc issue #7, never shipped). Land
-  incrementally (SP, RJ, MG, RS, PR first) behind the same `Document`/`UFScoped` pattern
-  used by RG. **Value: H, Effort: L (large).**
+  incrementally behind the same `Document`/`UFScoped` pattern used by RG.
+  **First batch shipped 2026-06-19 (plan 006): SP only** — verified algorithm + 2 sourced
+  samples (`ie.go`, `TestIE_AuthoritativeSamples`); CLI/MCP auto-derive it. **26 UFs
+  remaining** (MG/RJ/RS/PR researched but deferred for lack of ≥2 verifiable samples; the
+  rest unstarted). Architecture, SP sources, and the per-UF roadmap are in
+  `docs/IE-NOTES.md`. **Value: H, Effort: L (remaining).**
 - **Multi-state RG** — extend `rg.go` beyond SP/RJ wherever per-UF check-digit rules are
   documented; explicit `ErrUFNotImplemented` elsewhere (paemuri issue #22 ships only
   SP/RJ). Unblocks `Person.RG` for all states. **Value: M, Effort: L.**
