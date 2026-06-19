@@ -1,0 +1,222 @@
+{
+  "kind": "cnpj",
+  "group": "C",
+  "validate": [
+    {
+      "input": "39.591.842/0000-10",
+      "valid": true
+    },
+    {
+      "input": "984H7EL94SBQ46",
+      "valid": true
+    },
+    {
+      "input": "02Y414178J4602",
+      "valid": true
+    },
+    {
+      "input": "C6B8JG2J87J791",
+      "valid": true
+    },
+    {
+      "input": "8GZHG92LA3PV93",
+      "valid": true
+    },
+    {
+      "input": "R9XF2W49Y5Y381",
+      "valid": true
+    },
+    {
+      "input": "J9Z06D2P3FZM20",
+      "valid": true
+    },
+    {
+      "input": "8DIE1L9DE4G555",
+      "valid": true
+    },
+    {
+      "input": "1G91491EUMG944",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "02Y414178J460",
+      "valid": false
+    },
+    {
+      "input": "02Y414178J4603",
+      "valid": false
+    },
+    {
+      "input": "111111",
+      "valid": false
+    },
+    {
+      "input": "1111111",
+      "valid": false
+    },
+    {
+      "input": "11111111",
+      "valid": false
+    },
+    {
+      "input": "111111111",
+      "valid": false
+    },
+    {
+      "input": "111111111111",
+      "valid": false
+    },
+    {
+      "input": "11111111111111",
+      "valid": false
+    },
+    {
+      "input": "1G91491EUMG94",
+      "valid": false
+    },
+    {
+      "input": "1G91491EUMG945",
+      "valid": false
+    },
+    {
+      "input": "39.591.842/0000-1",
+      "valid": false
+    },
+    {
+      "input": "39.591.842/0000-11",
+      "valid": false
+    },
+    {
+      "input": "8DIE1L9DE4G55",
+      "valid": false
+    },
+    {
+      "input": "8DIE1L9DE4G556",
+      "valid": false
+    },
+    {
+      "input": "8GZHG92LA3PV9",
+      "valid": false
+    },
+    {
+      "input": "8GZHG92LA3PV94",
+      "valid": false
+    },
+    {
+      "input": "984H7EL94SBQ4",
+      "valid": false
+    },
+    {
+      "input": "984H7EL94SBQ47",
+      "valid": false
+    },
+    {
+      "input": "C6B8JG2J87J79",
+      "valid": false
+    },
+    {
+      "input": "C6B8JG2J87J792",
+      "valid": false
+    },
+    {
+      "input": "CZB8JG2J87J791",
+      "valid": false
+    },
+    {
+      "input": "J9Z06D2P3FZM2",
+      "valid": false
+    },
+    {
+      "input": "J9Z06D2P3FZM21",
+      "valid": false
+    },
+    {
+      "input": "R9XF2W49Y5Y38",
+      "valid": false
+    },
+    {
+      "input": "R9XF2W49Y5Y382",
+      "valid": false
+    },
+    {
+      "input": "Z2Y414178J4602",
+      "valid": false
+    },
+    {
+      "input": "Z9.591.842/0000-10",
+      "valid": false
+    },
+    {
+      "input": "ZDIE1L9DE4G555",
+      "valid": false
+    },
+    {
+      "input": "ZG91491EUMG944",
+      "valid": false
+    },
+    {
+      "input": "ZGZHG92LA3PV93",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "39.591.842/0000-10",
+      "output": "39.591.842/0000-10"
+    },
+    {
+      "input": "984H7EL94SBQ46",
+      "output": "98.4H7.EL9/4SBQ-46"
+    },
+    {
+      "input": "02Y414178J4602",
+      "output": "02.Y41.417/8J46-02"
+    },
+    {
+      "input": "C6B8JG2J87J791",
+      "output": "C6.B8J.G2J/87J7-91"
+    },
+    {
+      "input": "8GZHG92LA3PV93",
+      "output": "8G.ZHG.92L/A3PV-93"
+    },
+    {
+      "input": "R9XF2W49Y5Y381",
+      "output": "R9.XF2.W49/Y5Y3-81"
+    },
+    {
+      "input": "J9Z06D2P3FZM20",
+      "output": "J9.Z06.D2P/3FZM-20"
+    },
+    {
+      "input": "8DIE1L9DE4G555",
+      "output": "8D.IE1.L9D/E4G5-55"
+    },
+    {
+      "input": "1G91491EUMG944",
+      "output": "1G.914.91E/UMG9-44"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalid"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}
