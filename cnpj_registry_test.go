@@ -16,6 +16,22 @@ func TestCNPJ_SatisfiesDocument(t *testing.T) {
 	var _ Document = (*CNPJ)(nil)
 }
 
+func TestCNPJ_RejectsAllEqual(t *testing.T) {
+	c := NewCNPJ()
+	for _, bad := range []string{
+		"00000000000000",
+		"00.000.000/0000-00",
+		"11111111111111",
+	} {
+		if c.Validate(bad) {
+			t.Errorf("Validate(%q) = true, want false (all-equal must be rejected)", bad)
+		}
+	}
+	if !c.Validate("39591842000010") {
+		t.Error("Validate(\"39591842000010\") = false, want true (known-valid regression sample)")
+	}
+}
+
 func TestCNPJ_RegressionSample(t *testing.T) {
 	// paemuri #26/#27: this valid legacy numeric CNPJ was once falsely rejected.
 	c := NewCNPJ()
