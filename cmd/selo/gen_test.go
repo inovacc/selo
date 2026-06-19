@@ -48,10 +48,10 @@ func TestGenMissingLangExitsNonZero(t *testing.T) {
 }
 
 // TestGenSupportedLangNoEmitter asserts that a supported language whose emitter
-// is not registered yet (e.g. js, pending its milestone) fails cleanly rather
+// is not registered yet (e.g. ruby, pending its milestone) fails cleanly rather
 // than silently succeeding.
 func TestGenSupportedLangNoEmitter(t *testing.T) {
-	_, err := runCmd(t, "gen", "--lang", "js", "--kind", "cpf", "--out", t.TempDir())
+	_, err := runCmd(t, "gen", "--lang", "ruby", "--kind", "cpf", "--out", t.TempDir())
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "not yet registered")
 }

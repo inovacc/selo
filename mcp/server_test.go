@@ -279,7 +279,7 @@ func TestGenerateCodeTool(t *testing.T) {
 	// A language whose emitter is not registered yet yields a clean error result.
 	notReady, err := cs.CallTool(ctx, &mcp.CallToolParams{
 		Name:      "generate_code",
-		Arguments: map[string]any{"lang": "js", "kind": "cpf"},
+		Arguments: map[string]any{"lang": "ruby", "kind": "cpf"},
 	})
 	require.NoError(t, err)
 	require.True(t, notReady.IsError, "an unregistered lang should report a clean error result")
