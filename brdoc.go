@@ -319,6 +319,11 @@ func (c *CNPJ) Validate(value string) bool {
 		return false
 	}
 
+	// Reject all-equal inputs (e.g. "00000000000000"); never a real CNPJ.
+	if allEqualBytes(cleaned) {
+		return false
+	}
+
 	// Ensure the last 2 characters are numeric
 	ch12 := cleaned[12]
 	if ch12 < '0' || ch12 > '9' {
