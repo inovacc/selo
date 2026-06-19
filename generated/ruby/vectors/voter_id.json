@@ -1,0 +1,240 @@
+{
+  "kind": "voter_id",
+  "group": "F",
+  "validate": [
+    {
+      "input": "200523760876",
+      "valid": true
+    },
+    {
+      "input": "547525670426",
+      "valid": true
+    },
+    {
+      "input": "345958450744",
+      "valid": true
+    },
+    {
+      "input": "595835942259",
+      "valid": true
+    },
+    {
+      "input": "775062681554",
+      "valid": true
+    },
+    {
+      "input": "089425772844",
+      "valid": true
+    },
+    {
+      "input": "667432962453",
+      "valid": true
+    },
+    {
+      "input": "854855990582",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "08942577284",
+      "valid": false
+    },
+    {
+      "input": "089425772845",
+      "valid": false
+    },
+    {
+      "input": "111111111111",
+      "valid": false
+    },
+    {
+      "input": "12345678",
+      "valid": false
+    },
+    {
+      "input": "1234567890123",
+      "valid": false
+    },
+    {
+      "input": "20052376087",
+      "valid": false
+    },
+    {
+      "input": "200523760877",
+      "valid": false
+    },
+    {
+      "input": "34595845074",
+      "valid": false
+    },
+    {
+      "input": "345958450745",
+      "valid": false
+    },
+    {
+      "input": "54752567042",
+      "valid": false
+    },
+    {
+      "input": "547525670427",
+      "valid": false
+    },
+    {
+      "input": "59583594225",
+      "valid": false
+    },
+    {
+      "input": "595835942250",
+      "valid": false
+    },
+    {
+      "input": "66743296245",
+      "valid": false
+    },
+    {
+      "input": "667432962454",
+      "valid": false
+    },
+    {
+      "input": "77506268155",
+      "valid": false
+    },
+    {
+      "input": "775062681555",
+      "valid": false
+    },
+    {
+      "input": "85485599058",
+      "valid": false
+    },
+    {
+      "input": "854855990583",
+      "valid": false
+    },
+    {
+      "input": "Z00523760876",
+      "valid": false
+    },
+    {
+      "input": "Z45958450744",
+      "valid": false
+    },
+    {
+      "input": "Z47525670426",
+      "valid": false
+    },
+    {
+      "input": "Z54855990582",
+      "valid": false
+    },
+    {
+      "input": "Z67432962453",
+      "valid": false
+    },
+    {
+      "input": "Z75062681554",
+      "valid": false
+    },
+    {
+      "input": "Z89425772844",
+      "valid": false
+    },
+    {
+      "input": "Z95835942259",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "200523760876",
+      "output": "2005 2376 0876"
+    },
+    {
+      "input": "547525670426",
+      "output": "5475 2567 0426"
+    },
+    {
+      "input": "345958450744",
+      "output": "3459 5845 0744"
+    },
+    {
+      "input": "595835942259",
+      "output": "5958 3594 2259"
+    },
+    {
+      "input": "775062681554",
+      "output": "7750 6268 1554"
+    },
+    {
+      "input": "089425772844",
+      "output": "0894 2577 2844"
+    },
+    {
+      "input": "667432962453",
+      "output": "6674 3296 2453"
+    },
+    {
+      "input": "854855990582",
+      "output": "8548 5599 0582"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidLength"
+    }
+  ],
+  "origin": [
+    {
+      "input": "200523760876",
+      "output": "Pernambuco"
+    },
+    {
+      "input": "547525670426",
+      "output": "Rio Grande do Sul"
+    },
+    {
+      "input": "345958450744",
+      "output": "Ceará"
+    },
+    {
+      "input": "595835942259",
+      "output": "Amazonas"
+    },
+    {
+      "input": "775062681554",
+      "output": "Piauí"
+    },
+    {
+      "input": "089425772844",
+      "output": "Exterior"
+    },
+    {
+      "input": "667432962453",
+      "output": "Acre"
+    },
+    {
+      "input": "854855990582",
+      "output": "Bahia"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

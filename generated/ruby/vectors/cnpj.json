@@ -1,0 +1,230 @@
+{
+  "kind": "cnpj",
+  "group": "C",
+  "validate": [
+    {
+      "input": "39.591.842/0000-10",
+      "valid": true
+    },
+    {
+      "input": "6Z49S5H69L1F00",
+      "valid": true
+    },
+    {
+      "input": "F572RDP1KMIC60",
+      "valid": true
+    },
+    {
+      "input": "TB4E6L73E57733",
+      "valid": true
+    },
+    {
+      "input": "5YZ1ZUBRO26N03",
+      "valid": true
+    },
+    {
+      "input": "B15EXL1YP70M90",
+      "valid": true
+    },
+    {
+      "input": "PC65350MGWV525",
+      "valid": true
+    },
+    {
+      "input": "XV2KW8Y8UVO979",
+      "valid": true
+    },
+    {
+      "input": "RE83HQL5IA7306",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "111111",
+      "valid": false
+    },
+    {
+      "input": "1111111",
+      "valid": false
+    },
+    {
+      "input": "11111111",
+      "valid": false
+    },
+    {
+      "input": "111111111",
+      "valid": false
+    },
+    {
+      "input": "11111111111111",
+      "valid": false
+    },
+    {
+      "input": "39.591.842/0000-1",
+      "valid": false
+    },
+    {
+      "input": "39.591.842/0000-11",
+      "valid": false
+    },
+    {
+      "input": "5YZ1ZUBRO26N0",
+      "valid": false
+    },
+    {
+      "input": "5YZ1ZUBRO26N04",
+      "valid": false
+    },
+    {
+      "input": "6Z49S5H69L1F0",
+      "valid": false
+    },
+    {
+      "input": "6Z49S5H69L1F01",
+      "valid": false
+    },
+    {
+      "input": "B15EXL1YP70M9",
+      "valid": false
+    },
+    {
+      "input": "B15EXL1YP70M91",
+      "valid": false
+    },
+    {
+      "input": "BZ5EXL1YP70M90",
+      "valid": false
+    },
+    {
+      "input": "F572RDP1KMIC6",
+      "valid": false
+    },
+    {
+      "input": "F572RDP1KMIC61",
+      "valid": false
+    },
+    {
+      "input": "FZ72RDP1KMIC60",
+      "valid": false
+    },
+    {
+      "input": "PC65350MGWV52",
+      "valid": false
+    },
+    {
+      "input": "PC65350MGWV526",
+      "valid": false
+    },
+    {
+      "input": "PCZ5350MGWV525",
+      "valid": false
+    },
+    {
+      "input": "RE83HQL5IA730",
+      "valid": false
+    },
+    {
+      "input": "RE83HQL5IA7307",
+      "valid": false
+    },
+    {
+      "input": "REZ3HQL5IA7306",
+      "valid": false
+    },
+    {
+      "input": "TB4E6L73E5773",
+      "valid": false
+    },
+    {
+      "input": "TB4E6L73E57734",
+      "valid": false
+    },
+    {
+      "input": "TBZE6L73E57733",
+      "valid": false
+    },
+    {
+      "input": "XV2KW8Y8UVO97",
+      "valid": false
+    },
+    {
+      "input": "XV2KW8Y8UVO970",
+      "valid": false
+    },
+    {
+      "input": "XVZKW8Y8UVO979",
+      "valid": false
+    },
+    {
+      "input": "Z9.591.842/0000-10",
+      "valid": false
+    },
+    {
+      "input": "ZYZ1ZUBRO26N03",
+      "valid": false
+    },
+    {
+      "input": "ZZ49S5H69L1F00",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "39.591.842/0000-10",
+      "output": "39.591.842/0000-10"
+    },
+    {
+      "input": "6Z49S5H69L1F00",
+      "output": "6Z.49S.5H6/9L1F-00"
+    },
+    {
+      "input": "F572RDP1KMIC60",
+      "output": "F5.72R.DP1/KMIC-60"
+    },
+    {
+      "input": "TB4E6L73E57733",
+      "output": "TB.4E6.L73/E577-33"
+    },
+    {
+      "input": "5YZ1ZUBRO26N03",
+      "output": "5Y.Z1Z.UBR/O26N-03"
+    },
+    {
+      "input": "B15EXL1YP70M90",
+      "output": "B1.5EX.L1Y/P70M-90"
+    },
+    {
+      "input": "PC65350MGWV525",
+      "output": "PC.653.50M/GWV5-25"
+    },
+    {
+      "input": "XV2KW8Y8UVO979",
+      "output": "XV.2KW.8Y8/UVO9-79"
+    },
+    {
+      "input": "RE83HQL5IA7306",
+      "output": "RE.83H.QL5/IA73-06"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalid"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}
