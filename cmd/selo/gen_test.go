@@ -27,6 +27,7 @@ func TestGenHelpListsLangsAndKinds(t *testing.T) {
 	for _, lang := range []string{"ts", "js", "ruby", "java", "csharp"} {
 		assert.Containsf(t, out, lang, "gen --help should list lang %q", lang)
 	}
+
 	for _, k := range sdk.Kinds() {
 		assert.Containsf(t, out, k.String(), "gen --help should list kind %q", k)
 	}
@@ -61,6 +62,7 @@ func TestGenTSWritesFiles(t *testing.T) {
 	dir := t.TempDir()
 	_, err := runCmd(t, "gen", "--lang", "ts", "--kind", "cpf", "--out", dir)
 	require.NoError(t, err)
+
 	for _, rel := range []string{
 		"src/cpf.ts", "test/cpf.test.ts", "vectors/cpf.json",
 		"src/mod11.ts", "package.json", "tsconfig.json", "vitest.config.ts",

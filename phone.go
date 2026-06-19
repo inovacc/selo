@@ -52,6 +52,7 @@ func init() {
 			ddds[j-1], ddds[j] = ddds[j], ddds[j-1]
 		}
 	}
+
 	Register(&Phone{})
 }
 
@@ -76,9 +77,11 @@ func nationalNumber(d string) (string, bool) {
 		// a plausible national number (10 or 11 digits).
 		d = d[2:]
 	}
+
 	if d == "" {
 		return "", false
 	}
+
 	return d, true
 }
 
@@ -93,6 +96,7 @@ func (p *Phone) Validate(value string) bool {
 	if len(d) != 10 && len(d) != 11 {
 		return false
 	}
+
 	ddd := int(d[0]-'0')*10 + int(d[1]-'0')
 	if _, known := dddUFTable[ddd]; !known {
 		return false
@@ -101,6 +105,7 @@ func (p *Phone) Validate(value string) bool {
 	if len(d) == 11 && d[2] != '9' {
 		return false
 	}
+
 	return true
 }
 
@@ -112,14 +117,17 @@ func (p *Phone) Format(value string) (string, error) {
 	if !ok || (len(d) != 10 && len(d) != 11) {
 		return "", fmt.Errorf("selo: phone needs 10 or 11 national digits: %w", ErrInvalidLength)
 	}
+
 	ddd := int(d[0]-'0')*10 + int(d[1]-'0')
 	if _, known := dddUFTable[ddd]; !known {
 		return "", fmt.Errorf("selo: phone DDD %02d unknown: %w", ddd, ErrInvalidFormat)
 	}
+
 	sub := d[2:]
 	if len(sub) == 9 {
 		return "(" + d[0:2] + ") " + sub[0:5] + "-" + sub[5:9], nil
 	}
+
 	return "(" + d[0:2] + ") " + sub[0:4] + "-" + sub[4:8], nil
 }
 
@@ -131,11 +139,14 @@ func (p *Phone) Origin(value string) (string, error) {
 	if !ok || (len(d) != 10 && len(d) != 11) {
 		return "", fmt.Errorf("selo: phone needs 10 or 11 national digits: %w", ErrInvalidLength)
 	}
+
 	ddd := int(d[0]-'0')*10 + int(d[1]-'0')
+
 	uf, known := dddUFTable[ddd]
 	if !known {
 		return "", fmt.Errorf("selo: phone DDD %02d unknown: %w", ddd, ErrInvalidFormat)
 	}
+
 	return uf.String(), nil
 }
 
@@ -144,20 +155,25 @@ func (p *Phone) Origin(value string) (string, error) {
 // or an 8-digit landline (leading 2-5).
 func (p *Phone) Generate() string {
 	ddd := ddds[rand.IntN(len(ddds))]
+
 	var sb strings.Builder
 	fmt.Fprintf(&sb, "%02d", ddd)
+
 	if rand.IntN(2) == 0 {
 		// 9-digit mobile: leading 9 + 8 random digits.
 		sb.WriteByte('9')
-		for i := 0; i < 8; i++ {
+
+		for range 8 {
 			sb.WriteByte(byte('0' + rand.IntN(10)))
 		}
 	} else {
 		// 8-digit landline: leading 2-5 + 7 random digits.
 		sb.WriteByte(byte('2' + rand.IntN(4)))
-		for i := 0; i < 7; i++ {
+
+		for range 7 {
 			sb.WriteByte(byte('0' + rand.IntN(10)))
 		}
 	}
+
 	return sb.String()
 }

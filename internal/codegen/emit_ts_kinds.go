@@ -51,6 +51,7 @@ export function originCPF(value: string): string {
 }
 `, dv1, dv2, formatErrorThrow("ErrInvalidLength"),
 		formatErrorThrow("ErrInvalidLength"), formatErrorThrow("ErrInvalidLength"))
+
 	return b.String()
 }
 
@@ -83,6 +84,7 @@ export function format%[2]s(value: string): string {
   return %[6]s;
 }
 `, dv, name, length, base, formatErrorThrow("ErrInvalidLength"), mask)
+
 	return b.String()
 }
 
@@ -112,13 +114,14 @@ export function formatRenavam(value: string): string {
   return d;
 }
 `, dv)
+
 	return b.String()
 }
 
 // renderCNH emits the coupled-DV CNH module (bespoke fragment per the Note):
 // DV1 descending 9..1 (raw remainder >=10 -> DV1=0, carry offset 2); DV2
 // ascending 1..9 with the offset subtracted before the mod-11 fold.
-func (e tsEmitter) renderCNH(plan KindPlan) string {
+func (e tsEmitter) renderCNH(_ KindPlan) string {
 	var b strings.Builder
 	writeHeader(&b, "src/mod11.js", "")
 
@@ -159,6 +162,7 @@ export function formatCNH(value: string): string {
   return d;
 }
 `)
+
 	return b.String()
 }
 
@@ -190,6 +194,7 @@ export function formatCNS(value: string): string {
   return d;
 }
 `, dv, formatErrorThrow("ErrInvalidLength"))
+
 	return b.String()
 }
 
@@ -241,5 +246,6 @@ export function formatCNPJ(value: string): string {
   return `+"`${c.slice(0, 2)}.${c.slice(2, 5)}.${c.slice(5, 8)}/${c.slice(8, 12)}-${c.slice(12, 14)}`"+`;
 }
 `, dv, formatErrorThrow("ErrInvalidLength"))
+
 	return b.String()
 }

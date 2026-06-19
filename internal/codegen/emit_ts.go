@@ -42,11 +42,14 @@ func (e tsEmitter) Emit(kind selo.Kind, plan KindPlan, vec Vector) ([]File, erro
 	if err != nil {
 		return nil, err
 	}
+
 	test := e.renderTest(kind, plan, vec)
+
 	vectorJSON, err := json.MarshalIndent(vec, "", "  ")
 	if err != nil {
 		return nil, fmt.Errorf("codegen/ts: marshal %q vector: %w", kind, err)
 	}
+
 	vectorJSON = append(vectorJSON, '\n')
 
 	files := []File{
@@ -54,10 +57,12 @@ func (e tsEmitter) Emit(kind selo.Kind, plan KindPlan, vec Vector) ([]File, erro
 		{Path: "test/" + kind.String() + ".test.ts", Content: []byte(test)},
 		{Path: "vectors/" + kind.String() + ".json", Content: vectorJSON},
 	}
+
 	shared, err := e.sharedFiles()
 	if err != nil {
 		return nil, err
 	}
+
 	return append(files, shared...), nil
 }
 
@@ -70,18 +75,22 @@ func (e tsEmitter) sharedFiles() ([]File, error) {
 	if err != nil {
 		return nil, fmt.Errorf("codegen/ts: read mod11 template: %w", err)
 	}
+
 	pkg, err := tsTemplates.ReadFile("templates/ts/package.json.tmpl")
 	if err != nil {
 		return nil, fmt.Errorf("codegen/ts: read package.json template: %w", err)
 	}
+
 	tsconfig, err := tsTemplates.ReadFile("templates/ts/tsconfig.json.tmpl")
 	if err != nil {
 		return nil, fmt.Errorf("codegen/ts: read tsconfig template: %w", err)
 	}
+
 	vitest, err := tsTemplates.ReadFile("templates/ts/vitest.config.ts.tmpl")
 	if err != nil {
 		return nil, fmt.Errorf("codegen/ts: read vitest template: %w", err)
 	}
+
 	return []File{
 		{Path: "src/mod11.ts", Content: mod11},
 		{Path: "src/data.ts", Content: []byte(e.renderData())},
@@ -97,9 +106,11 @@ func (e tsEmitter) renderIndex() string {
 	var b strings.Builder
 	b.WriteString(headerComment())
 	b.WriteString("\n")
+
 	for _, k := range KindStrings() {
 		fmt.Fprintf(&b, "export * from \"./%s.js\";\n", k)
 	}
+
 	return b.String()
 }
 
@@ -113,46 +124,61 @@ func (e tsEmitter) renderData() string {
 	// CEP prefix ranges (scan order; first match wins).
 	b.WriteString("export interface UFRange { uf: string; from: number; to: number }\n\n")
 	b.WriteString("export const CEP_RANGES: UFRange[] = [\n")
+
 	for _, r := range CEPRanges() {
 		fmt.Fprintf(&b, "  { uf: %q, from: %d, to: %d },\n", r.UF, r.From, r.To)
 	}
+
 	b.WriteString("];\n\n")
 
 	// DDD -> UF.
 	b.WriteString("export const DDD_TO_UF: Record<string, string> = {\n")
+
 	dddMap := DDDtoUF()
+
 	ddds := make([]string, 0, len(dddMap))
 	for d := range dddMap {
 		ddds = append(ddds, d)
 	}
+
 	sort.Strings(ddds)
+
 	for _, d := range ddds {
 		fmt.Fprintf(&b, "  %q: %q,\n", d, dddMap[d].String())
 	}
+
 	b.WriteString("};\n\n")
 
 	// CPF ninth-digit region map.
 	b.WriteString("export const CPF_REGIONS: Record<number, string> = {\n")
+
 	cpfRegions := CPFRegions()
 	for i := 0; i <= 9; i++ {
 		if name, ok := cpfRegions[i]; ok {
 			fmt.Fprintf(&b, "  %d: %q,\n", i, name)
 		}
 	}
+
 	b.WriteString("};\n\n")
 
 	// Voter-ID UF code -> region name.
 	b.WriteString("export const VOTER_UF_NAMES: Record<number, string> = {\n")
+
 	voterNames := VoterUFNames()
+
 	codes := make([]int, 0, len(voterNames))
 	for c := range voterNames {
 		codes = append(codes, c)
 	}
+
 	sort.Ints(codes)
+
 	for _, c := range codes {
 		fmt.Fprintf(&b, "  %d: %q,\n", c, voterNames[c])
 	}
+
 	b.WriteString("};\n")
+
 	return b.String()
 }
 
@@ -238,6 +264,7 @@ func intSlice(xs []int) string {
 	for i, x := range xs {
 		parts[i] = strconv.Itoa(x)
 	}
+
 	return "[" + strings.Join(parts, ", ") + "]"
 }
 
@@ -245,20 +272,26 @@ func intSlice(xs []int) string {
 // mod11.ts CheckDigit interface.
 func checkDigitLiteral(cd CheckDigit) string {
 	var fields []string
+
 	fields = append(fields, "weights: "+intSlice(cd.Weights))
+
 	fields = append(fields, "rule: \""+cd.Rule.String()+"\"")
 	if len(cd.RemainderTo0) > 0 {
 		fields = append(fields, "remainderTo0: "+intSlice(cd.RemainderTo0))
 	}
+
 	if cd.MultiplyBy10 {
 		fields = append(fields, "multiplyBy10: true")
 	}
+
 	if cd.EncodeXAt != 0 {
 		fields = append(fields, "encodeXAt: "+strconv.Itoa(cd.EncodeXAt))
 	}
+
 	if cd.EncodeZeroAt != 0 {
 		fields = append(fields, "encodeZeroAt: "+strconv.Itoa(cd.EncodeZeroAt))
 	}
+
 	return "{ " + strings.Join(fields, ", ") + " }"
 }
 

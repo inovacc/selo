@@ -9,5 +9,6 @@ func onlyDigits(s string) string {
 			out = append(out, s[i])
 		}
 	}
+
 	return string(out)
 }

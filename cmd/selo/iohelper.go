@@ -49,9 +49,11 @@ func streamValidate(r io.Reader, w io.Writer, fn lineValidator) (bool, error) {
 	scanner.Buffer(scanBuf, maxLine)
 
 	bw := bufio.NewWriter(w)
+
 	defer func() { _ = bw.Flush() }()
 
 	anyInvalid := false
+
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
 		if line == "" || strings.HasPrefix(line, "#") {

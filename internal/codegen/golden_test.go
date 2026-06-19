@@ -42,14 +42,18 @@ func normalizeEOL(b []byte) string {
 // emitAllTS renders the full TS file set for every kind, keyed by slash path.
 func emitAllTS(t *testing.T) map[string][]byte {
 	t.Helper()
+
 	out := make(map[string][]byte)
+
 	for _, k := range selo.Kinds() {
 		files, err := codegen.Generate(codegen.LangTS, k)
 		require.NoErrorf(t, err, "Generate(ts, %q)", k)
+
 		for _, f := range files {
 			out[filepath.ToSlash(f.Path)] = f.Content
 		}
 	}
+
 	return out
 }
 
@@ -61,6 +65,7 @@ func TestGoldenTS_DeterministicFilesMatch(t *testing.T) {
 		if isVectorPath(path) {
 			continue
 		}
+
 		committed, err := os.ReadFile(filepath.Join(goldenRoot, filepath.FromSlash(path)))
 		require.NoErrorf(t, err, "reading committed %s (regenerate generated/typescript?)", path)
 		assert.Equalf(t, normalizeEOL(committed), normalizeEOL(content),
@@ -76,20 +81,26 @@ func TestGoldenTS_NoExtraDeterministicFiles(t *testing.T) {
 		if werr != nil {
 			return werr
 		}
+
 		if info.IsDir() {
 			if info.Name() == "node_modules" {
 				return filepath.SkipDir
 			}
+
 			return nil
 		}
+
 		rel, rerr := filepath.Rel(goldenRoot, path)
 		require.NoError(t, rerr)
+
 		rel = filepath.ToSlash(rel)
 		if isVectorPath(rel) || rel == "package-lock.json" {
 			return nil
 		}
+
 		_, ok := emitted[rel]
 		assert.Truef(t, ok, "committed file %q is not produced by the emitter (stale?)", rel)
+
 		return nil
 	})
 	require.NoError(t, err)
@@ -115,12 +126,14 @@ func TestGoldenTS_VectorsMatchSelo(t *testing.T) {
 
 		doc, ok := selo.Get(k)
 		require.Truef(t, ok, "selo.Get(%q)", k)
+
 		for _, c := range vec.Format {
 			out, ferr := doc.Format(c.Input)
 			if c.Error != "" {
 				assert.Errorf(t, ferr, "committed vector %q input %q expects format error", k, c.Input)
 				continue
 			}
+
 			require.NoErrorf(t, ferr, "committed vector %q input %q format", k, c.Input)
 			assert.Equalf(t, out, c.Output, "committed vector %q input %q format output drift", k, c.Input)
 		}

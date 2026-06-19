@@ -62,6 +62,7 @@ func Register(e Emitter) {
 func SupportedLangs() []Lang {
 	out := make([]Lang, len(supportedLangs))
 	copy(out, supportedLangs)
+
 	return out
 }
 
@@ -72,6 +73,7 @@ func SupportedLangStrings() []string {
 	for _, l := range supportedLangs {
 		out = append(out, string(l))
 	}
+
 	return out
 }
 
@@ -82,6 +84,7 @@ func IsSupportedLang(s string) bool {
 			return true
 		}
 	}
+
 	return false
 }
 
@@ -92,7 +95,9 @@ func KindStrings() []string {
 	for k := range Plans {
 		out = append(out, k.String())
 	}
+
 	sort.Strings(out)
+
 	return out
 }
 
@@ -110,17 +115,21 @@ func Generate(lang Lang, kind selo.Kind) ([]File, error) {
 	if !IsSupportedLang(string(lang)) {
 		return nil, fmt.Errorf("codegen: unsupported language %q (supported: %v)", lang, SupportedLangStrings())
 	}
+
 	plan, ok := PlanFor(kind)
 	if !ok {
 		return nil, fmt.Errorf("codegen: unknown kind %q", kind)
 	}
+
 	emitter, ok := EmitterFor(lang)
 	if !ok {
 		return nil, fmt.Errorf("codegen: emitter for %q not yet registered", lang)
 	}
+
 	vec, err := Vectors(kind)
 	if err != nil {
 		return nil, err
 	}
+
 	return emitter.Emit(kind, plan, vec)
 }

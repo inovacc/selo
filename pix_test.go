@@ -52,6 +52,7 @@ func TestDetectPIXKind(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
+
 			gotKind, gotOK := DetectPIXKind(tt.value)
 			assert.Equal(t, tt.wantOK, gotOK)
 			assert.Equal(t, tt.wantKind, gotKind)
@@ -106,6 +107,7 @@ func TestPIXFormat(t *testing.T) {
 
 	t.Run("identity on valid key", func(t *testing.T) {
 		t.Parallel()
+
 		out, err := p.Format("  joao.silva@example.com.br  ")
 		assert.NoError(t, err)
 		assert.Equal(t, "joao.silva@example.com.br", out) // trimmed, otherwise verbatim
@@ -113,6 +115,7 @@ func TestPIXFormat(t *testing.T) {
 
 	t.Run("identity on valid cpf key keeps mask", func(t *testing.T) {
 		t.Parallel()
+
 		out, err := p.Format("529.982.247-25")
 		assert.NoError(t, err)
 		assert.Equal(t, "529.982.247-25", out) // PIX has no canonical mask; verbatim
@@ -120,6 +123,7 @@ func TestPIXFormat(t *testing.T) {
 
 	t.Run("error on invalid key", func(t *testing.T) {
 		t.Parallel()
+
 		_, err := p.Format("not-a-pix-key")
 		assert.ErrorIs(t, err, ErrInvalidLength)
 	})
@@ -130,7 +134,7 @@ func TestPIXGenerate(t *testing.T) {
 	p := NewPIX()
 
 	// Round-trip: every generated key is a valid PIX key, and a valid EVP UUIDv4.
-	for i := 0; i < 200; i++ {
+	for range 200 {
 		key := p.Generate()
 
 		assert.True(t, p.Validate(key), "generated key must validate: %q", key)
@@ -152,7 +156,8 @@ func TestPIXGenerateUnique(t *testing.T) {
 
 	p := NewPIX()
 	seen := make(map[string]struct{}, 1000)
-	for i := 0; i < 1000; i++ {
+
+	for range 1000 {
 		key := p.Generate()
 		_, dup := seen[key]
 		assert.Falsef(t, dup, "generated duplicate EVP key: %q", key)

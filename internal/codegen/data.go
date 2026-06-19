@@ -26,20 +26,24 @@ type UFRange struct {
 // than once, matching the live table.
 func CEPRanges() []UFRange {
 	src := selo.CEPRanges()
+
 	out := make([]UFRange, 0, len(src))
 	for _, r := range src {
 		out = append(out, UFRange{UF: r.UF.String(), From: r.From, To: r.To})
 	}
+
 	return out
 }
 
 // DDDtoUF returns the DDD area-code→UF map (DDD as int, UF as two-letter code).
 func DDDtoUF() map[string]selo.UF {
 	src := selo.DDDtoUF()
+
 	out := make(map[string]selo.UF, len(src))
 	for ddd, uf := range src {
 		out[ddString(ddd)] = uf
 	}
+
 	return out
 }
 
@@ -47,11 +51,14 @@ func DDDtoUF() map[string]selo.UF {
 // prefer a sorted slice over a map.
 func DDDList() []int {
 	src := selo.DDDtoUF()
+
 	out := make([]int, 0, len(src))
 	for ddd := range src {
 		out = append(out, ddd)
 	}
+
 	sort.Ints(out)
+
 	return out
 }
 

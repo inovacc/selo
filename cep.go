@@ -37,6 +37,7 @@ func init() {
 			cepRanges[r.uf] = [2]int{r.from, r.to}
 		}
 	}
+
 	Register(&CEP{})
 }
 
@@ -58,6 +59,7 @@ func cepRangeFor(prefix int) (UF, bool) {
 			return r.uf, true
 		}
 	}
+
 	return "", false
 }
 
@@ -67,8 +69,10 @@ func (c *CEP) Validate(value string) bool {
 	if len(d) != CepLength {
 		return false
 	}
+
 	prefix := int(d[0]-'0')*100 + int(d[1]-'0')*10 + int(d[2]-'0')
 	_, ok := cepRangeFor(prefix)
+
 	return ok
 }
 
@@ -79,6 +83,7 @@ func (c *CEP) Format(value string) (string, error) {
 	if len(d) != CepLength {
 		return "", fmt.Errorf("selo: cep needs %d digits, got %d: %w", CepLength, len(d), ErrInvalidLength)
 	}
+
 	return d[0:5] + "-" + d[5:8], nil
 }
 
@@ -90,11 +95,14 @@ func (c *CEP) Origin(value string) (string, error) {
 	if len(d) != CepLength {
 		return "", fmt.Errorf("selo: cep needs %d digits, got %d: %w", CepLength, len(d), ErrInvalidLength)
 	}
+
 	prefix := int(d[0]-'0')*100 + int(d[1]-'0')*10 + int(d[2]-'0')
+
 	uf, ok := cepRangeFor(prefix)
 	if !ok {
 		return "", fmt.Errorf("selo: cep prefix %03d has no UF: %w", prefix, ErrInvalidFormat)
 	}
+
 	return uf.String(), nil
 }
 
@@ -104,5 +112,6 @@ func (c *CEP) Generate() string {
 	r := cepPrefixRanges[rand.IntN(len(cepPrefixRanges))]
 	prefix := r.from + rand.IntN(r.to-r.from+1)
 	suffix := rand.IntN(100000) // 0..99999
+
 	return fmt.Sprintf("%03d%05d", prefix, suffix)
 }

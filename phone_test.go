@@ -89,7 +89,7 @@ func TestPhoneOrigin(t *testing.T) {
 
 func TestPhoneGenerateRoundTrip(t *testing.T) {
 	p := NewPhone()
-	for i := 0; i < 500; i++ {
+	for range 500 {
 		got := p.Generate()
 		assert.True(t, len(got) == 10 || len(got) == 11, "Generate must emit 10 or 11 raw digits, got %q", got)
 		assert.True(t, p.Validate(got), "generated phone %q must validate", got)
@@ -113,18 +113,20 @@ func TestPhoneViaRegistry(t *testing.T) {
 
 func BenchmarkPhoneValidate(b *testing.B) {
 	p := NewPhone()
+
 	b.ReportAllocs()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+
+	for b.Loop() {
 		_ = p.Validate("11987654321")
 	}
 }
 
 func BenchmarkPhoneGenerate(b *testing.B) {
 	p := NewPhone()
+
 	b.ReportAllocs()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+
+	for b.Loop() {
 		_ = p.Generate()
 	}
 }

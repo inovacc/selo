@@ -19,6 +19,7 @@ func newPersonCmd() *cobra.Command {
 		asJSON, withVehicle, withCompany bool
 		formatted                        bool
 	)
+
 	cmd := &cobra.Command{
 		Use:   "person",
 		Short: "Generate coherent synthetic Brazilian people (all documents, UF-consistent)",
@@ -33,20 +34,26 @@ func newPersonCmd() *cobra.Command {
 			if count < 1 {
 				count = 1
 			}
+
 			var opts []sdk.PersonOption
+
 			if ufFlag != "" {
 				uf := sdk.UF(strings.ToUpper(ufFlag))
 				if !uf.Valid() {
 					return fmt.Errorf("invalid --uf %q", ufFlag)
 				}
+
 				opts = append(opts, sdk.WithUF(uf))
 			}
+
 			if withVehicle {
 				opts = append(opts, sdk.WithVehicle())
 			}
+
 			if withCompany {
 				opts = append(opts, sdk.WithCompany())
 			}
+
 			if formatted {
 				opts = append(opts, sdk.Formatted())
 			}
@@ -60,17 +67,22 @@ func newPersonCmd() *cobra.Command {
 			if asJSON {
 				enc := json.NewEncoder(out)
 				enc.SetIndent("", "  ")
+
 				if count == 1 {
 					return enc.Encode(people[0])
 				}
+
 				return enc.Encode(people)
 			}
+
 			for i, p := range people {
 				if i > 0 {
 					_, _ = fmt.Fprintln(out)
 				}
+
 				printPerson(out, p)
 			}
+
 			return nil
 		},
 	}
@@ -80,6 +92,7 @@ func newPersonCmd() *cobra.Command {
 	cmd.Flags().BoolVar(&withVehicle, "with-vehicle", false, "also generate a vehicle (plate + RENAVAM)")
 	cmd.Flags().BoolVar(&withCompany, "with-company", false, "also generate a company (CNPJ)")
 	cmd.Flags().BoolVar(&formatted, "formatted", false, "output documents in masked form")
+
 	return cmd
 }
 
@@ -87,10 +100,12 @@ func printPerson(w io.Writer, p sdk.Person) {
 	_, _ = fmt.Fprintf(w, "Name:    %s\n", p.Name)
 	_, _ = fmt.Fprintf(w, "Email:   %s\n", p.Email)
 	_, _ = fmt.Fprintf(w, "UF:      %s\n", p.UF)
+
 	_, _ = fmt.Fprintf(w, "CPF:     %s\n", p.CPF)
 	if p.RG != "" {
 		_, _ = fmt.Fprintf(w, "RG:      %s\n", p.RG)
 	}
+
 	_, _ = fmt.Fprintf(w, "CNH:     %s\n", p.CNH)
 	_, _ = fmt.Fprintf(w, "PIS:     %s\n", p.PIS)
 	_, _ = fmt.Fprintf(w, "RENAVAM: %s\n", p.Renavam)
@@ -98,10 +113,12 @@ func printPerson(w io.Writer, p sdk.Person) {
 	_, _ = fmt.Fprintf(w, "CNS:     %s\n", p.CNS)
 	_, _ = fmt.Fprintf(w, "CEP:     %s\n", p.CEP)
 	_, _ = fmt.Fprintf(w, "Phone:   %s\n", p.Phone)
+
 	_, _ = fmt.Fprintf(w, "PIX:     %s\n", strings.Join(p.PIXKeys, ", "))
 	if p.Vehicle != nil {
 		_, _ = fmt.Fprintf(w, "Vehicle: %s / %s\n", p.Vehicle.Plate, p.Vehicle.Renavam)
 	}
+
 	if p.Company != nil {
 		_, _ = fmt.Fprintf(w, "Company: %s (%s)\n", p.Company.Name, p.Company.CNPJ)
 	}

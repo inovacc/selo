@@ -13,12 +13,15 @@ import (
 // tsFiles emits the TS file set for kind and returns a path->content map.
 func tsFiles(t *testing.T, kind selo.Kind) map[string]string {
 	t.Helper()
+
 	files, err := codegen.Generate(codegen.LangTS, kind)
 	require.NoErrorf(t, err, "Generate(ts, %q)", kind)
+
 	out := make(map[string]string, len(files))
 	for _, f := range files {
 		out[f.Path] = string(f.Content)
 	}
+
 	return out
 }
 
@@ -37,6 +40,7 @@ func TestEmitTS_CPFModule(t *testing.T) {
 // and vector, and that the validator is exported.
 func TestEmitTS_AllKindsNonEmpty(t *testing.T) {
 	require.Len(t, selo.Kinds(), 13)
+
 	for _, k := range selo.Kinds() {
 		files := tsFiles(t, k)
 		mod := files["src/"+k.String()+".ts"]
@@ -59,6 +63,7 @@ func TestEmitTS_SharedFiles(t *testing.T) {
 	} {
 		assert.NotEmptyf(t, files[p], "missing shared file %q", p)
 	}
+
 	assert.Contains(t, files["src/mod11.ts"], "export function computeDigit")
 	assert.Contains(t, files["src/data.ts"], "CEP_RANGES")
 	assert.Contains(t, files["src/index.ts"], "export * from \"./cpf.js\"")
@@ -80,6 +85,7 @@ func TestEmitTS_FileSetShape(t *testing.T) {
 	modules := map[string]bool{}
 	tests := map[string]bool{}
 	vectors := map[string]bool{}
+
 	for _, k := range selo.Kinds() {
 		files := tsFiles(t, k)
 		for p := range files {
@@ -94,6 +100,7 @@ func TestEmitTS_FileSetShape(t *testing.T) {
 			}
 		}
 	}
+
 	assert.Len(t, modules, 13, "expected 13 kind modules")
 	assert.Len(t, tests, 13, "expected 13 kind tests")
 	assert.Len(t, vectors, 13, "expected 13 vector files")

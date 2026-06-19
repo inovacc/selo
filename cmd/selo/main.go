@@ -44,6 +44,7 @@ func main() {
 		if !errors.Is(err, errInvalidInput) {
 			_, _ = fmt.Fprintln(os.Stderr, err)
 		}
+
 		os.Exit(1)
 	}
 }

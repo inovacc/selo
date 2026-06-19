@@ -9,6 +9,7 @@ import (
 
 func TestRenavam_Validate(t *testing.T) {
 	r := NewRenavam()
+
 	tests := []struct {
 		name  string
 		value string
@@ -34,7 +35,7 @@ func TestRenavam_Validate(t *testing.T) {
 
 func TestRenavam_Generate_RoundTrip(t *testing.T) {
 	r := NewRenavam()
-	for i := 0; i < 1000; i++ {
+	for range 1000 {
 		got := r.Generate()
 		require.Len(t, got, RenavamLength)
 		assert.True(t, r.Validate(got), "generated RENAVAM must validate: %q", got)
@@ -48,6 +49,7 @@ func TestRenavam_Kind(t *testing.T) {
 
 func TestRenavam_Format(t *testing.T) {
 	r := NewRenavam()
+
 	t.Run("11 digits identity", func(t *testing.T) {
 		got, err := r.Format("12345678900")
 		require.NoError(t, err)
@@ -62,19 +64,22 @@ func TestRenavam_Format(t *testing.T) {
 
 func BenchmarkRenavam_Validate(b *testing.B) {
 	r := NewRenavam()
+
 	const sample = "12345678900"
+
 	b.ReportAllocs()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+
+	for b.Loop() {
 		_ = r.Validate(sample)
 	}
 }
 
 func BenchmarkRenavam_Generate(b *testing.B) {
 	r := NewRenavam()
+
 	b.ReportAllocs()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+
+	for b.Loop() {
 		_ = r.Generate()
 	}
 }

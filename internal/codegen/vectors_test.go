@@ -37,6 +37,7 @@ func TestVectors_MinimumCoverage(t *testing.T) {
 		require.NoErrorf(t, err, "Vectors(%q)", k)
 
 		var valid, invalid int
+
 		for _, c := range vec.Validate {
 			if c.Valid {
 				valid++
@@ -44,6 +45,7 @@ func TestVectors_MinimumCoverage(t *testing.T) {
 				invalid++
 			}
 		}
+
 		assert.GreaterOrEqualf(t, valid, 4, "kind %q needs >=4 valid cases, got %d", k, valid)
 		assert.GreaterOrEqualf(t, invalid, 4, "kind %q needs >=4 invalid cases, got %d", k, invalid)
 	}
@@ -64,6 +66,7 @@ func TestVectors_FormatCasesMatchSelo(t *testing.T) {
 				assert.Errorf(t, ferr, "kind %q input %q: vector expects error %q", k, c.Input, c.Error)
 				continue
 			}
+
 			require.NoErrorf(t, ferr, "kind %q input %q: vector has output but selo errored", k, c.Input)
 			assert.Equalf(t, out, c.Output, "kind %q input %q format output", k, c.Input)
 		}
@@ -76,6 +79,7 @@ func TestVectors_OriginCasesMatchSelo(t *testing.T) {
 	originKinds := map[selo.Kind]bool{
 		selo.KindCPF: true, selo.KindCEP: true, selo.KindPhone: true, selo.KindVoterID: true,
 	}
+
 	for _, k := range selo.Kinds() {
 		vec, err := codegen.Vectors(k)
 		require.NoErrorf(t, err, "Vectors(%q)", k)
@@ -84,9 +88,11 @@ func TestVectors_OriginCasesMatchSelo(t *testing.T) {
 		if originKinds[k] {
 			assert.NotEmptyf(t, vec.Origin, "kind %q should emit origin cases", k)
 		}
+
 		res, hasOrigin := doc.(selo.OriginResolver)
 		for _, c := range vec.Origin {
 			require.Truef(t, hasOrigin, "kind %q has origin cases but no resolver", k)
+
 			out, oerr := res.Origin(c.Input)
 			require.NoErrorf(t, oerr, "kind %q input %q origin", k, c.Input)
 			assert.Equalf(t, out, c.Output, "kind %q input %q origin output", k, c.Input)
@@ -98,6 +104,7 @@ func TestVectors_OriginCasesMatchSelo(t *testing.T) {
 // is non-trivially populated.
 func TestVectors_AllKindsProduced(t *testing.T) {
 	require.Len(t, selo.Kinds(), 13, "expected 13 registered kinds")
+
 	for _, k := range selo.Kinds() {
 		vec, err := codegen.Vectors(k)
 		require.NoErrorf(t, err, "Vectors(%q)", k)

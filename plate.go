@@ -68,19 +68,23 @@ func (p *Plate) ValidateMercosul(value string) bool {
 // ABC1D23 pattern; otherwise the national ABC1234 pattern (no dash).
 func (p *Plate) Generate() string {
 	var sb strings.Builder
-	for i := 0; i < 3; i++ {
+	for range 3 {
 		sb.WriteByte(byte('A' + rand.IntN(26)))
 	}
+
 	if p.Mercosul {
 		sb.WriteByte(byte('0' + rand.IntN(10)))
 		sb.WriteByte(byte('A' + rand.IntN(26)))
 		sb.WriteByte(byte('0' + rand.IntN(10)))
 		sb.WriteByte(byte('0' + rand.IntN(10)))
+
 		return sb.String()
 	}
-	for i := 0; i < 4; i++ {
+
+	for range 4 {
 		sb.WriteByte(byte('0' + rand.IntN(10)))
 	}
+
 	return sb.String()
 }
 
@@ -92,9 +96,11 @@ func (p *Plate) Format(value string) (string, error) {
 	if mercosulPlateRE.MatchString(v) {
 		return v, nil
 	}
+
 	if nationalPlateRE.MatchString(v) {
 		v = strings.ReplaceAll(v, "-", "")
 		return v[0:3] + "-" + v[3:7], nil
 	}
+
 	return "", fmt.Errorf("selo: %q is not a valid plate: %w", value, ErrInvalidFormat)
 }

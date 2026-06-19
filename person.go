@@ -11,33 +11,33 @@ import (
 // agree on the same federative unit (UF). Generated for testing/fixtures only —
 // never real PII (LGPD: synthetic data).
 type Person struct {
-	Name    string
-	Email   string
-	UF      UF
-	CPF     string
-	RG      string // only when UF is SP or RJ (the implemented RG algorithms); else ""
-	CNH     string
-	PIS     string
-	Renavam string
-	VoterID string
-	CNS     string
-	CEP     string
-	Phone   string
-	PIXKeys []string
-	Vehicle *Vehicle // populated only with WithVehicle()
-	Company *Company // populated only with WithCompany()
+	Name    string   `json:"name"`
+	Email   string   `json:"email"`
+	UF      UF       `json:"uf"`
+	CPF     string   `json:"cpf"`
+	RG      string   `json:"rg,omitempty"` // only when UF is SP or RJ (the implemented RG algorithms); else ""
+	CNH     string   `json:"cnh"`
+	PIS     string   `json:"pis"`
+	Renavam string   `json:"renavam"`
+	VoterID string   `json:"voter_id"`
+	CNS     string   `json:"cns"`
+	CEP     string   `json:"cep"`
+	Phone   string   `json:"phone"`
+	PIXKeys []string `json:"pix_keys"`
+	Vehicle *Vehicle `json:"vehicle,omitempty"` // populated only with WithVehicle()
+	Company *Company `json:"company,omitempty"` // populated only with WithCompany()
 }
 
 // Vehicle is a synthetic vehicle linked to a Person.
 type Vehicle struct {
-	Plate   string
-	Renavam string
+	Plate   string `json:"plate"`
+	Renavam string `json:"renavam"`
 }
 
 // Company is a synthetic company (CNPJ) linked to a Person.
 type Company struct {
-	Name string
-	CNPJ string
+	Name string `json:"name"`
+	CNPJ string `json:"cnpj"`
 }
 
 type personOpts struct {
@@ -159,6 +159,7 @@ func GeneratePerson(opts ...PersonOption) Person {
 	if o.withVehicle {
 		p.Vehicle = &Vehicle{Plate: (&Plate{Mercosul: true}).Generate(), Renavam: NewRenavam().Generate()}
 	}
+
 	if o.withCompany {
 		p.Company = &Company{
 			Name: last + " " + personCompanySuffixes[rand.IntN(len(personCompanySuffixes))],
@@ -169,6 +170,7 @@ func GeneratePerson(opts ...PersonOption) Person {
 	if o.formatted {
 		formatPerson(&p)
 	}
+
 	return p
 }
 
@@ -182,12 +184,14 @@ func personUFs() []UF {
 			out = append(out, uf)
 		}
 	}
+
 	return out
 }
 
 // genCPFForUF returns a valid CPF whose 9th digit matches uf's fiscal region.
 func genCPFForUF(uf UF) string {
 	region := cpfRegionByUF[uf]
+
 	c := NewCPF()
 	for {
 		v := c.Generate()
@@ -200,6 +204,7 @@ func genCPFForUF(uf UF) string {
 // genVoterIDForUF returns a valid Título Eleitoral whose embedded UF code matches uf.
 func genVoterIDForUF(uf UF) string {
 	code := fmt.Sprintf("%02d", voterCodeByUF[uf])
+
 	v := NewVoterID()
 	for {
 		got := v.Generate()
@@ -213,35 +218,43 @@ func genVoterIDForUF(uf UF) string {
 func genPhoneForUF(uf UF) string {
 	ddds := dddsForUF(uf)
 	ddd := ddds[rand.IntN(len(ddds))]
+
 	var sb strings.Builder
 	fmt.Fprintf(&sb, "%02d9", ddd) // DDD + mobile leading 9
-	for i := 0; i < 8; i++ {
+
+	for range 8 {
 		sb.WriteByte(byte('0' + rand.IntN(10)))
 	}
+
 	return sb.String()
 }
 
 // dddsForUF returns the sorted DDD codes belonging to uf.
 func dddsForUF(uf UF) []int {
 	var out []int
+
 	for _, ddd := range ddds {
 		if dddUFTable[ddd] == uf {
 			out = append(out, ddd)
 		}
 	}
+
 	return out
 }
 
 // genCEPForUF builds a valid 8-digit CEP within one of uf's postal ranges.
 func genCEPForUF(uf UF) string {
 	var ranges [][2]int
+
 	for _, r := range cepPrefixRanges {
 		if r.uf == uf {
 			ranges = append(ranges, [2]int{r.from, r.to})
 		}
 	}
+
 	r := ranges[rand.IntN(len(ranges))]
 	prefix := r[0] + rand.IntN(r[1]-r[0]+1)
+
 	return fmt.Sprintf("%03d%05d", prefix, rand.IntN(100000))
 }
 
@@ -252,9 +265,11 @@ func formatPerson(p *Person) {
 		if v == "" {
 			return v
 		}
+
 		if s, err := d.Format(v); err == nil {
 			return s
 		}
+
 		return v
 	}
 	p.CPF = fmtOr(NewCPF(), p.CPF)
@@ -269,6 +284,7 @@ func formatPerson(p *Person) {
 	if p.Company != nil {
 		p.Company.CNPJ = fmtOr(NewCNPJ(), p.Company.CNPJ)
 	}
+
 	if p.Vehicle != nil {
 		p.Vehicle.Renavam = fmtOr(NewRenavam(), p.Vehicle.Renavam)
 	}

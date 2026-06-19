@@ -62,7 +62,6 @@ func TestBulkFromMissingFile(t *testing.T) {
 // wiring gaps, and future kinds cannot be silently skipped.
 func TestBulkFromAcrossKinds(t *testing.T) {
 	for _, kind := range sdk.Kinds() {
-		kind := kind // capture for parallel subtest
 		name := kind.String()
 
 		t.Run(name, func(t *testing.T) {
@@ -85,6 +84,7 @@ func TestBulkFromAcrossKinds(t *testing.T) {
 			if fmtErr != nil {
 				formatted = value
 			}
+
 			assert.Equal(t, "valid\t"+formatted+"\n", out, "unexpected --from output for %s", name)
 		})
 	}

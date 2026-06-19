@@ -53,7 +53,7 @@ func (v *VoterID) Validate(value string) bool {
 // voterDV1 computes the first check digit over the 8 sequence digits.
 func voterDV1(d string) int {
 	sum := 0
-	for i := 0; i < 8; i++ {
+	for i := range 8 {
 		sum += int(d[i]-'0') * voterWeightsDV1[i]
 	}
 
@@ -70,7 +70,7 @@ func voterDV2(d string, dv1 int) int {
 	vals := [3]int{int(d[8] - '0'), int(d[9] - '0'), dv1}
 
 	sum := 0
-	for i := 0; i < 3; i++ {
+	for i := range 3 {
 		sum += vals[i] * voterWeightsDV2[i]
 	}
 
@@ -102,7 +102,7 @@ func (v *VoterID) Generate() string {
 	for {
 		var d [VoterIDLength]byte
 
-		for i := 0; i < 8; i++ {
+		for i := range 8 {
 			d[i] = byte('0' + rand.IntN(10))
 		}
 

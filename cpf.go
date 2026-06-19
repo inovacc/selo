@@ -54,7 +54,7 @@ func NewCPF() *CPF {
 
 // Generate generates a valid random CPF with unformatting
 func (c *CPF) Generate() string {
-	number := []int{0, 0, 0, 0, 0, 0, 0, 0, 0}
+	number := make([]int, 9, 11)
 
 	for i := range 9 {
 		number[i] = rand.IntN(10)
@@ -139,6 +139,7 @@ func (c *CPF) Origin(value string) (string, error) {
 	if origin == "" {
 		return "", ErrInvalidLength
 	}
+
 	return origin, nil
 }
 
@@ -294,9 +295,11 @@ func ValidateDocument(doc string) (docType string, isValid bool) {
 		ok, _ := Validate(KindCPF, doc)
 		return "CPF", ok
 	}
+
 	if len((&CNPJ{}).digits(doc)) == CnpjLength {
 		ok, _ := Validate(KindCNPJ, doc)
 		return "CNPJ", ok
 	}
+
 	return "UNKNOWN", false
 }

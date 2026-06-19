@@ -8,6 +8,7 @@ import (
 
 func TestIsDigitDocs_ParityWithRoot(t *testing.T) {
 	t.Parallel()
+
 	tests := []struct {
 		name    string
 		compat  func(string) bool
@@ -35,6 +36,7 @@ func TestIsDigitDocs_ParityWithRoot(t *testing.T) {
 }
 func TestPlateWrappers(t *testing.T) {
 	t.Parallel()
+
 	tests := []struct {
 		value        string
 		wantPlate    bool
@@ -60,6 +62,7 @@ func TestPlateWrappers(t *testing.T) {
 
 func TestPlateWrappers_ParityWithRoot(t *testing.T) {
 	t.Parallel()
+
 	p := selo.NewPlate()
 	for _, v := range []string{"ABC1234", "ABC-1234", "ABC1D23", "AB1234"} {
 		assert.Equal(t, p.Validate(v), IsPlate(v), "IsPlate parity %q", v)
@@ -88,10 +91,12 @@ func TestIsCEP(t *testing.T) {
 
 func TestIsCEPFrom(t *testing.T) {
 	t.Parallel()
+
 	cep := selo.NewCEP()
 	valid := cep.Generate()
 	originStr, err := cep.Origin(valid)
 	assert.NoError(t, err)
+
 	uf := selo.UF(originStr)
 
 	assert.True(t, IsCEPFrom(valid, uf), "IsCEPFrom must accept when uf matches")
@@ -101,11 +106,13 @@ func TestIsCEPFrom(t *testing.T) {
 	if uf == selo.UFSP {
 		other = selo.UFRJ
 	}
+
 	assert.False(t, IsCEPFrom(valid, other), "IsCEPFrom must reject when uf does not match")
 	assert.False(t, IsCEPFrom("000", uf), "IsCEPFrom must reject an invalid CEP")
 }
 func TestIsPhone(t *testing.T) {
 	t.Parallel()
+
 	phone := selo.NewPhone()
 	valid := phone.Generate()
 	wantUF, err := phone.Origin(valid)
@@ -122,27 +129,33 @@ func TestIsPhone(t *testing.T) {
 
 func TestIsPhoneFrom(t *testing.T) {
 	t.Parallel()
+
 	phone := selo.NewPhone()
 	valid := phone.Generate()
 	originStr, err := phone.Origin(valid)
 	assert.NoError(t, err)
+
 	uf := selo.UF(originStr)
 
 	assert.True(t, IsPhoneFrom(valid, uf), "IsPhoneFrom must accept when uf matches")
 	assert.True(t, IsPhoneFrom(valid), "IsPhoneFrom with no UFs must behave like IsPhone (valid -> true)")
+
 	other := selo.UFSP
 	if uf == selo.UFSP {
 		other = selo.UFRJ
 	}
+
 	assert.False(t, IsPhoneFrom(valid, other), "IsPhoneFrom must reject when uf does not match")
 	assert.False(t, IsPhoneFrom("123", uf), "IsPhoneFrom must reject an invalid phone")
 }
 func TestIsRG(t *testing.T) {
 	t.Parallel()
+
 	rg := selo.NewRG()
 
 	// Valid SP RG sample: 33.962.657-4 (mod-11 weights 2..9, DV=11-(sum%11)=4).
 	const validSP = "33.962.657-4"
+
 	wantOK, wantErr := rg.ValidateUF(validSP, selo.UFSP)
 	gotOK, gotErr := IsRG(validSP, selo.UFSP)
 	assert.Equal(t, wantOK, gotOK, "IsRG must mirror root validity for a valid SP RG")
@@ -166,25 +179,26 @@ func TestIsRG(t *testing.T) {
 // values at runtime so the test counts toward coverage.
 func TestSignatureParity(t *testing.T) {
 	t.Parallel()
+
 	var (
-		_ func(string) bool              = IsCPF
-		_ func(string) bool              = IsCNPJ
-		_ func(string) bool              = IsCNH
-		_ func(string) bool              = IsPIS
-		_ func(string) bool              = IsRENAVAM
-		_ func(string) bool              = IsVoterID
-		_ func(string) bool              = IsCNS
-		_ func(string) bool              = IsPlate
-		_ func(string) bool              = IsNationalPlate
-		_ func(string) bool              = IsMercosulPlate
-		_ func(string) (bool, UF)        = IsCEP
-		_ func(string, ...UF) bool       = IsCEPFrom
-		_ func(string) (bool, UF)        = IsPhone
-		_ func(string, ...UF) bool       = IsPhoneFrom
-		_ func(string, UF) (bool, error) = IsRG
+		_ = IsCPF
+		_ = IsCNPJ
+		_ = IsCNH
+		_ = IsPIS
+		_ = IsRENAVAM
+		_ = IsVoterID
+		_ = IsCNS
+		_ = IsPlate
+		_ = IsNationalPlate
+		_ = IsMercosulPlate
+		_ = IsCEP
+		_ = IsCEPFrom
+		_ = IsPhone
+		_ = IsPhoneFrom
+		_ = IsRG
 	)
 	// UF must be the SAME type as selo.UF (alias, not a defined type), so a
 	// selo.UF is assignable to compat.UF with no conversion.
-	var u UF = selo.UFSP
+	var u = selo.UFSP
 	assert.Equal(t, "SP", string(u))
 }

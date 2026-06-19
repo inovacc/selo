@@ -45,7 +45,7 @@ func TestVoterIDValidate(t *testing.T) {
 func TestVoterIDGenerate(t *testing.T) {
 	v := NewVoterID()
 
-	for i := 0; i < 1000; i++ {
+	for range 1000 {
 		got := v.Generate()
 		require.Len(t, got, VoterIDLength, "generated voter ID must be 12 digits")
 		assert.True(t, v.Validate(got), "generated voter ID %q must validate", got)
@@ -73,6 +73,7 @@ func TestVoterIDFormat(t *testing.T) {
 			if tt.wantErr != nil {
 				require.Error(t, err)
 				assert.True(t, errors.Is(err, tt.wantErr), "want %v, got %v", tt.wantErr, err)
+
 				return
 			}
 
@@ -116,6 +117,7 @@ func TestVoterIDOrigin(t *testing.T) {
 			if tt.wantErr != nil {
 				require.Error(t, err)
 				assert.True(t, errors.Is(err, tt.wantErr), "want %v, got %v", tt.wantErr, err)
+
 				return
 			}
 
@@ -135,12 +137,12 @@ func TestVoterIDImplementsOriginResolver(t *testing.T) {
 
 func BenchmarkVoterIDValidate(b *testing.B) {
 	v := NewVoterID()
+
 	const sample = "106438700108"
 
 	b.ReportAllocs()
-	b.ResetTimer()
 
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		_ = v.Validate(sample)
 	}
 }
@@ -149,9 +151,8 @@ func BenchmarkVoterIDGenerate(b *testing.B) {
 	v := NewVoterID()
 
 	b.ReportAllocs()
-	b.ResetTimer()
 
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		_ = v.Generate()
 	}
 }
@@ -181,6 +182,7 @@ func TestVoterIDAndCNSRegistered(t *testing.T) {
 
 func FuzzVoterIDValidate(f *testing.F) {
 	v := NewVoterID()
+
 	f.Add("106438700108")
 	f.Add("389901862852")
 	f.Add("")

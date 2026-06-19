@@ -38,6 +38,7 @@ func (r *RG) parse(value string) (base [RGBaseLength]int, check int, ok bool) {
 	if len(cleaned) != RGTotalLength {
 		return base, 0, false
 	}
+
 	last := cleaned[RGBaseLength] // the check character
 	switch {
 	case last == 'X' || last == 'x':
@@ -49,13 +50,16 @@ func (r *RG) parse(value string) (base [RGBaseLength]int, check int, ok bool) {
 	default:
 		return base, 0, false
 	}
-	for i := 0; i < RGBaseLength; i++ {
+
+	for i := range RGBaseLength {
 		c := cleaned[i]
 		if c < '0' || c > '9' {
 			return base, 0, false
 		}
+
 		base[i] = int(c - '0')
 	}
+
 	return base, check, true
 }
 
@@ -63,12 +67,14 @@ func (r *RG) parse(value string) (base [RGBaseLength]int, check int, ok bool) {
 // from an RG, preserving digits and a trailing X/x check character.
 func (r *RG) clean(value string) string {
 	out := make([]byte, 0, RGTotalLength)
+
 	for i := 0; i < len(value); i++ {
 		c := value[i]
 		if (c >= '0' && c <= '9') || c == 'X' || c == 'x' {
 			out = append(out, c)
 		}
 	}
+
 	return string(out)
 }
 
@@ -78,9 +84,10 @@ func (r *RG) clean(value string) string {
 // (matching parse and Format); digits 1..9 encode as themselves.
 func (r *RG) checkDigit(base [RGBaseLength]int) int {
 	sum := 0
-	for i := 0; i < RGBaseLength; i++ {
+	for i := range RGBaseLength {
 		sum += base[i] * rgWeights[i]
 	}
+
 	return 11 - (sum % 11)
 }
 
@@ -99,10 +106,12 @@ func (r *RG) ValidateUF(value string, uf UF) (bool, error) {
 	if !rgImplemented[uf] {
 		return false, fmt.Errorf("%w: %s", ErrUFNotImplemented, uf)
 	}
+
 	base, check, ok := r.parse(value)
 	if !ok {
 		return false, ErrInvalidFormat
 	}
+
 	return r.checkDigit(base) == check, nil
 }
 
@@ -115,6 +124,7 @@ func (r *RG) Validate(value string) bool {
 			return true
 		}
 	}
+
 	return false
 }
 
@@ -126,7 +136,9 @@ func (r *RG) Format(value string) (string, error) {
 	if !ok {
 		return "", ErrInvalidFormat
 	}
+
 	var checkChar byte
+
 	switch check {
 	case 10:
 		checkChar = 'X'
@@ -135,14 +147,17 @@ func (r *RG) Format(value string) (string, error) {
 	default:
 		checkChar = byte('0' + check)
 	}
+
 	buf := make([]byte, 0, 12)
-	for i := 0; i < RGBaseLength; i++ {
+	for i := range RGBaseLength {
 		buf = append(buf, byte('0'+base[i]))
 		if i == 1 || i == 4 {
 			buf = append(buf, '.')
 		}
 	}
+
 	buf = append(buf, '-', checkChar)
+
 	return string(buf), nil
 }
 
@@ -152,11 +167,14 @@ func (r *RG) Format(value string) (string, error) {
 // Document interface.
 func (r *RG) Generate() string {
 	var base [RGBaseLength]int
-	for i := 0; i < RGBaseLength; i++ {
+	for i := range RGBaseLength {
 		base[i] = rand.IntN(10)
 	}
+
 	dv := r.checkDigit(base)
+
 	var checkChar byte
+
 	switch dv {
 	case 10:
 		checkChar = 'X'
@@ -165,13 +183,16 @@ func (r *RG) Generate() string {
 	default:
 		checkChar = byte('0' + dv)
 	}
+
 	buf := make([]byte, 0, 12)
-	for i := 0; i < RGBaseLength; i++ {
+	for i := range RGBaseLength {
 		buf = append(buf, byte('0'+base[i]))
 		if i == 1 || i == 4 {
 			buf = append(buf, '.')
 		}
 	}
+
 	buf = append(buf, '-', checkChar)
+
 	return string(buf)
 }

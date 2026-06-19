@@ -65,6 +65,7 @@ func runGen(cmd *cobra.Command, f *genFlags) error {
 	if f.lang == "" {
 		return fmt.Errorf("--lang is required (supported: %s)", strings.Join(codegen.SupportedLangStrings(), ", "))
 	}
+
 	if !codegen.IsSupportedLang(f.lang) {
 		return fmt.Errorf("unsupported --lang %q (supported: %s)", f.lang, strings.Join(codegen.SupportedLangStrings(), ", "))
 	}
@@ -80,11 +81,14 @@ func runGen(cmd *cobra.Command, f *genFlags) error {
 		if gerr != nil {
 			return gerr
 		}
+
 		if werr := writeFiles(f.out, files); werr != nil {
 			return werr
 		}
+
 		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "generated %s/%s (%d files)\n", f.lang, k, len(files))
 	}
+
 	return nil
 }
 
@@ -93,10 +97,12 @@ func resolveKinds(kind string) ([]sdk.Kind, error) {
 	if kind == "" || kind == "all" {
 		return sdk.Kinds(), nil
 	}
+
 	k := sdk.Kind(kind)
 	if _, ok := codegen.PlanFor(k); !ok {
 		return nil, fmt.Errorf("unknown --kind %q (use 'all' or one of: %s)", kind, strings.Join(codegen.KindStrings(), ", "))
 	}
+
 	return []sdk.Kind{k}, nil
 }
 
@@ -108,9 +114,11 @@ func writeFiles(out string, files []codegen.File) error {
 		if err := os.MkdirAll(filepath.Dir(dst), 0o755); err != nil {
 			return fmt.Errorf("gen: mkdir for %q: %w", dst, err)
 		}
+
 		if err := os.WriteFile(dst, file.Content, 0o644); err != nil {
 			return fmt.Errorf("gen: write %q: %w", dst, err)
 		}
 	}
+
 	return nil
 }

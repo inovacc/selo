@@ -30,6 +30,7 @@ func TestPersonCmd_JSONArray(t *testing.T) {
 	var people []sdk.Person
 	require.NoError(t, json.Unmarshal([]byte(out), &people))
 	require.Len(t, people, 3)
+
 	for _, p := range people {
 		assert.Equal(t, sdk.UFMG, p.UF)
 	}

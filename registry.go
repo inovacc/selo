@@ -2,7 +2,7 @@ package selo
 
 import (
 	"fmt"
-	"sort"
+	"slices"
 	"sync"
 )
 
@@ -17,6 +17,7 @@ var (
 func Register(d Document) {
 	registryMu.Lock()
 	defer registryMu.Unlock()
+
 	registry[d.Kind()] = d
 }
 
@@ -24,19 +25,24 @@ func Register(d Document) {
 func Get(kind Kind) (Document, bool) {
 	registryMu.RLock()
 	defer registryMu.RUnlock()
+
 	d, ok := registry[kind]
+
 	return d, ok
 }
 
 // Kinds returns the registered kinds in stable, sorted order.
 func Kinds() []Kind {
 	registryMu.RLock()
+
 	out := make([]Kind, 0, len(registry))
 	for k := range registry {
 		out = append(out, k)
 	}
+
 	registryMu.RUnlock()
-	sort.Slice(out, func(i, j int) bool { return out[i] < out[j] })
+	slices.Sort(out)
+
 	return out
 }
 
@@ -47,6 +53,7 @@ func Validate(kind Kind, value string) (bool, error) {
 	if !ok {
 		return false, fmt.Errorf("%q: %w", kind, ErrUnknownKind)
 	}
+
 	return d.Validate(value), nil
 }
 
@@ -56,6 +63,7 @@ func Generate(kind Kind) (string, error) {
 	if !ok {
 		return "", fmt.Errorf("%q: %w", kind, ErrUnknownKind)
 	}
+
 	return d.Generate(), nil
 }
 
@@ -65,6 +73,7 @@ func Format(kind Kind, value string) (string, error) {
 	if !ok {
 		return "", fmt.Errorf("%q: %w", kind, ErrUnknownKind)
 	}
+
 	return d.Format(value)
 }
 
@@ -84,5 +93,6 @@ func Detect(value string) (Kind, bool) {
 			return KindCNPJ, true
 		}
 	}
+
 	return "", false
 }

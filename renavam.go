@@ -29,9 +29,11 @@ func (r *Renavam) Validate(value string) bool {
 	if len(d) != RenavamLength {
 		return false
 	}
+
 	if renavamAllEqual(d) {
 		return false
 	}
+
 	return int(d[10]-'0') == renavamCheckDigit(d)
 }
 
@@ -40,10 +42,12 @@ func (r *Renavam) Validate(value string) bool {
 func (r *Renavam) Generate() string {
 	for {
 		var b [RenavamLength]byte
-		for i := 0; i < 10; i++ {
+		for i := range 10 {
 			b[i] = byte('0' + rand.IntN(10))
 		}
+
 		b[10] = byte('0' + renavamCheckDigit(string(b[:10])))
+
 		out := string(b[:])
 		if !renavamAllEqual(out) {
 			return out
@@ -58,19 +62,22 @@ func (r *Renavam) Format(value string) (string, error) {
 	if len(d) < RenavamLength {
 		d = strings.Repeat("0", RenavamLength-len(d)) + d
 	}
+
 	return d, nil
 }
 
 // renavamCheckDigit computes the (sum*10)%11 check digit over the first 10 digits.
 func renavamCheckDigit(d string) int {
 	sum := 0
-	for i := 0; i < 10; i++ {
+	for i := range 10 {
 		sum += int(d[i]-'0') * renavamWeights[i]
 	}
+
 	dv := (sum * 10) % 11
 	if dv == 10 {
 		dv = 0
 	}
+
 	return dv
 }
 
@@ -81,5 +88,6 @@ func renavamAllEqual(d string) bool {
 			return false
 		}
 	}
+
 	return true
 }

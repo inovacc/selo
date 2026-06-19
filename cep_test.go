@@ -106,7 +106,7 @@ func TestCEPOrigin(t *testing.T) {
 
 func TestCEPGenerateRoundTrip(t *testing.T) {
 	c := NewCEP()
-	for i := 0; i < 500; i++ {
+	for range 500 {
 		got := c.Generate()
 		assert.Len(t, got, CepLength, "Generate must emit 8 raw digits")
 		assert.True(t, c.Validate(got), "generated CEP %q must validate", got)
@@ -137,18 +137,20 @@ var _ = errors.New
 
 func BenchmarkCEPValidate(b *testing.B) {
 	c := NewCEP()
+
 	b.ReportAllocs()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+
+	for b.Loop() {
 		_ = c.Validate("01310-100")
 	}
 }
 
 func BenchmarkCEPGenerate(b *testing.B) {
 	c := NewCEP()
+
 	b.ReportAllocs()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+
+	for b.Loop() {
 		_ = c.Generate()
 	}
 }

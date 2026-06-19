@@ -18,6 +18,7 @@ func TestIE_Registered(t *testing.T) {
 	if !ok {
 		t.Fatal("IE not registered in registry")
 	}
+
 	if d.Kind() != KindIE {
 		t.Fatalf("registered Kind() = %q, want %q", d.Kind(), KindIE)
 	}
@@ -26,10 +27,12 @@ func TestIE_Registered(t *testing.T) {
 func TestIE_ImplementedUFs(t *testing.T) {
 	e := NewIE()
 	ufs := e.ImplementedUFs()
+
 	want := map[UF]bool{UFSP: true}
 	if len(ufs) != len(want) {
 		t.Fatalf("ImplementedUFs() = %v, want %d UF(s)", ufs, len(want))
 	}
+
 	for _, u := range ufs {
 		if !want[u] {
 			t.Errorf("ImplementedUFs() returned unexpected UF %q", u)
@@ -55,6 +58,7 @@ func TestIE_ImplementedUFs(t *testing.T) {
 // docs/IE-NOTES.md for sources and the remaining-UF roadmap.
 func TestIE_AuthoritativeSamples(t *testing.T) {
 	e := NewIE()
+
 	samples := []struct {
 		value  string
 		source string
@@ -73,6 +77,7 @@ func TestIE_AuthoritativeSamples(t *testing.T) {
 
 func TestIE_ValidateUF(t *testing.T) {
 	e := NewIE()
+
 	tests := []struct {
 		name    string
 		value   string
@@ -96,12 +101,15 @@ func TestIE_ValidateUF(t *testing.T) {
 			if got != tt.want {
 				t.Errorf("ValidateUF(%q,%q) = %v, want %v", tt.value, tt.uf, got, tt.want)
 			}
+
 			if tt.wantErr == nil {
 				if err != nil {
 					t.Errorf("ValidateUF(%q,%q) err = %v, want nil", tt.value, tt.uf, err)
 				}
+
 				return
 			}
+
 			if !errors.Is(err, tt.wantErr) {
 				t.Errorf("ValidateUF(%q,%q) err = %v, want errors.Is %v", tt.value, tt.uf, err, tt.wantErr)
 			}
@@ -111,6 +119,7 @@ func TestIE_ValidateUF(t *testing.T) {
 
 func TestIE_Validate(t *testing.T) {
 	e := NewIE()
+
 	tests := []struct {
 		name  string
 		value string
@@ -136,6 +145,7 @@ func TestIE_Validate(t *testing.T) {
 
 func TestIE_Format(t *testing.T) {
 	e := NewIE()
+
 	tests := []struct {
 		name    string
 		in      string
@@ -155,11 +165,14 @@ func TestIE_Format(t *testing.T) {
 				if !errors.Is(err, tt.wantErr) {
 					t.Fatalf("Format(%q) err = %v, want errors.Is %v", tt.in, err, tt.wantErr)
 				}
+
 				return
 			}
+
 			if err != nil {
 				t.Fatalf("Format(%q) unexpected err: %v", tt.in, err)
 			}
+
 			if got != tt.want {
 				t.Errorf("Format(%q) = %q, want %q", tt.in, got, tt.want)
 			}
@@ -169,11 +182,12 @@ func TestIE_Format(t *testing.T) {
 
 func TestIE_GenerateRoundTrip(t *testing.T) {
 	e := NewIE()
-	for i := 0; i < 1000; i++ {
+	for range 1000 {
 		v := e.Generate()
 		if v == "" {
 			t.Fatal("Generate() returned empty string")
 		}
+
 		if !e.Validate(v) {
 			t.Fatalf("Generate() produced invalid IE: %q", v)
 		}
@@ -185,6 +199,7 @@ func TestIE_RegistryDispatch(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Validate(KindIE, ...) err = %v", err)
 	}
+
 	if !ok {
 		t.Fatal("Validate(KindIE, valid sample) = false, want true")
 	}
@@ -192,6 +207,7 @@ func TestIE_RegistryDispatch(t *testing.T) {
 
 func FuzzIEValidate(f *testing.F) {
 	e := NewIE()
+
 	f.Add("110.042.490.114")
 	f.Add("388108598269")
 	f.Add("")
@@ -206,10 +222,12 @@ func FuzzIEValidate(f *testing.F) {
 
 func BenchmarkIEValidate(b *testing.B) {
 	e := NewIE()
+
 	const sample = "110.042.490.114"
+
 	b.ReportAllocs()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+
+	for b.Loop() {
 		_ = e.Validate(sample)
 	}
 }
