@@ -1,0 +1,300 @@
+{
+  "kind": "cpf",
+  "group": "A",
+  "validate": [
+    {
+      "input": "529.982.247-25",
+      "valid": true
+    },
+    {
+      "input": "52998224725",
+      "valid": true
+    },
+    {
+      "input": "12345678909",
+      "valid": true
+    },
+    {
+      "input": "97661339803",
+      "valid": true
+    },
+    {
+      "input": "15375594196",
+      "valid": true
+    },
+    {
+      "input": "78820497867",
+      "valid": true
+    },
+    {
+      "input": "97027272865",
+      "valid": true
+    },
+    {
+      "input": "03061290354",
+      "valid": true
+    },
+    {
+      "input": "12685384855",
+      "valid": true
+    },
+    {
+      "input": "83135393305",
+      "valid": true
+    },
+    {
+      "input": "62263316230",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "0306129035",
+      "valid": false
+    },
+    {
+      "input": "03061290355",
+      "valid": false
+    },
+    {
+      "input": "11111111111",
+      "valid": false
+    },
+    {
+      "input": "1234567890",
+      "valid": false
+    },
+    {
+      "input": "12345678900",
+      "valid": false
+    },
+    {
+      "input": "1268538485",
+      "valid": false
+    },
+    {
+      "input": "12685384856",
+      "valid": false
+    },
+    {
+      "input": "1537559419",
+      "valid": false
+    },
+    {
+      "input": "15375594197",
+      "valid": false
+    },
+    {
+      "input": "529.982.247-2",
+      "valid": false
+    },
+    {
+      "input": "529.982.247-26",
+      "valid": false
+    },
+    {
+      "input": "5299822472",
+      "valid": false
+    },
+    {
+      "input": "52998224726",
+      "valid": false
+    },
+    {
+      "input": "6226331623",
+      "valid": false
+    },
+    {
+      "input": "62263316231",
+      "valid": false
+    },
+    {
+      "input": "7882049786",
+      "valid": false
+    },
+    {
+      "input": "78820497868",
+      "valid": false
+    },
+    {
+      "input": "8313539330",
+      "valid": false
+    },
+    {
+      "input": "83135393306",
+      "valid": false
+    },
+    {
+      "input": "9702727286",
+      "valid": false
+    },
+    {
+      "input": "97027272866",
+      "valid": false
+    },
+    {
+      "input": "9766133980",
+      "valid": false
+    },
+    {
+      "input": "97661339804",
+      "valid": false
+    },
+    {
+      "input": "Z2263316230",
+      "valid": false
+    },
+    {
+      "input": "Z2345678909",
+      "valid": false
+    },
+    {
+      "input": "Z2685384855",
+      "valid": false
+    },
+    {
+      "input": "Z29.982.247-25",
+      "valid": false
+    },
+    {
+      "input": "Z2998224725",
+      "valid": false
+    },
+    {
+      "input": "Z3061290354",
+      "valid": false
+    },
+    {
+      "input": "Z3135393305",
+      "valid": false
+    },
+    {
+      "input": "Z5375594196",
+      "valid": false
+    },
+    {
+      "input": "Z7027272865",
+      "valid": false
+    },
+    {
+      "input": "Z7661339803",
+      "valid": false
+    },
+    {
+      "input": "Z8820497867",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "529.982.247-25",
+      "output": "529.982.247-25"
+    },
+    {
+      "input": "52998224725",
+      "output": "529.982.247-25"
+    },
+    {
+      "input": "12345678909",
+      "output": "123.456.789-09"
+    },
+    {
+      "input": "97661339803",
+      "output": "976.613.398-03"
+    },
+    {
+      "input": "15375594196",
+      "output": "153.755.941-96"
+    },
+    {
+      "input": "78820497867",
+      "output": "788.204.978-67"
+    },
+    {
+      "input": "97027272865",
+      "output": "970.272.728-65"
+    },
+    {
+      "input": "03061290354",
+      "output": "030.612.903-54"
+    },
+    {
+      "input": "12685384855",
+      "output": "126.853.848-55"
+    },
+    {
+      "input": "83135393305",
+      "output": "831.353.933-05"
+    },
+    {
+      "input": "62263316230",
+      "output": "622.633.162-30"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalid"
+    }
+  ],
+  "origin": [
+    {
+      "input": "529.982.247-25",
+      "output": "Rio de Janeiro and Espírito Santo"
+    },
+    {
+      "input": "52998224725",
+      "output": "Rio de Janeiro and Espírito Santo"
+    },
+    {
+      "input": "12345678909",
+      "output": "Paraná and Santa Catarina"
+    },
+    {
+      "input": "97661339803",
+      "output": "São Paulo"
+    },
+    {
+      "input": "15375594196",
+      "output": "Federal District, Goiás, Mato Grosso do Sul, and Tocantins"
+    },
+    {
+      "input": "78820497867",
+      "output": "São Paulo"
+    },
+    {
+      "input": "97027272865",
+      "output": "São Paulo"
+    },
+    {
+      "input": "03061290354",
+      "output": "Ceará, Maranhão, and Piauí"
+    },
+    {
+      "input": "12685384855",
+      "output": "São Paulo"
+    },
+    {
+      "input": "83135393305",
+      "output": "Ceará, Maranhão, and Piauí"
+    },
+    {
+      "input": "62263316230",
+      "output": "Pará, Amazonas, Acre, Amapá, Rondônia, and Roraima"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

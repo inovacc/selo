@@ -1,0 +1,186 @@
+{
+  "kind": "plate",
+  "group": "D",
+  "validate": [
+    {
+      "input": "TLC7407",
+      "valid": true
+    },
+    {
+      "input": "SGY6571",
+      "valid": true
+    },
+    {
+      "input": "LAS7574",
+      "valid": true
+    },
+    {
+      "input": "QUN3737",
+      "valid": true
+    },
+    {
+      "input": "ANQ4194",
+      "valid": true
+    },
+    {
+      "input": "KTA6720",
+      "valid": true
+    },
+    {
+      "input": "DOG7723",
+      "valid": true
+    },
+    {
+      "input": "ULI1420",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "1111",
+      "valid": false
+    },
+    {
+      "input": "1234567",
+      "valid": false
+    },
+    {
+      "input": "AB-1234",
+      "valid": false
+    },
+    {
+      "input": "ABC-123",
+      "valid": false
+    },
+    {
+      "input": "ABC12345",
+      "valid": false
+    },
+    {
+      "input": "ABCD123",
+      "valid": false
+    },
+    {
+      "input": "ANQ419",
+      "valid": false
+    },
+    {
+      "input": "ANQZ194",
+      "valid": false
+    },
+    {
+      "input": "DOG772",
+      "valid": false
+    },
+    {
+      "input": "DOGZ723",
+      "valid": false
+    },
+    {
+      "input": "KTA672",
+      "valid": false
+    },
+    {
+      "input": "KTAZ720",
+      "valid": false
+    },
+    {
+      "input": "LAS757",
+      "valid": false
+    },
+    {
+      "input": "LASZ574",
+      "valid": false
+    },
+    {
+      "input": "QUN373",
+      "valid": false
+    },
+    {
+      "input": "QUNZ737",
+      "valid": false
+    },
+    {
+      "input": "SGY657",
+      "valid": false
+    },
+    {
+      "input": "SGYZ571",
+      "valid": false
+    },
+    {
+      "input": "TLC740",
+      "valid": false
+    },
+    {
+      "input": "TLCZ407",
+      "valid": false
+    },
+    {
+      "input": "ULI142",
+      "valid": false
+    },
+    {
+      "input": "ULIZ420",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    },
+    {
+      "input": "abc-12e4",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "TLC7407",
+      "output": "TLC-7407"
+    },
+    {
+      "input": "SGY6571",
+      "output": "SGY-6571"
+    },
+    {
+      "input": "LAS7574",
+      "output": "LAS-7574"
+    },
+    {
+      "input": "QUN3737",
+      "output": "QUN-3737"
+    },
+    {
+      "input": "ANQ4194",
+      "output": "ANQ-4194"
+    },
+    {
+      "input": "KTA6720",
+      "output": "KTA-6720"
+    },
+    {
+      "input": "DOG7723",
+      "output": "DOG-7723"
+    },
+    {
+      "input": "ULI1420",
+      "output": "ULI-1420"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidFormat"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}
