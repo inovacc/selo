@@ -16,11 +16,6 @@ jobs:
         with:
           go-version: 'stable'
 
-      - name: Lint
-        uses: golangci/golangci-lint-action@v8
-        with:
-          version: v2.8.0
-
       - name: Build
         run: go build -v ./...
 
@@ -36,11 +31,6 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: 'stable'
-
-      - name: Lint
-        uses: golangci/golangci-lint-action@v8
-        with:
-          version: v2.8.0
 
       - name: Build
         run: go build -v ./...

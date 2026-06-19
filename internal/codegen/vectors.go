@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strings"
 
@@ -246,9 +247,8 @@ func mutations(in string) []string {
 	// Wrong last digit: bump the final digit (mod 10) — flips the check digit.
 	if len(digits) > 0 {
 		runes := []rune(in)
-		for i := len(runes) - 1; i >= 0; i-- {
-			if runes[i] >= '0' && runes[i] <= '9' {
-				orig := runes[i]
+		for i, orig := range slices.Backward(runes) {
+			if orig >= '0' && orig <= '9' {
 				runes[i] = '0' + (orig-'0'+1)%10
 				out = append(out, string(runes))
 				runes[i] = orig

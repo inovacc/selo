@@ -52,18 +52,20 @@ func (e tsEmitter) Emit(kind selo.Kind, plan KindPlan, vec Vector) ([]File, erro
 
 	vectorJSON = append(vectorJSON, '\n')
 
-	files := []File{
-		{Path: "src/" + kind.String() + ".ts", Content: []byte(module)},
-		{Path: "test/" + kind.String() + ".test.ts", Content: []byte(test)},
-		{Path: "vectors/" + kind.String() + ".json", Content: vectorJSON},
-	}
-
 	shared, err := e.sharedFiles()
 	if err != nil {
 		return nil, err
 	}
 
-	return append(files, shared...), nil
+	files := make([]File, 0, 3+len(shared))
+	files = append(files,
+		File{Path: "src/" + kind.String() + ".ts", Content: []byte(module)},
+		File{Path: "test/" + kind.String() + ".test.ts", Content: []byte(test)},
+		File{Path: "vectors/" + kind.String() + ".json", Content: vectorJSON},
+	)
+	files = append(files, shared...)
+
+	return files, nil
 }
 
 // sharedFiles returns the language-wide files that do not depend on a single

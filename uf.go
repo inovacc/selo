@@ -45,6 +45,7 @@ var ufSet = func() map[UF]struct{} {
 	for _, u := range allUFs {
 		m[u] = struct{}{}
 	}
+
 	return m
 }()
 
