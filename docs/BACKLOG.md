@@ -110,6 +110,17 @@ states instead of SP/RJ.
     algorithm is what's verified; the code applies the *same* algorithm to **RJ**, but no
     independent RJ-specific source was found — confirm RJ before relying on it or building
     multi-state RG on top.
+- **RNM (Registro Nacional Migratório)** — the foreigner ID on the CRNM card. **Researched
+  2026-06-19, deferred** (owner's call) for lack of a verifiable spec: the RNM is an *opaque*
+  alphanumeric sequence "derived from personal data + fingerprints" with **no public format or
+  check-digit algorithm** ([Polícia Federal](https://www.gov.br/pf/pt-br/assuntos/imigracao/duvidas-frequentes/autorizacao-de-residencia-e-registro-nacional-migratorio-rnm/o-que-e-registro-nacional)).
+  The predecessor **RNE** is reportedly "8 digits + 1 check digit", but no authoritative
+  weights/algorithm and no ≥2 verifiable samples were found. Per the project's verify-or-don't-ship
+  discipline (cf. plans 004/006), not implemented — would require inventing a checksum. **To ship:**
+  obtain an authoritative format + check-digit algorithm (or a trusted reference impl + real
+  samples), then add `rnm.go` behind the `Document` interface; the new kind auto-propagates to
+  CLI/MCP and needs a `KindPlan` + the 5 codegen emitters + CI-matrix verification.
+  **Value: M, Effort: M (blocked on spec).**
 
 ---
 
