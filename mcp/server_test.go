@@ -243,3 +243,36 @@ func TestGeneratePersonTool(t *testing.T) {
 	require.NoError(t, err)
 	assert.True(t, bad.IsError, "invalid uf should yield an error result")
 }
+
+func TestGenerateCodeTool(t *testing.T) {
+	ctx, cs := newTestSession(t)
+
+	// M1: no emitter registered, so a supported lang/kind yields a clean error
+	// result (not a transport error).
+	res, err := cs.CallTool(ctx, &mcp.CallToolParams{
+		Name:      "generate_code",
+		Arguments: map[string]any{"lang": "ts", "kind": "cpf"},
+	})
+	require.NoError(t, err)
+	require.True(t, res.IsError, "M1 generate_code should report a clean error result")
+	require.NotEmpty(t, res.Content)
+	tc, ok := res.Content[0].(*mcp.TextContent)
+	require.True(t, ok)
+	assert.Contains(t, tc.Text, "not yet registered")
+
+	// Unsupported language is a clean error result.
+	bad, err := cs.CallTool(ctx, &mcp.CallToolParams{
+		Name:      "generate_code",
+		Arguments: map[string]any{"lang": "bogus", "kind": "cpf"},
+	})
+	require.NoError(t, err)
+	assert.True(t, bad.IsError, "unsupported lang should yield an error result")
+
+	// Unknown kind is a clean error result.
+	badKind, err := cs.CallTool(ctx, &mcp.CallToolParams{
+		Name:      "generate_code",
+		Arguments: map[string]any{"lang": "ts", "kind": "nope"},
+	})
+	require.NoError(t, err)
+	assert.True(t, badKind.IsError, "unknown kind should yield an error result")
+}

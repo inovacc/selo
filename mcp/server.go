@@ -4,16 +4,18 @@ import (
 	"context"
 	"fmt"
 	"github.com/inovacc/selo"
+	"github.com/inovacc/selo/internal/codegen"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"log/slog"
 	"os"
+	"strings"
 )
 
 // Package mcp adapts the selo registry to a Model Context Protocol server.
 //
-// It exposes six tools (validate_document, generate_document,
-// format_document, detect_document, list_document_types, generate_person)
-// over stdio.
+// It exposes seven tools (validate_document, generate_document,
+// format_document, detect_document, list_document_types, generate_person,
+// generate_code) over stdio.
 // Every tool is derived from the selo registry, so adding a new document
 // type to the registry automatically widens the MCP surface with no edits
 // here.
@@ -84,6 +86,23 @@ type PersonInput struct {
 // PersonOutput is the typed output for the generate_person tool.
 type PersonOutput struct {
 	People []selo.Person `json:"people" jsonschema:"synthetic identities; all documents valid and UF-consistent"`
+}
+
+// GenerateCodeInput is the typed input for the generate_code tool.
+type GenerateCodeInput struct {
+	Lang string `json:"lang" jsonschema:"target language: ts, js, ruby, java, or csharp"`
+	Kind string `json:"kind" jsonschema:"document kind to generate code for, e.g. cpf"`
+}
+
+// GenerateCodeFile is one generated artifact: a relative path and its contents.
+type GenerateCodeFile struct {
+	Path    string `json:"path" jsonschema:"path of the generated file, relative to the output root"`
+	Content string `json:"content" jsonschema:"the generated file contents"`
+}
+
+// GenerateCodeOutput is the typed output for the generate_code tool.
+type GenerateCodeOutput struct {
+	Files []GenerateCodeFile `json:"files" jsonschema:"the generated module/test/vector files"`
 }
 
 // kindEnum returns one enum value per registered kind, for the jsonschema
@@ -220,7 +239,35 @@ func personHandler(_ context.Context, _ *mcp.CallToolRequest, in PersonInput) (*
 	return &mcp.CallToolResult{StructuredContent: out}, out, nil
 }
 
-// NewServer builds an MCP server with all six selo tools registered.
+// generateCodeHandler is the generate_code tool. It validates the requested
+// language/kind and asks the codegen package to render the file set. In M1 no
+// language emitters are registered, so it reports "emitter not yet registered"
+// cleanly (as a tool error) rather than failing the RPC. M2+ register emitters
+// and this returns real files with no handler change here.
+func generateCodeHandler(_ context.Context, _ *mcp.CallToolRequest, in GenerateCodeInput) (*mcp.CallToolResult, GenerateCodeOutput, error) {
+	if !codegen.IsSupportedLang(in.Lang) {
+		return errResult[GenerateCodeOutput](fmt.Sprintf(
+			"unsupported language %q (supported: %s)", in.Lang, strings.Join(codegen.SupportedLangStrings(), ", ")))
+	}
+	kind := selo.Kind(in.Kind)
+	if _, ok := codegen.PlanFor(kind); !ok {
+		return errResult[GenerateCodeOutput](fmt.Sprintf("unknown document kind %q", in.Kind))
+	}
+
+	files, err := codegen.Generate(codegen.Lang(in.Lang), kind)
+	if err != nil {
+		// Includes the M1 "emitter for %q not yet registered" message.
+		return errResult[GenerateCodeOutput](err.Error())
+	}
+
+	out := GenerateCodeOutput{Files: make([]GenerateCodeFile, 0, len(files))}
+	for _, f := range files {
+		out.Files = append(out.Files, GenerateCodeFile{Path: f.Path, Content: string(f.Content)})
+	}
+	return &mcp.CallToolResult{StructuredContent: out}, out, nil
+}
+
+// NewServer builds an MCP server with all selo tools registered.
 // version is stamped into the server Implementation (use build info).
 func NewServer(version string) *mcp.Server {
 	if version == "" {
@@ -262,6 +309,11 @@ func NewServer(version string) *mcp.Server {
 		Name:        "generate_person",
 		Description: "Generate coherent synthetic Brazilian identities: all documents valid and UF-consistent. Synthetic test data only — never real PII.",
 	}, personHandler)
+
+	mcp.AddTool(srv, &mcp.Tool{
+		Name:        "generate_code",
+		Description: "Generate validate/format/origin code (with golden vectors and a test) for a Brazilian document kind in a target language (ts, js, ruby, java, csharp).",
+	}, generateCodeHandler)
 
 	return srv
 }
