@@ -57,6 +57,14 @@ func TestKindCmdBulkConflictsWithValidate(t *testing.T) {
 	assert.Contains(t, err.Error(), "cannot be used with")
 }
 
+func TestKindCmdUnimplementedUFMessage(t *testing.T) {
+	// An unimplemented UF surfaces the real reason, not a bare "invalid".
+	out, err := runCmd(t, "rg", "--uf", "AC", "--validate", "24.678.131-2")
+	require.Error(t, err)
+	assert.True(t, errors.Is(err, errInvalidInput))
+	assert.Contains(t, out, "not implemented")
+}
+
 func TestKindCmdValidateValidCPF(t *testing.T) {
 	// 529.982.247-25 is a well-known valid CPF.
 	out, err := runCmd(t, "cpf", "--validate", "529.982.247-25")

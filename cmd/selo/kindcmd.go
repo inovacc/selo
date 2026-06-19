@@ -216,7 +216,14 @@ func runOrigin(cmd *cobra.Command, doc sdk.Document, value string) error {
 }
 
 func runValidate(cmd *cobra.Command, doc sdk.Document, value, uf string) error {
-	valid := docValidate(doc, value, uf)
+	valid, verr := docValidate(doc, value, uf)
+	if verr != nil {
+		// Surface the real reason (e.g. UF not implemented, invalid format for
+		// the UF) instead of a bare "invalid".
+		_, _ = fmt.Fprintf(cmd.OutOrStdout(), "invalid\t%s\n", verr)
+		return errInvalidInput
+	}
+
 	if !valid {
 		_, _ = fmt.Fprintln(cmd.OutOrStdout(), "invalid")
 		return errInvalidInput
@@ -233,13 +240,12 @@ func runValidate(cmd *cobra.Command, doc sdk.Document, value, uf string) error {
 
 // docValidate runs UF-scoped validation when a --uf is supplied and the type
 // supports it; otherwise it runs plain Validate.
-func docValidate(doc sdk.Document, value, uf string) bool {
+func docValidate(doc sdk.Document, value, uf string) (bool, error) {
 	if uf != "" {
 		if s, ok := doc.(sdk.UFScoped); ok {
-			ok2, err := s.ValidateUF(value, sdk.UF(strings.ToUpper(uf)))
-			return err == nil && ok2
+			return s.ValidateUF(value, sdk.UF(strings.ToUpper(uf)))
 		}
 	}
 
-	return doc.Validate(value)
+	return doc.Validate(value), nil
 }

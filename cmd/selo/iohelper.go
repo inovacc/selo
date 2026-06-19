@@ -11,9 +11,6 @@ import (
 
 const maxLine = 1024 * 1024
 
-// scanBuf is a scratch buffer reused by bufio.Scanner for long lines.
-var scanBuf = make([]byte, 0, 64*1024)
-
 // lineValidator validates a single trimmed line. It returns the formatted
 // representation (empty string when no mask applies) and whether it is valid.
 type lineValidator func(value string) (formatted string, valid bool)
@@ -46,7 +43,8 @@ func openReader(path string) (io.Reader, func(), error) {
 // was invalid and any scanner error.
 func streamValidate(r io.Reader, w io.Writer, fn lineValidator) (bool, error) {
 	scanner := bufio.NewScanner(r)
-	scanner.Buffer(scanBuf, maxLine)
+	// Call-local scratch buffer (never shared) so concurrent callers can't race.
+	scanner.Buffer(make([]byte, 0, 64*1024), maxLine)
 
 	bw := bufio.NewWriter(w)
 
