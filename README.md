@@ -126,8 +126,9 @@ go run ./cmd/selo person --uf SP --count 5 --json   # synthetic people
 ```
 
 Flags per kind: `-g/--generate`, `-v/--validate`, `--format`, `--origin` (geolocatable kinds),
-`-f/--from FILE|-` (bulk), `-n/--count N`, `--uf` (RG only). **Exit code is `1` when a document
-is invalid** (scriptable); genuine errors also exit `1`.
+`-f/--from FILE|-` (bulk validate), `-n/--count N`, `-b/--bulk N` (bulk generate — implies
+`--generate`), `--uf` (RG only). **Exit code is `1` when a document is invalid** (scriptable);
+genuine errors also exit `1`.
 
 ## 🤖 MCP server
 

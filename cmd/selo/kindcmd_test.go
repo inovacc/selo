@@ -42,6 +42,21 @@ func TestKindCmdGenerateCount(t *testing.T) {
 	assert.Len(t, lines, 3)
 }
 
+func TestKindCmdBulkGenerate(t *testing.T) {
+	// --bulk implies generation and outputs N values (no --generate needed).
+	out, err := runCmd(t, "cpf", "--bulk", "4")
+	require.NoError(t, err)
+
+	lines := strings.Split(strings.TrimSpace(out), "\n")
+	assert.Len(t, lines, 4)
+}
+
+func TestKindCmdBulkConflictsWithValidate(t *testing.T) {
+	_, err := runCmd(t, "cpf", "--bulk", "2", "--validate", "529.982.247-25")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "cannot be used with")
+}
+
 func TestKindCmdValidateValidCPF(t *testing.T) {
 	// 529.982.247-25 is a well-known valid CPF.
 	out, err := runCmd(t, "cpf", "--validate", "529.982.247-25")

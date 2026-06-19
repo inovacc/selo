@@ -19,6 +19,7 @@ type kindFlags struct {
 	from     string
 	uf       string
 	count    int
+	bulk     int
 }
 
 // newKindCmd builds the Cobra subcommand for a single registered document kind.
@@ -41,6 +42,7 @@ func newKindCmd(kind sdk.Kind) *cobra.Command {
 		Example: strings.Join([]string{
 			fmt.Sprintf("selo %s --generate", name),
 			fmt.Sprintf("selo %s --generate --count 10", name),
+			fmt.Sprintf("selo %s --bulk 100", name),
 			fmt.Sprintf("selo %s --validate <value>", name),
 			fmt.Sprintf("selo %s --format <value>", name),
 			fmt.Sprintf("selo %s --from values.txt", name),
@@ -56,6 +58,7 @@ func newKindCmd(kind sdk.Kind) *cobra.Command {
 	cmd.Flags().StringVar(&f.format, "format", "", "Format a single "+upper+" value")
 	cmd.Flags().StringVarP(&f.from, "from", "f", "", "Validate many values from file or '-' for stdin")
 	cmd.Flags().IntVarP(&f.count, "count", "n", 0, "When generating, how many values to output")
+	cmd.Flags().IntVarP(&f.bulk, "bulk", "b", 0, "Bulk-generate this many values (implies --generate)")
 
 	if _, ok := doc.(sdk.OriginResolver); ok {
 		cmd.Flags().StringVar(&f.origin, "origin", "", "Resolve origin/region of a single "+upper+" value")
@@ -82,8 +85,13 @@ func runKind(cmd *cobra.Command, doc sdk.Document, f *kindFlags) error {
 	}
 
 	switch {
-	case f.generate:
-		return runGenerate(cmd, doc, f.count)
+	case f.generate || f.bulk > 0:
+		n := f.count
+		if f.bulk > 0 {
+			n = f.bulk
+		}
+
+		return runGenerate(cmd, doc, n)
 	case f.from != "":
 		return runFrom(cmd, doc, f.from)
 	case f.format != "":
@@ -98,20 +106,21 @@ func runKind(cmd *cobra.Command, doc sdk.Document, f *kindFlags) error {
 // validateCombo enforces mutually exclusive / required flag combinations,
 // preserving the original CLI's error messages and UX.
 func (f *kindFlags) validateCombo() error {
-	if f.generate && (f.validate != "" || f.from != "" || f.format != "" || f.origin != "") {
-		return errors.New("--generate cannot be used with --validate, --format, --origin, or --from")
+	gen := f.generate || f.bulk > 0
+	if gen && (f.validate != "" || f.from != "" || f.format != "" || f.origin != "") {
+		return errors.New("--generate/--bulk cannot be used with --validate, --format, --origin, or --from")
 	}
 
 	actions := 0
 
-	for _, on := range []bool{f.generate, f.validate != "", f.format != "", f.origin != "", f.from != ""} {
+	for _, on := range []bool{gen, f.validate != "", f.format != "", f.origin != "", f.from != ""} {
 		if on {
 			actions++
 		}
 	}
 
 	if actions == 0 {
-		return errors.New("either --generate, --validate, --format, --origin, or --from must be provided")
+		return errors.New("either --generate, --bulk, --validate, --format, --origin, or --from must be provided")
 	}
 
 	if f.from != "" && f.validate != "" {
