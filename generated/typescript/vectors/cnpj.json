@@ -7,35 +7,35 @@
       "valid": true
     },
     {
-      "input": "06O23AV9950K36",
+      "input": "V59HHPQJM37764",
       "valid": true
     },
     {
-      "input": "Q7FVLRBC78RD10",
+      "input": "G3KIS6IEF7CR38",
       "valid": true
     },
     {
-      "input": "D4VKKR466XI303",
+      "input": "8I5V11M3LN3K08",
       "valid": true
     },
     {
-      "input": "TGF7NE98EPII68",
+      "input": "VX30TDH5PY2H01",
       "valid": true
     },
     {
-      "input": "94VW8FJ5511202",
+      "input": "1A0871Y4SFT808",
       "valid": true
     },
     {
-      "input": "1SIPBGCQZ98M94",
+      "input": "E7HZLB58NKF833",
       "valid": true
     },
     {
-      "input": "ATH30AVA857003",
+      "input": "QKOYE9OI8C6005",
       "valid": true
     },
     {
-      "input": "2C98831IA51721",
+      "input": "9FXYUA4IZ3N717",
       "valid": true
     },
     {
@@ -51,15 +51,11 @@
       "valid": false
     },
     {
-      "input": "06O23AV9950K3",
-      "valid": false
-    },
-    {
-      "input": "06O23AV9950K37",
-      "valid": false
-    },
-    {
       "input": "11111",
+      "valid": false
+    },
+    {
+      "input": "111111",
       "valid": false
     },
     {
@@ -71,11 +67,7 @@
       "valid": false
     },
     {
-      "input": "1111111111",
-      "valid": false
-    },
-    {
-      "input": "11111111111",
+      "input": "111111111",
       "valid": false
     },
     {
@@ -83,19 +75,11 @@
       "valid": false
     },
     {
-      "input": "1SIPBGCQZ98M9",
+      "input": "1A0871Y4SFT80",
       "valid": false
     },
     {
-      "input": "1SIPBGCQZ98M95",
-      "valid": false
-    },
-    {
-      "input": "2C98831IA5172",
-      "valid": false
-    },
-    {
-      "input": "2C98831IA51722",
+      "input": "1A0871Y4SFT809",
       "valid": false
     },
     {
@@ -107,63 +91,75 @@
       "valid": false
     },
     {
-      "input": "94VW8FJ551120",
+      "input": "8I5V11M3LN3K0",
       "valid": false
     },
     {
-      "input": "94VW8FJ5511203",
+      "input": "8I5V11M3LN3K09",
       "valid": false
     },
     {
-      "input": "ATH30AVA85700",
+      "input": "9FXYUA4IZ3N71",
       "valid": false
     },
     {
-      "input": "ATH30AVA857004",
+      "input": "9FXYUA4IZ3N718",
       "valid": false
     },
     {
-      "input": "ATHZ0AVA857003",
+      "input": "E7HZLB58NKF83",
       "valid": false
     },
     {
-      "input": "D4VKKR466XI30",
+      "input": "E7HZLB58NKF834",
       "valid": false
     },
     {
-      "input": "D4VKKR466XI304",
+      "input": "EZHZLB58NKF833",
       "valid": false
     },
     {
-      "input": "DZVKKR466XI303",
+      "input": "G3KIS6IEF7CR3",
       "valid": false
     },
     {
-      "input": "Q7FVLRBC78RD1",
+      "input": "G3KIS6IEF7CR39",
       "valid": false
     },
     {
-      "input": "Q7FVLRBC78RD11",
+      "input": "GZKIS6IEF7CR38",
       "valid": false
     },
     {
-      "input": "QZFVLRBC78RD10",
+      "input": "QKOYE9OI8C600",
       "valid": false
     },
     {
-      "input": "TGF7NE98EPII6",
+      "input": "QKOYE9OI8C6006",
       "valid": false
     },
     {
-      "input": "TGF7NE98EPII69",
+      "input": "V59HHPQJM3776",
       "valid": false
     },
     {
-      "input": "TGFZNE98EPII68",
+      "input": "V59HHPQJM37765",
       "valid": false
     },
     {
-      "input": "Z6O23AV9950K36",
+      "input": "VX30TDH5PY2H0",
+      "valid": false
+    },
+    {
+      "input": "VX30TDH5PY2H02",
+      "valid": false
+    },
+    {
+      "input": "VXZ0TDH5PY2H01",
+      "valid": false
+    },
+    {
+      "input": "VZ9HHPQJM37764",
       "valid": false
     },
     {
@@ -171,11 +167,11 @@
       "valid": false
     },
     {
-      "input": "ZC98831IA51721",
+      "input": "ZA0871Y4SFT808",
       "valid": false
     },
     {
-      "input": "ZSIPBGCQZ98M94",
+      "input": "ZI5V11M3LN3K08",
       "valid": false
     },
     {
@@ -189,36 +185,36 @@
       "output": "39.591.842/0000-10"
     },
     {
-      "input": "06O23AV9950K36",
-      "output": "06.O23.AV9/950K-36"
+      "input": "V59HHPQJM37764",
+      "output": "V5.9HH.PQJ/M377-64"
     },
     {
-      "input": "Q7FVLRBC78RD10",
-      "output": "Q7.FVL.RBC/78RD-10"
+      "input": "G3KIS6IEF7CR38",
+      "output": "G3.KIS.6IE/F7CR-38"
     },
     {
-      "input": "D4VKKR466XI303",
-      "output": "D4.VKK.R46/6XI3-03"
+      "input": "8I5V11M3LN3K08",
+      "output": "8I.5V1.1M3/LN3K-08"
     },
     {
-      "input": "TGF7NE98EPII68",
-      "output": "TG.F7N.E98/EPII-68"
+      "input": "VX30TDH5PY2H01",
+      "output": "VX.30T.DH5/PY2H-01"
     },
     {
-      "input": "94VW8FJ5511202",
-      "output": "94.VW8.FJ5/5112-02"
+      "input": "1A0871Y4SFT808",
+      "output": "1A.087.1Y4/SFT8-08"
     },
     {
-      "input": "1SIPBGCQZ98M94",
-      "output": "1S.IPB.GCQ/Z98M-94"
+      "input": "E7HZLB58NKF833",
+      "output": "E7.HZL.B58/NKF8-33"
     },
     {
-      "input": "ATH30AVA857003",
-      "output": "AT.H30.AVA/8570-03"
+      "input": "QKOYE9OI8C6005",
+      "output": "QK.OYE.9OI/8C60-05"
     },
     {
-      "input": "2C98831IA51721",
-      "output": "2C.988.31I/A517-21"
+      "input": "9FXYUA4IZ3N717",
+      "output": "9F.XYU.A4I/Z3N7-17"
     },
     {
       "input": "1",
