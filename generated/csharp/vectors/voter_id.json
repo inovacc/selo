@@ -1,0 +1,240 @@
+{
+  "kind": "voter_id",
+  "group": "F",
+  "validate": [
+    {
+      "input": "424918530663",
+      "valid": true
+    },
+    {
+      "input": "283334152100",
+      "valid": true
+    },
+    {
+      "input": "856146242429",
+      "valid": true
+    },
+    {
+      "input": "108793020680",
+      "valid": true
+    },
+    {
+      "input": "127959320876",
+      "valid": true
+    },
+    {
+      "input": "086295812704",
+      "valid": true
+    },
+    {
+      "input": "345320451309",
+      "valid": true
+    },
+    {
+      "input": "854573231023",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "08629581270",
+      "valid": false
+    },
+    {
+      "input": "086295812705",
+      "valid": false
+    },
+    {
+      "input": "10879302068",
+      "valid": false
+    },
+    {
+      "input": "108793020681",
+      "valid": false
+    },
+    {
+      "input": "111111111111",
+      "valid": false
+    },
+    {
+      "input": "12345678",
+      "valid": false
+    },
+    {
+      "input": "1234567890123",
+      "valid": false
+    },
+    {
+      "input": "12795932087",
+      "valid": false
+    },
+    {
+      "input": "127959320877",
+      "valid": false
+    },
+    {
+      "input": "28333415210",
+      "valid": false
+    },
+    {
+      "input": "283334152101",
+      "valid": false
+    },
+    {
+      "input": "34532045130",
+      "valid": false
+    },
+    {
+      "input": "345320451300",
+      "valid": false
+    },
+    {
+      "input": "42491853066",
+      "valid": false
+    },
+    {
+      "input": "424918530664",
+      "valid": false
+    },
+    {
+      "input": "85457323102",
+      "valid": false
+    },
+    {
+      "input": "854573231024",
+      "valid": false
+    },
+    {
+      "input": "85614624242",
+      "valid": false
+    },
+    {
+      "input": "856146242420",
+      "valid": false
+    },
+    {
+      "input": "Z08793020680",
+      "valid": false
+    },
+    {
+      "input": "Z24918530663",
+      "valid": false
+    },
+    {
+      "input": "Z27959320876",
+      "valid": false
+    },
+    {
+      "input": "Z45320451309",
+      "valid": false
+    },
+    {
+      "input": "Z54573231023",
+      "valid": false
+    },
+    {
+      "input": "Z56146242429",
+      "valid": false
+    },
+    {
+      "input": "Z83334152100",
+      "valid": false
+    },
+    {
+      "input": "Z86295812704",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "424918530663",
+      "output": "4249 1853 0663"
+    },
+    {
+      "input": "283334152100",
+      "output": "2833 3415 2100"
+    },
+    {
+      "input": "856146242429",
+      "output": "8561 4624 2429"
+    },
+    {
+      "input": "108793020680",
+      "output": "1087 9302 0680"
+    },
+    {
+      "input": "127959320876",
+      "output": "1279 5932 0876"
+    },
+    {
+      "input": "086295812704",
+      "output": "0862 9581 2704"
+    },
+    {
+      "input": "345320451309",
+      "output": "3453 2045 1309"
+    },
+    {
+      "input": "854573231023",
+      "output": "8545 7323 1023"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidLength"
+    }
+  ],
+  "origin": [
+    {
+      "input": "424918530663",
+      "output": "Paraná"
+    },
+    {
+      "input": "283334152100",
+      "output": "Sergipe"
+    },
+    {
+      "input": "856146242429",
+      "output": "Acre"
+    },
+    {
+      "input": "108793020680",
+      "output": "Paraná"
+    },
+    {
+      "input": "127959320876",
+      "output": "Pernambuco"
+    },
+    {
+      "input": "086295812704",
+      "output": "Tocantins"
+    },
+    {
+      "input": "345320451309",
+      "output": "Pará"
+    },
+    {
+      "input": "854573231023",
+      "output": "Goiás"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}
