@@ -120,7 +120,7 @@ states instead of SP/RJ.
   which rejects repeated-digit inputs via `notAcceptedCPF`). Add a symmetric all-equal /
   all-zeros rejection to `CNPJ.Validate` for parity with CPF. **Value: M, Effort: S.**
   (Note: this is a behavior change — gate it deliberately and update the regression tests.)
-- **`scanBuf` shared package-level buffer** in `cmd/brdoc/iohelper.go` is passed to every
+- **`scanBuf` shared package-level buffer** in `cmd/selo/iohelper.go` is passed to every
   `streamValidate` call; safe today (CLI invokes it serially) but a latent data race if it
   were ever called concurrently. Make the buffer call-local. **Value: L, Effort: S.**
 - **`golangci-lint` gate not enforced locally** — the tool is not installed in the dev
@@ -132,11 +132,18 @@ states instead of SP/RJ.
 - **Go 1.25 requirement (release note, not debt).** Adding the MCP `go-sdk` (v1.6.1)
   bumped `go.mod`'s go directive from 1.24.0 → 1.25.0 (the sdk requires it). Document this
   minimum-Go bump in the README/release notes; it is a consumer-visible requirement.
+- **CRLF line endings repo-wide (no `.gitattributes`).** Every `.go` file carries CRLF in
+  the Windows working tree (`core.autocrlf=true`), so a local `gofmt -l` flags them even
+  though committed blobs are LF and Linux CI is unaffected. Confirmed twice (plan 005 review
+  + final whole-branch review 2026-06-19). Fix: add `.gitattributes` with `*.go text eol=lf`
+  (and `*.{yml,yaml,md} text eol=lf`), then `git add --renormalize .` in a dedicated commit.
+  Pre-existing, not introduced by any one change. **Value: L, Effort: S.**
 
 ---
 
 ## DEPRECATION
 
 - **`ValidateDocument(doc string) (string, bool)`** — superseded by `Detect` + `Validate`.
-  Marked `// Deprecated:` in `brdoc.go`. **Removal: after 2026-07-18** (≥30 days). Remove
-  in a dedicated cleanup commit (not mixed with features) once the date passes.
+  Marked `// Deprecated:` in `cpf.go` (was `brdoc.go` before plan 005's split). **Removal:
+  after 2026-07-18** (≥30 days). Remove in a dedicated cleanup commit (not mixed with
+  features) once the date passes.
