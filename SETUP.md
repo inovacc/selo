@@ -2,7 +2,7 @@
 
 ## 📦 Package Contents
 
-This repository contains the complete **selo** library for validating, generating, and formatting Brazilian fiscal documents (CPF and CNPJ), plus a CLI.
+This repository contains the complete **selo** toolkit for validating, generating, formatting, and geolocating Brazilian documents — 13 kinds (CPF, CNPJ, CNH, PIS/PASEP/NIS, RENAVAM, Título Eleitoral, CEP, phone, license plate, CNS, RG, Inscrição Estadual, PIX) — exposed as a library, a CLI, and an MCP server.
 
 ### 📂 Project Structure
 
@@ -11,15 +11,19 @@ selo/
 ├── cmd/
 │   └── selo/
 │       └── main.go             # Cobra CLI (generate/validate, bulk support)
-├── selo.go                    # Main implementation
-├── brdoc_test.go               # Test suite
+├── cpf.go, cnpj.go, rg.go, ie.go, …  # One file per document type
+├── document.go                 # Document interface + Kind constants
+├── registry.go                 # Self-registering type registry
+├── person.go                   # GeneratePerson (synthetic identities)
+├── compat/                     # paemuri/brdoc drop-in compat layer
+├── mcp/                        # MCP server (stdio)
+├── cpf_cnpj_test.go, *_test.go # Test suites (per type)
 ├── doc.go                      # Package documentation
+├── docs/                       # ROADMAP, ARCHITECTURE, ADRs, …
 ├── CHANGELOG.md                # Version history
-├── CONTRIBUTING.md             # Contribution guidelines
 ├── LICENSE                     # MIT License
 ├── README.md                   # Complete documentation
-├── SETUP.md                    # This setup guide
-├── go.mod                      # Module configuration (Go 1.24)
+├── go.mod                      # Module configuration (Go 1.25)
 └── go.sum
 ```
 

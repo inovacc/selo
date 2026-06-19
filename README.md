@@ -35,9 +35,16 @@ issuing federative unit (UF).
 
 ## 📦 Install
 
+**Library:**
 ```bash
 go get github.com/inovacc/selo
 ```
+
+**CLI** — installs the `selo` binary into `$(go env GOBIN)` (or `$(go env GOPATH)/bin`):
+```bash
+go install github.com/inovacc/selo/cmd/selo@latest   # or @v1.1.0 to pin a release
+```
+Make sure that directory is on your `PATH`, then run `selo --help`.
 
 Requires **Go 1.25+** (the MCP server depends on `modelcontextprotocol/go-sdk`, which requires
 Go 1.25; the core library and CLI otherwise have only Cobra as a runtime dependency).
@@ -103,7 +110,8 @@ p := selo.GeneratePerson(selo.WithUF(selo.UFSP), selo.WithVehicle(), selo.WithCo
 
 ## 🖥️ CLI
 
-The CLI derives one subcommand per registered kind automatically:
+The CLI derives one subcommand per registered kind automatically. After `go install` (above)
+run `selo <cmd>`; from a checkout, use `go run ./cmd/selo <cmd>`:
 
 ```bash
 go run ./cmd/selo cpf --generate --count 5
@@ -123,7 +131,7 @@ is invalid** (scriptable); genuine errors also exit `1`.
 
 ## 🤖 MCP server
 
-Expose the toolkit to AI agents over stdio:
+Expose the toolkit to AI agents over stdio (`selo mcp` once installed):
 
 ```bash
 go run ./cmd/selo mcp
