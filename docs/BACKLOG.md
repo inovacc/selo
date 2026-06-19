@@ -97,6 +97,15 @@ states instead of SP/RJ.
 - **Multi-state RG** — extend `rg.go` beyond SP/RJ wherever per-UF check-digit rules are
   documented; explicit `ErrUFNotImplemented` elsewhere (paemuri issue #22 ships only
   SP/RJ). Unblocks `Person.RG` for all states. **Value: M, Effort: L.**
+  - RG SP/RJ convention **verified (A)** 2026-06-19 (plan 004): the implemented
+    `DV = 11 - (sum mod 11)` with ascending weights 2..9 (10→'X', 11→'0') matches four
+    independent sources — NG Matemática and "Tudo em AdvPL"/siga0984 state it verbatim;
+    Bóson Treinamentos and dev.to/shadowlik state the algebraically-equivalent descending
+    form (weights 9..2, `DV = sum mod 11`). Real samples pinned in
+    `TestRG_AuthoritativeSamples` (`24.678.131-2`, `29.465.327-2`). Caveat: the **SP**
+    algorithm is what's verified; the code applies the *same* algorithm to **RJ**, but no
+    independent RJ-specific source was found — confirm RJ before relying on it or building
+    multi-state RG on top.
 
 ---
 
