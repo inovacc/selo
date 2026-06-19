@@ -51,11 +51,15 @@ func TestValidateDocumentTool(t *testing.T) {
 	cpf := selo.NewCPF().Generate()
 	require.True(t, selo.NewCPF().Validate(cpf), "generated CPF must validate")
 
+	// A freshly generated RG is always valid for SP.
+	rg := selo.NewRG().Generate()
+
 	tests := []struct {
-		name      string
-		args      map[string]any
-		wantValid bool
-		wantErr   bool
+		name       string
+		args       map[string]any
+		wantValid  bool
+		wantErr    bool
+		wantOrigin string // non-empty means we assert the origin field
 	}{
 		{
 			name:      "valid cpf",
@@ -77,6 +81,24 @@ func TestValidateDocumentTool(t *testing.T) {
 			args:    map[string]any{"kind": "bogus", "value": "x"},
 			wantErr: true,
 		},
+		// uf supplied but kind is NOT UFScoped → error result.
+		{
+			name:    "uf on non-uf-scoped kind is error",
+			args:    map[string]any{"kind": "cpf", "value": cpf, "uf": "SP"},
+			wantErr: true,
+		},
+		// uf supplied, kind IS UFScoped, ValidateUF succeeds.
+		{
+			name:      "rg valid with uf SP",
+			args:      map[string]any{"kind": "rg", "value": rg, "uf": "SP"},
+			wantValid: true,
+		},
+		// uf supplied, kind IS UFScoped, ValidateUF returns ErrUFNotImplemented.
+		{
+			name:    "rg with unimplemented uf MG is error",
+			args:    map[string]any{"kind": "rg", "value": rg, "uf": "MG"},
+			wantErr: true,
+		},
 	}
 
 	for _, tt := range tests {
@@ -95,8 +117,31 @@ func TestValidateDocumentTool(t *testing.T) {
 			var out ValidateOutput
 			decodeResult(t, res, &out)
 			assert.Equal(t, tt.wantValid, out.Valid)
+
+			if tt.wantOrigin != "" {
+				assert.Equal(t, tt.wantOrigin, out.Origin)
+			}
 		})
 	}
+}
+
+// TestValidateDocumentOriginResolver exercises the OriginResolver path: a valid
+// CPF must come back with a non-empty Origin field.
+func TestValidateDocumentOriginResolver(t *testing.T) {
+	ctx, cs := newTestSession(t)
+
+	cpf := selo.NewCPF().Generate()
+
+	res, err := cs.CallTool(ctx, &mcp.CallToolParams{
+		Name:      "validate_document",
+		Arguments: map[string]any{"kind": "cpf", "value": cpf},
+	})
+	require.NoError(t, err)
+
+	var out ValidateOutput
+	decodeResult(t, res, &out)
+	assert.True(t, out.Valid)
+	assert.NotEmpty(t, out.Origin, "valid CPF should have an Origin")
 }
 
 func TestGenerateDocumentTool(t *testing.T) {
@@ -153,6 +198,14 @@ func TestFormatDocumentTool(t *testing.T) {
 	res, err = cs.CallTool(ctx, &mcp.CallToolParams{
 		Name:      "format_document",
 		Arguments: map[string]any{"kind": "cpf", "value": "123"},
+	})
+	require.NoError(t, err)
+	assert.True(t, res.IsError)
+
+	// unknown kind -> error result.
+	res, err = cs.CallTool(ctx, &mcp.CallToolParams{
+		Name:      "format_document",
+		Arguments: map[string]any{"kind": "bogus", "value": "11144477735"},
 	})
 	require.NoError(t, err)
 	assert.True(t, res.IsError)
@@ -247,6 +300,17 @@ func TestGeneratePersonTool(t *testing.T) {
 	})
 	require.NoError(t, err)
 	assert.True(t, bad.IsError, "invalid uf should yield an error result")
+
+	// formatted=true exercises the Formatted() option branch.
+	fmtRes, err := cs.CallTool(ctx, &mcp.CallToolParams{
+		Name:      "generate_person",
+		Arguments: map[string]any{"count": 1, "formatted": true},
+	})
+	require.NoError(t, err)
+
+	var fmtOut PersonOutput
+	decodeResult(t, fmtRes, &fmtOut)
+	require.Len(t, fmtOut.People, 1)
 }
 
 func TestGenerateCodeTool(t *testing.T) {
