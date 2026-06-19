@@ -1,0 +1,180 @@
+{
+  "kind": "phone",
+  "group": "F",
+  "validate": [
+    {
+      "input": "6828017048",
+      "valid": true
+    },
+    {
+      "input": "48988197165",
+      "valid": true
+    },
+    {
+      "input": "54945561279",
+      "valid": true
+    },
+    {
+      "input": "21954347576",
+      "valid": true
+    },
+    {
+      "input": "6242836692",
+      "valid": true
+    },
+    {
+      "input": "14970568453",
+      "valid": true
+    },
+    {
+      "input": "5150289706",
+      "valid": true
+    },
+    {
+      "input": "1428212663",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "(00) 1234-5678",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "0099999999",
+      "valid": false
+    },
+    {
+      "input": "11111111111",
+      "valid": false
+    },
+    {
+      "input": "11912345",
+      "valid": false
+    },
+    {
+      "input": "142821266",
+      "valid": false
+    },
+    {
+      "input": "515028970",
+      "valid": false
+    },
+    {
+      "input": "624283669",
+      "valid": false
+    },
+    {
+      "input": "682801704",
+      "valid": false
+    },
+    {
+      "input": "999999999999",
+      "valid": false
+    },
+    {
+      "input": "Z150289706",
+      "valid": false
+    },
+    {
+      "input": "Z242836692",
+      "valid": false
+    },
+    {
+      "input": "Z428212663",
+      "valid": false
+    },
+    {
+      "input": "Z828017048",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "6828017048",
+      "output": "(68) 2801-7048"
+    },
+    {
+      "input": "48988197165",
+      "output": "(48) 98819-7165"
+    },
+    {
+      "input": "54945561279",
+      "output": "(54) 94556-1279"
+    },
+    {
+      "input": "21954347576",
+      "output": "(21) 95434-7576"
+    },
+    {
+      "input": "6242836692",
+      "output": "(62) 4283-6692"
+    },
+    {
+      "input": "14970568453",
+      "output": "(14) 97056-8453"
+    },
+    {
+      "input": "5150289706",
+      "output": "(51) 5028-9706"
+    },
+    {
+      "input": "1428212663",
+      "output": "(14) 2821-2663"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidLength"
+    }
+  ],
+  "origin": [
+    {
+      "input": "6828017048",
+      "output": "AC"
+    },
+    {
+      "input": "48988197165",
+      "output": "SC"
+    },
+    {
+      "input": "54945561279",
+      "output": "RS"
+    },
+    {
+      "input": "21954347576",
+      "output": "RJ"
+    },
+    {
+      "input": "6242836692",
+      "output": "GO"
+    },
+    {
+      "input": "14970568453",
+      "output": "SP"
+    },
+    {
+      "input": "5150289706",
+      "output": "RS"
+    },
+    {
+      "input": "1428212663",
+      "output": "SP"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

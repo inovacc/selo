@@ -58,3 +58,19 @@ tasks:
           else
             echo "node not found; skipping vitest (generated TS still emitted)"
           fi
+
+  gen:js:
+    desc: Emit the JavaScript target into generated/javascript (all 13 kinds)
+    cmds:
+      - go run ./cmd/selo gen --lang js --kind all --out generated/javascript
+
+  gen:verify:js:
+    desc: Emit the JS target, then install deps and run the vitest suite (needs node)
+    cmds:
+      - task: gen:js
+      - cmd: |
+          if command -v node >/dev/null 2>&1; then
+            cd generated/javascript && npm install && npx vitest run
+          else
+            echo "node not found; skipping vitest (generated JS still emitted)"
+          fi
