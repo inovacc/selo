@@ -26,12 +26,13 @@ issuing federative unit (UF).
 | **License plate** (national + Mercosul) | ✅ | ✅ | dash | — |
 | **CNS** (health card) | ✅ | ✅ | identity | — |
 | **RG** (SP) | ✅ | ✅ | `##.###.###-#` | — |
-| **Inscrição Estadual** (SP) | ✅ | ✅ | `###.###.###.###` | — |
+| **Inscrição Estadual** (SP/MG/RS/PR) | ✅ | ✅ | `###.###.###.###` | — |
 | **PIX key** (CPF/CNPJ/email/phone/EVP) | ✅ | ✅ (EVP) | identity | — |
 
 `RG` and `Inscrição Estadual` are **UF-scoped** (`selo.UFScoped`): `ValidateUF(value, uf)` /
-`ImplementedUFs()`. RG ships SP (RJ uses a different, unverified algorithm — see ISSUES); IE ships SP, with more states tracked in
-[`docs/IE-NOTES.md`](docs/IE-NOTES.md).
+`ImplementedUFs()`. RG ships SP (RJ uses a different, unverified algorithm — see ISSUES); IE ships
+**SP, MG, RS, PR** (RJ blocked — its official page omits the weight vector), with the remaining
+states tracked in [`docs/IE-NOTES.md`](docs/IE-NOTES.md).
 
 ## 📦 Install
 
@@ -45,6 +46,11 @@ go get github.com/inovacc/selo
 go install github.com/inovacc/selo/cmd/selo@latest   # or @v1.1.0 to pin a release
 ```
 Make sure that directory is on your `PATH`, then run `selo --help`.
+
+Or **download a prebuilt binary** from the
+[GitHub Releases page](https://github.com/inovacc/selo/releases) — each tagged release publishes
+linux/darwin/windows archives for amd64/arm64 (plus checksums and source) built by GoReleaser. Run
+`selo completion --help` to install shell completions (bash/zsh/fish/powershell).
 
 Requires **Go 1.25+** (the MCP server depends on `modelcontextprotocol/go-sdk`, which requires
 Go 1.25; the core library and CLI otherwise have only Cobra as a runtime dependency).
@@ -105,7 +111,8 @@ test data / fixtures only (synthetic, never real PII):
 
 ```go
 p := selo.GeneratePerson(selo.WithUF(selo.UFSP), selo.WithVehicle(), selo.WithCompany())
-// p.CPF, p.RG, p.CNH, p.PIS, p.Renavam, p.VoterID, p.CNS, p.CEP, p.Phone, p.PIXKeys, p.Vehicle, p.Company
+// p.CPF, p.RG, p.IE, p.CNH, p.PIS, p.Renavam, p.VoterID, p.CNS, p.CEP, p.Phone, p.PIXKeys, p.Vehicle, p.Company
+// p.Address (UF-consistent: Street, Number, Neighborhood, City — a real municipality in p.UF — UF, CEP)
 ```
 
 ## 🖥️ CLI
@@ -146,14 +153,15 @@ Logs go to stderr; the protocol runs on stdin/stdout.
 
 Generate validators in other languages from the *same verified algorithms*. `selo gen` emits
 **validate / format / origin / generate** code for all 13 kinds in **TypeScript, JavaScript, Ruby,
-Java, C#, Python, and PHP**, each shipped with Go-produced golden test vectors and a runnable test suite:
+Java, C#, Python, PHP, and Rust**, each shipped with Go-produced golden test vectors and a runnable test suite:
 
 ```bash
 selo gen --lang ts     --kind cpf --out ./out      # one kind, one language
 selo gen --lang python --kind all --out ./generated/python   # all 13 kinds
+selo gen --lang rust   --kind all --out ./generated/rust     # a Cargo library crate
 ```
 
-Supported languages: `ts`, `js`, `ruby`, `java`, `csharp`, `python`, `php`. A CI matrix runs each target's golden
+Supported languages: `ts`, `js`, `ruby`, `java`, `csharp`, `python`, `php`, `rust`. A CI matrix runs each target's golden
 vectors on real toolchains, so a wrong port fails its own tests. The MCP `generate_code` tool
 returns the same file set. Full details in [`docs/CODEGEN.md`](docs/CODEGEN.md).
 
@@ -187,9 +195,9 @@ check-digit type, and runnable godoc examples.
 ## 🗺️ Roadmap
 
 See [`docs/ROADMAP.md`](docs/ROADMAP.md) and [`docs/BACKLOG.md`](docs/BACKLOG.md). **Inscrição
-Estadual** shipped its first state (SP) — remaining UFs are tracked in
-[`docs/IE-NOTES.md`](docs/IE-NOTES.md). Other highlights: **multi-state RG** and reproducible
-`GenPerson` output via a seed. The `GenPerson` generator itself is **shipped**.
+Estadual** now ships **SP, MG, RS, PR** (RJ blocked — its official page omits the weight vector);
+remaining UFs are tracked in [`docs/IE-NOTES.md`](docs/IE-NOTES.md). Other highlights: **multi-state
+RG** and reproducible `GenPerson` output via a seed. The `GenPerson` generator itself is **shipped**.
 
 ## 📄 License
 

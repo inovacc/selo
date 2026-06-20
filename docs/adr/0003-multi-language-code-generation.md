@@ -9,13 +9,13 @@
 
 selo's check-digit, format, origin, and generation algorithms for Brazilian documents are verified
 against authoritative sources and pinned by tests. Those algorithms are valuable beyond Go —
-TypeScript, JavaScript, Ruby, Java, C#, Python, and PHP projects all need the same validators — but
-hand-porting them to each language invites **drift**: a subtle weight or modulo difference produces a
-validator that silently accepts invalid (or rejects valid) documents, and there is no single place
-that guarantees all ports agree.
+TypeScript, JavaScript, Ruby, Java, C#, Python, PHP, and Rust projects all need the same validators —
+but hand-porting them to each language invites **drift**: a subtle weight or modulo difference
+produces a validator that silently accepts invalid (or rejects valid) documents, and there is no
+single place that guarantees all ports agree.
 
 We wanted other-language validators that stay correct as the Go algorithms evolve, without turning
-selo into seven hand-maintained codebases.
+selo into eight hand-maintained codebases.
 
 ## Decision
 
@@ -34,8 +34,11 @@ source of truth:
   committed `generated/<lang>/` reference byte-for-byte (deterministic files) and that every committed
   vector still agrees with the live library.
 - **A CI matrix** (`.github/workflows/codegen.yml`) runs each target's emitted test suite on that
-  language's real toolchain (node / ruby / JDK+Maven / .NET / Python / PHP). A wrong port fails its
-  own vector tests there.
+  language's real toolchain (node / ruby / JDK+Maven / .NET / Python / PHP / Cargo). A wrong port
+  fails its own vector tests there.
+
+The current targets are TypeScript, JavaScript, Ruby, Java, C#, Python, PHP, and **Rust** (8) —
+Rust emits a Cargo library crate with golden-vector tests and a CI cargo lane (added in v1.6.0).
 
 ## Consequences
 

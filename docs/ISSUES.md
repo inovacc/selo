@@ -16,10 +16,18 @@ or verifiable samples were obtainable — so rather than validate RJ with the wr
 *workaround:* check `ImplementedUFs()` before relying on a UF. (Re-add RJ once its spec + ≥2 real
 samples are sourced — see BACKLOG "Multi-state RG".)
 
-### Inscrição Estadual supports only SP
-Only SP is implemented and verified (two sourced samples). MG/RJ/RS/PR were researched but deferred
-for lack of ≥2 verifiable samples; the other 22 UFs are unstarted. Unsupported UFs return
-`ErrUFNotImplemented`. Roadmap and per-UF research in [IE-NOTES.md](IE-NOTES.md).
+### Inscrição Estadual supports SP, MG, RS, PR (RJ blocked — official page omits the weight vector)
+SP, MG, RS, and PR are implemented and verified — SP from two sourced samples; MG/RS/PR (v1.6.0) from
+authoritative, adversarially-verified algorithms (official SINTEGRA-MG/RS and SEFA-PR worked examples
++ independent reference-impl corroboration). **RJ was re-researched and remains blocked:** its
+official page omits the weight vector and no ≥2 verifiable samples were obtainable. The other 22 UFs
+are unstarted. Unsupported UFs return `ErrUFNotImplemented`. Roadmap and per-UF research in
+[IE-NOTES.md](IE-NOTES.md).
+
+### Multi-language codegen IE emitter is SP-only (parity gap)
+While the Go library validates IE for SP/MG/RS/PR, the `selo gen` code-generation targets still emit
+**SP-only** IE. MG/RS/PR use cross-digit/over-9 sum rules the current codegen `DVRule` doesn't model;
+emitting them needs a digit-sum DV rule. Documented follow-up — tracked in [BACKLOG.md](BACKLOG.md).
 
 ### Sample provenance for RG and IE
 The pinned regression samples are authoritative-tutorial / official-documentation worked examples,

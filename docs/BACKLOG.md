@@ -95,10 +95,18 @@ states instead of SP/RJ.
   Biggest open gap in the Go ecosystem (paemuri/brdoc issue #7, never shipped). Land
   incrementally behind the same `Document`/`UFScoped` pattern used by RG.
   **First batch shipped 2026-06-19 (plan 006): SP only** — verified algorithm + 2 sourced
-  samples (`ie.go`, `TestIE_AuthoritativeSamples`); CLI/MCP auto-derive it. **26 UFs
-  remaining** (MG/RJ/RS/PR researched but deferred for lack of ≥2 verifiable samples; the
-  rest unstarted). Architecture, SP sources, and the per-UF roadmap are in
-  `docs/IE-NOTES.md`. **Value: H, Effort: L (remaining).**
+  samples (`ie.go`, `TestIE_AuthoritativeSamples`); CLI/MCP auto-derive it.
+  **Second batch shipped 2026-06-20 (v1.6.0): MG, RS, PR** — authoritative,
+  adversarially-verified algorithms (official SINTEGRA-MG/RS and SEFA-PR worked examples +
+  independent reference-impl corroboration); `GeneratePerson` carries a UF-consistent IE for them
+  too. **RJ re-researched and kept BLOCKED** — its official page omits the weight vector and no ≥2
+  verifiable samples were obtainable. **22 UFs remaining** (RJ blocked; the rest unstarted).
+  Architecture, sources, and the per-UF roadmap are in `docs/IE-NOTES.md`. **Value: H, Effort: L
+  (remaining).**
+- **Codegen IE parity** — the multi-language codegen IE emitter is still **SP-only**, while the Go
+  library now validates SP/MG/RS/PR. Emitting MG/RS/PR in the generated targets needs a digit-sum DV
+  rule in the codegen spec (their algorithms use cross-digit/over-9 sums the current `DVRule` doesn't
+  model). Documented follow-up. **Value: M, Effort: M.**
 - **Multi-state RG** — extend `rg.go` beyond SP wherever per-UF check-digit rules are documented;
   explicit `ErrUFNotImplemented` elsewhere. **RJ was removed in v1.3.0** (its algorithm differs
   from SP — see the update below); re-adding RJ or any other UF is blocked on an authoritative
@@ -117,9 +125,10 @@ states instead of SP/RJ.
     SP** (an SP-valid RG can be invalid under RJ rules), so the current RJ reuse of the SP algorithm
     is **likely incorrect**. No authoritative SSP-RJ algorithm or verifiable samples were
     obtainable. Fix path: source the SSP-RJ spec + ≥2 real samples, or demote `UFRJ` to
-    `ErrUFNotImplemented` until verified. See ISSUES.md. **IE next batch (MG/RJ/RS/PR)** likewise
-    stays deferred — RJ IE's DV rule was found (mod 11, remainder ≤1→0 else 11−remainder) but its
-    weight vector and ≥2 verifiable samples were not.
+    `ErrUFNotImplemented` until verified. See ISSUES.md. **IE update (v1.6.0):** MG/RS/PR shipped
+    (authoritative algorithms + verified samples). **RJ IE stays blocked** — its DV rule was found
+    (mod 11, remainder ≤1→0 else 11−remainder) but its official page omits the weight vector and ≥2
+    verifiable samples were not obtainable.
 - **RNM (Registro Nacional Migratório)** — the foreigner ID on the CRNM card. **Researched
   2026-06-19, deferred** (owner's call) for lack of a verifiable spec: the RNM is an *opaque*
   alphanumeric sequence "derived from personal data + fingerprints" with **no public format or

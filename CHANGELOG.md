@@ -8,6 +8,46 @@ All notable changes to this project are documented here. The format is based on
 > (module `github.com/inovacc/selo`) in the 1.1.0 line. The `v1.0.0` tag predates the rename and
 > points at the original `brdoc` code; `github.com/inovacc/selo` is first installable at **v1.1.0**.
 
+## [1.6.0] - 2026-06-20
+
+Shell completions, prebuilt cross-platform binaries, expanded Inscrição Estadual coverage, richer
+synthetic people, an eighth code-generation target (Rust), and a benchmark/fuzz/example quality pass.
+
+### Added
+- **Shell completions.** A documented `selo completion [bash|zsh|fish|powershell]` command (Cobra's
+  default completion command was previously disabled) emits a completion script with per-shell
+  install instructions.
+- **Inscrição Estadual — MG, RS, PR (now SP, MG, RS, PR).** Three new UFs with authoritative,
+  adversarially-verified algorithms (official SINTEGRA-MG / SINTEGRA-RS and SEFA-PR worked examples,
+  corroborated by independent reference implementations). `GeneratePerson` now carries a
+  UF-consistent `IE` for MG/RS/PR people too. **RJ was re-researched and remains blocked** — its
+  official page omits the weight vector. See [IE-NOTES.md](docs/IE-NOTES.md).
+- **Prebuilt cross-platform binaries (GoReleaser).** Pushing a `v*` tag now auto-publishes
+  linux/darwin/windows × amd64/arm64 archives plus checksums and source via the existing
+  `inovacc/workflows` reusable release (a `.goreleaser.yaml` config was added). `selo version` now
+  reports the ldflags-injected version/commit/date in release builds. New `Taskfile`
+  `release:check` / `release:snapshot` / `release` targets.
+- **`Person.Address`.** `GeneratePerson` gains an optional UF-consistent `Address` (Street, Number,
+  Neighborhood, City, UF, CEP); `City` is a real municipality in the person's UF, backed by expanded
+  pt-BR name lists. Seeded determinism is preserved — `Address` is the last rand draw, so
+  pre-existing seeded output is byte-identical.
+- **Rust code-generation target (8th language).** `selo gen --lang rust` emits
+  validate / format / origin / generate for all 13 kinds as a Cargo library crate with Go-produced
+  golden-vector tests and a CI cargo lane. The MCP `generate_code` tool now offers `rust`. Languages
+  now: TypeScript, JavaScript, Ruby, Java, C#, Python, PHP, Rust. See [CODEGEN.md](docs/CODEGEN.md).
+- **Quality:** a Go 1.25 `b.Loop` benchmark suite (with alloc reporting) for hot paths; fuzz
+  coverage extended to all 13 kinds and the `Detect` entry points; runnable godoc `Example`
+  functions (`Detect`, registry `Validate`, `GeneratePerson`).
+- **ADR-0004** documenting binary distribution via GoReleaser.
+
+### Changed
+- ADR-0003 updated to list Rust (8 code-generation targets).
+- Docs reconciled with the above (README / ROADMAP / MILESTONES / FEATURES / BACKLOG / ISSUES).
+
+### Known issues
+- The multi-language codegen IE emitter is still **SP-only** — a documented parity gap; emitting
+  MG/RS/PR in generated targets needs a digit-sum DV rule (tracked in BACKLOG).
+
 ## [1.5.0] - 2026-06-20
 
 Seedable generation across every generate surface, Inscrição Estadual in synthetic people, and a
@@ -198,6 +238,7 @@ Superseded by the `selo` rebrand in 1.1.0. See the entries below for the early h
 - `Fixed` for any bug fixes
 - `Security` in case of vulnerabilities
 
+[1.6.0]: https://github.com/inovacc/selo/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/inovacc/selo/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/inovacc/selo/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/inovacc/selo/compare/v1.2.0...v1.3.0

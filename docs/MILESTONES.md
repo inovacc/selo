@@ -76,7 +76,7 @@ document toolkit, and the post-build hardening (advisor plans 001–006).
 - **Test Coverage:** 94.2% total (core 92.5%, compat 94.6%, cmd/selo 89.3%, mcp 93.3%,
   internal/codegen 95.6%).
 
-## v1.5.0 — Seed everywhere + IE-in-Person + a 7th codegen language — 🔜 RELEASING (2026-06-20)
+## v1.5.0 — Seed everywhere + IE-in-Person + a 7th codegen language — ✅ RELEASED (2026-06-20, tag `v1.5.0`)
 - **Goal:** finish seedable generation across all surfaces, enrich synthetic identities, and widen
   codegen reach.
 - Shipped:
@@ -88,10 +88,37 @@ document toolkit, and the post-build hardening (advisor plans 001–006).
   - ✅ ADR-0003 documenting the multi-language code-generation architecture.
 - **Test Coverage:** ≥85% per package (maintained).
 
-## v1.6.0 — Breadth — 🔜 PLANNED
+## v1.6.0 — Completions, binaries, IE breadth + a Rust codegen target — 🔜 RELEASING (2026-06-20)
+- **Goal:** make the CLI installable and ergonomic, broaden Inscrição Estadual coverage, enrich
+  synthetic identities, and widen codegen reach.
+- Shipped (6 feature areas):
+  - ✅ **Shell completions** — explicit `selo completion [bash|zsh|fish|powershell]` command (Cobra's
+    default was disabled) with per-shell install instructions.
+  - ✅ **Inscrição Estadual — MG, RS, PR** (now SP/MG/RS/PR) with authoritative,
+    adversarially-verified algorithms (SINTEGRA-MG/RS, SEFA-PR worked examples + independent
+    reference-impl corroboration); `GeneratePerson` carries a UF-consistent IE for them too. **RJ
+    re-researched and kept BLOCKED** — its official page omits the weight vector. (Parity gap: the
+    codegen IE emitter is still SP-only — tracked in BACKLOG.)
+  - ✅ **Prebuilt cross-platform binaries (GoReleaser)** — a `v*` tag auto-publishes
+    linux/darwin/windows × amd64/arm64 archives + checksums + source via the `inovacc/workflows`
+    reusable release (a `.goreleaser.yaml` was added); `selo version` reports ldflags-injected
+    version/commit/date in release builds. New `release:check` / `release:snapshot` / `release` tasks.
+  - ✅ **`Person.Address`** — optional UF-consistent address (Street, Number, Neighborhood, City, UF,
+    CEP); City is a real municipality in the person's UF; expanded pt-BR name lists; seeded
+    determinism preserved (Address is the last rand draw, so prior seeded output is byte-identical).
+  - ✅ **Rust codegen target (8th language)** — full validate/format/origin/generate for all 13 kinds
+    as a Cargo library crate, golden-vector tests + a CI cargo lane. Languages now: TypeScript,
+    JavaScript, Ruby, Java, C#, Python, PHP, Rust.
+  - ✅ **Quality** — a Go 1.25 `b.Loop` benchmark suite (alloc reporting) for hot paths; fuzz coverage
+    extended to all 13 kinds + the `Detect` entry points; runnable godoc `Example` functions.
+  - ✅ ADR-0004 (binary distribution via GoReleaser); ADR-0003 updated to 8 codegen targets.
+- **Test Coverage:** ≥85% per package (maintained).
+
+## v1.7.0 — Breadth — 🔮 PLANNED
 - **Goal:** broaden UF coverage once authoritative sources are obtained.
 - Candidate scope (each gated by an authoritative algorithm + ≥2 verifiable samples):
-  - Inscrição Estadual next batch (MG, RJ, RS, PR), then the remaining UFs.
+  - Inscrição Estadual remaining UFs (RJ blocked — its official page omits the weight vector).
+  - Codegen IE parity — emit MG/RS/PR in generated targets (needs a digit-sum DV rule).
   - Multi-state RG (re-verify RJ independently, then add documented UFs).
   - RNM (Registro Nacional Migratório) — blocked on a public format + check-digit spec.
 - **Coverage target:** maintain ≥85% per package.
