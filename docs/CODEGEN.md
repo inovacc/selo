@@ -1,9 +1,9 @@
 # Code generation (`selo gen`)
 
-`selo` generates idiomatic **validation / formatting / origin** code for all 13 document kinds
-in **TypeScript, JavaScript, Ruby, Java, C#, Python, and PHP**, from the verified Go library — the
-single source of truth. Every generated target ships with **golden test vectors** produced by Go
-and a runnable test suite, so a wrong port fails its own tests.
+`selo` generates idiomatic **validation / formatting / origin / generation** code for all 13
+document kinds in **TypeScript, JavaScript, Ruby, Java, C#, Python, PHP, and Rust**, from the
+verified Go library — the single source of truth. Every generated target ships with **golden test
+vectors** produced by Go and a runnable test suite, so a wrong port fails its own tests.
 
 ## Quick start
 
@@ -14,7 +14,7 @@ selo gen --lang ts --kind cpf --out ./out
 # Emit all 13 kinds
 selo gen --lang ruby --kind all --out ./generated/ruby
 
-# Languages: ts | js | ruby | java | csharp | python | php   Kinds: all + the 13 document kinds
+# Languages: ts | js | ruby | java | csharp | python | php | rust   Kinds: all + the 13 document kinds
 ```
 
 Or via Task (toolchain-guarded — skips the language test run when its toolchain is absent):
@@ -22,15 +22,15 @@ Or via Task (toolchain-guarded — skips the language test run when its toolchai
 ```bash
 task gen:ts          # emit the TypeScript target into generated/typescript
 task gen:verify:ts   # emit + run the vitest suite (needs node)
-task gen:all         # emit all seven language targets
-# gen:js / gen:ruby / gen:java / gen:csharp / gen:python / gen:php and gen:verify:<lang> likewise
+task gen:all         # emit all eight language targets
+# gen:js / gen:ruby / gen:java / gen:csharp / gen:python / gen:php / gen:rust and gen:verify:<lang> likewise
 ```
 
 MCP agents can call the **`generate_code`** tool (`{lang, kind}`) to get the file set back.
 
 ## The correctness contract: golden vectors
 
-The risk in porting 13 check-digit algorithms into 6 languages is shipping a subtly-wrong
+The risk in porting 13 check-digit algorithms into eight languages is shipping a subtly-wrong
 validator. The defense: for each kind, Go emits a `vectors/<kind>.json` file of valid/invalid/
 format/origin cases (produced by the *verified* `selo` library — valid samples include
 authoritative ones and `Generate()` output; invalid samples are systematic mutations re-checked
@@ -53,10 +53,13 @@ python/      selo/<kind>.py, selo/{mod11,data,__init__}.py, tests/test_<kind>.py
              vectors/, pyproject.toml   (pytest, stdlib-only)
 php/         src/<Kind>.php, src/{Mod11,Data}.php, tests/<Kind>Test.php,
              vectors/, composer.json, phpunit.xml   (PHPUnit, PSR-4 Selo\, stdlib-only)
+rust/        src/<kind>.rs (inline #[cfg(test)] tests), src/{mod11,data,lib}.rs,
+             vectors/, Cargo.toml   (cargo test, zero runtime deps; serde_json dev-only)
 ```
 
-The TypeScript output is committed under `generated/typescript/` as the reference baseline (a Go
-snapshot test pins it byte-for-byte); the others are generated on demand and verified in CI.
+All eight targets are committed under `generated/<lang>/` as reference baselines (Go snapshot tests
+pin the deterministic source files byte-for-byte); CI re-verifies the committed vectors on each
+language's real toolchain.
 
 ## Architecture (`internal/codegen`)
 
@@ -78,8 +81,8 @@ from this registry.
 
 ## CI verification
 
-`.github/workflows/codegen.yml` runs a matrix over `[ts, js, ruby, java, csharp, python, php]` on real
-toolchains (node / ruby / JDK+Maven / .NET / Python / PHP), executing each language's vector tests. This is the
+`.github/workflows/codegen.yml` runs a matrix over `[ts, js, ruby, java, csharp, python, php, rust]` on real
+toolchains (node / ruby / JDK+Maven / .NET / Python / PHP / Rust+cargo), executing each language's vector tests. This is the
 authoritative gate for the targets that a given dev machine can't run locally. It is path-scoped
 (runs only when `internal/codegen/**`, `generated/**`, `cmd/selo/gen.go`, or the workflow change).
 
@@ -95,12 +98,14 @@ authoritative gate for the targets that a given dev machine can't run locally. I
 
 ## Adding a kind
 
-Add the kind to `selo` (it self-registers), then add a `KindPlan` entry in `spec.go`. All seven
+Add the kind to `selo` (it self-registers), then add a `KindPlan` entry in `spec.go`. All eight
 emitters pick it up; regenerate and let the CI matrix verify.
 
 ## Limitations
 
-- Generated targets provide **Validate / Format / Origin** (and UF-scoped variants for RG/IE).
-  Cross-language `generate()` is not yet emitted (tracked in `docs/BACKLOG.md`).
-- Generated code is produced on demand (except the committed TypeScript reference); run
-  `selo gen` / `task gen:<lang>` to materialize a target.
+- Generated targets provide **Validate / Format / Origin / Generate** (and UF-scoped variants for
+  RG/IE), each with generate→validate round-trip tests.
+- **IE in generated targets is SP-only.** The Go library validates SP/MG/RS/PR, but the emitters
+  emit SP IE only; covering the other UFs needs a digit-sum DV rule (tracked in `docs/BACKLOG.md`).
+- All eight targets are committed under `generated/<lang>/` as the reference baseline; run
+  `selo gen` / `task gen:<lang>` to regenerate.
