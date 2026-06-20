@@ -25,12 +25,12 @@ issuing federative unit (UF).
 | **Phone** (BR telephone) | ✅ | ✅ | `(##) #####-####` | ✅ DDD |
 | **License plate** (national + Mercosul) | ✅ | ✅ | dash | — |
 | **CNS** (health card) | ✅ | ✅ | identity | — |
-| **RG** (SP/RJ) | ✅ | ✅ | `##.###.###-#` | — |
+| **RG** (SP) | ✅ | ✅ | `##.###.###-#` | — |
 | **Inscrição Estadual** (SP) | ✅ | ✅ | `###.###.###.###` | — |
 | **PIX key** (CPF/CNPJ/email/phone/EVP) | ✅ | ✅ (EVP) | identity | — |
 
 `RG` and `Inscrição Estadual` are **UF-scoped** (`selo.UFScoped`): `ValidateUF(value, uf)` /
-`ImplementedUFs()`. RG ships SP/RJ; IE ships SP, with more states tracked in
+`ImplementedUFs()`. RG ships SP (RJ uses a different, unverified algorithm — see ISSUES); IE ships SP, with more states tracked in
 [`docs/IE-NOTES.md`](docs/IE-NOTES.md).
 
 ## 📦 Install

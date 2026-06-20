@@ -6,19 +6,15 @@ prioritized work in [BACKLOG.md](BACKLOG.md).
 
 ## Coverage / scope limitations
 
-### RG supports only SP and RJ
-`RG.Validate`/`ValidateUF` implement the SP/RJ check-digit algorithm only; every other UF returns
-`(false, ErrUFNotImplemented)`. **RG check digits are not nationally standardized** — other states
-use different schemes. *Workaround:* check `ImplementedUFs()` before relying on a UF.
-
-### RG RJ likely uses the WRONG algorithm (it reuses SP's)
-`RG.ValidateUF(value, UFRJ)` reuses the **SP** algorithm. SP is verified against four independent
-sources (`TestRG_AuthoritativeSamples`), but research (2026-06-19, "steps:next" item 8) found that
-**RJ uses a *different* algorithm** — an RG valid under SP rules can be invalid under RJ's. No
-authoritative RJ algorithm or verifiable samples were obtainable, so **RJ validation is likely
-incorrect** (may accept fake RJ RGs and reject real ones). **Recommended:** obtain the SSP-RJ
-algorithm + ≥2 real samples and fix it, OR demote `UFRJ` to `ErrUFNotImplemented` until verified
-(stops returning wrong answers — a small behavior change). Tracked in BACKLOG (Multi-state RG).
+### RG supports only SP (RJ demoted — its algorithm differs)
+`RG.Validate`/`ValidateUF` implement only the verified **SP** check-digit algorithm (mod 11,
+weights 2..9, verified against four sources — `TestRG_AuthoritativeSamples`); every other UF returns
+`(false, ErrUFNotImplemented)`. **RJ was removed (2026-06-19):** research found RJ uses a *different*
+algorithm than SP (an SP-valid RG can be invalid under RJ rules), and no authoritative RJ algorithm
+or verifiable samples were obtainable — so rather than validate RJ with the wrong (SP) algorithm,
+`UFRJ` now returns `ErrUFNotImplemented`. RG check digits are not nationally standardized;
+*workaround:* check `ImplementedUFs()` before relying on a UF. (Re-add RJ once its spec + ≥2 real
+samples are sourced — see BACKLOG "Multi-state RG".)
 
 ### Inscrição Estadual supports only SP
 Only SP is implemented and verified (two sourced samples). MG/RJ/RS/PR were researched but deferred

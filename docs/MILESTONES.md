@@ -26,7 +26,7 @@ document toolkit, and the post-build hardening (advisor plans 001–006).
 - **Architecture:** `Document` interface + self-registering registry; optional `OriginResolver`
   and `UFScoped` capabilities.
 - **13 document kinds:** CPF, CNPJ (alphanumeric + legacy), CNH, PIS/PASEP/NIS, RENAVAM,
-  Título Eleitoral, CEP, phone, license plate, CNS, RG (SP/RJ), Inscrição Estadual (SP), PIX keys.
+  Título Eleitoral, CEP, phone, license plate, CNS, RG (SP), Inscrição Estadual (SP), PIX keys.
 - **Surfaces:** Cobra CLI (`cmd/selo`, registry-derived; scriptable exit codes), stdio MCP server
   (6 tools), `compat` subpackage mirroring `paemuri/brdoc` v3 with a signature-parity guard.
 - **Synthetic data:** `GeneratePerson` (UF-consistent identities).

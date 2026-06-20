@@ -39,7 +39,7 @@ type Person struct {
     BirthDate  string   // ISO-8601; adult by default
     UF         UF       // home federative unit; drives all geo-consistent docs
     CPF        string
-    RG         string   // SP/RJ only until multi-state RG ships (see v2)
+    RG         string   // SP only until multi-state RG ships (see v2)
     CNH        string
     PIS        string
     VoterID    string   // Título Eleitoral, UF code == UF

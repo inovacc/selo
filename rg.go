@@ -13,11 +13,12 @@ const RGBaseLength = 8
 const RGTotalLength = 9
 
 // rgWeights are the positional mod-11 weights applied to the 8 base digits
-// of an SP/RJ RG, least-significant base digit first.
+// of an SP RG, least-significant base digit first.
 var rgWeights = [RGBaseLength]int{2, 3, 4, 5, 6, 7, 8, 9}
 
 // RG is the Registro Geral (state identity card) document type. Only the SP
-// and RJ algorithms are well-defined; other federative units return
+// algorithm is verified and shipped; other federative units — including RJ,
+// which uses a different, unverified algorithm (see docs/ISSUES.md) — return
 // ErrUFNotImplemented.
 type RG struct{}
 
@@ -79,7 +80,7 @@ func (r *RG) clean(value string) string {
 }
 
 // checkDigit computes the mod-11 check value for the 8 base digits using the
-// SP/RJ positional weights 2..9 and the DV = 11 - (sum mod 11) convention. The
+// SP positional weights 2..9 and the DV = 11 - (sum mod 11) convention. The
 // result is in 1..11, where 10 is encoded as the check char 'X' and 11 as '0'
 // (matching parse and Format); digits 1..9 encode as themselves.
 func (r *RG) checkDigit(base [RGBaseLength]int) int {
@@ -92,14 +93,15 @@ func (r *RG) checkDigit(base [RGBaseLength]int) int {
 }
 
 // rgImplemented is the set of federative units whose RG algorithm is shipped.
-var rgImplemented = map[UF]bool{UFSP: true, UFRJ: true}
+var rgImplemented = map[UF]bool{UFSP: true}
 
 // ImplementedUFs returns the federative units for which RG validation is
-// supported (SP and RJ).
-func (r *RG) ImplementedUFs() []UF { return []UF{UFSP, UFRJ} }
+// supported (SP only; RJ uses a different, unverified algorithm — see docs/ISSUES.md).
+func (r *RG) ImplementedUFs() []UF { return []UF{UFSP} }
 
 // ValidateUF reports whether value is a valid RG for the given federative
-// unit. SP and RJ share the mod-11/weights-2..9 algorithm. Any other UF
+// unit. Only SP is implemented (the verified mod-11/weights-2..9 algorithm);
+// every other UF — including RJ, whose algorithm differs and is unverified —
 // yields (false, ErrUFNotImplemented). A malformed value for a supported UF
 // yields (false, ErrInvalidFormat).
 func (r *RG) ValidateUF(value string, uf UF) (bool, error) {
@@ -196,6 +198,6 @@ func (r *RG) GenerateRand(rng *rand.Rand) string {
 
 // Generate returns a syntactically valid, SP-style RG in masked form
 // XX.XXX.XXX-C. The 8 base digits are random; the check character is computed
-// via the SP/RJ mod-11 algorithm ('X' when the DV is 10). It satisfies the
+// via the SP mod-11 algorithm ('X' when the DV is 10). It satisfies the
 // Document interface.
 func (r *RG) Generate() string { return r.GenerateRand(newRand()) }

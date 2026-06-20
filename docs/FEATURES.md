@@ -15,7 +15,7 @@ What `github.com/inovacc/selo` does today, and proposed extensions. Status: **Co
 
 ### Supported kinds (13)
 CPF · CNPJ (alphanumeric + legacy numeric) · CNH · PIS/PASEP/NIS · RENAVAM · Título Eleitoral ·
-CEP · phone · license plate (national + Mercosul) · CNS · RG (SP/RJ) · Inscrição Estadual (SP) ·
+CEP · phone · license plate (national + Mercosul) · CNS · RG (SP) · Inscrição Estadual (SP) ·
 PIX keys (CPF/CNPJ/email/phone/EVP).
 
 ### Architecture

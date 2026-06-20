@@ -37,8 +37,8 @@ func TestGeneratePerson_Consistency(t *testing.T) {
 			assert.NoError(t, err)
 			assert.Equal(t, string(uf), cepUF, "cep origin")
 
-			// RG only for the implemented UFs (SP/RJ).
-			if uf == UFSP || uf == UFRJ {
+			// RG only for the implemented UF (SP).
+			if uf == UFSP {
 				assert.NotEmpty(t, p.RG)
 				assert.Truef(t, NewRG().Validate(p.RG), "RG %q", p.RG)
 			} else {

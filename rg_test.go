@@ -77,7 +77,7 @@ func TestRG_ValidateUF(t *testing.T) {
 	}{
 		{"valid SP formatted", "24.678.131-2", UFSP, true, nil},
 		{"valid SP bare", "246781312", UFSP, true, nil},
-		{"valid RJ (same algo)", "24.678.131-2", UFRJ, true, nil},
+		{"RJ now unimplemented (algo differs from SP)", "24.678.131-2", UFRJ, false, ErrUFNotImplemented},
 		{"wrong check digit SP", "24.678.131-5", UFSP, false, nil},
 		{"wrong length SP", "1234567", UFSP, false, ErrInvalidFormat},
 		{"unimplemented UF MG", "24.678.131-4", UFMG, false, ErrUFNotImplemented},
@@ -110,7 +110,7 @@ func TestRG_ImplementedUFs(t *testing.T) {
 	r := NewRG()
 	ufs := r.ImplementedUFs()
 
-	want := map[UF]bool{UFSP: true, UFRJ: true}
+	want := map[UF]bool{UFSP: true}
 	if len(ufs) != len(want) {
 		t.Fatalf("ImplementedUFs() len = %d, want %d (%v)", len(ufs), len(want), ufs)
 	}

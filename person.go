@@ -15,7 +15,7 @@ type Person struct {
 	Email   string   `json:"email"`
 	UF      UF       `json:"uf"`
 	CPF     string   `json:"cpf"`
-	RG      string   `json:"rg,omitempty"` // only when UF is SP or RJ (the implemented RG algorithms); else ""
+	RG      string   `json:"rg,omitempty"` // only when UF is SP (the implemented RG algorithm); else ""
 	CNH     string   `json:"cnh"`
 	PIS     string   `json:"pis"`
 	Renavam string   `json:"renavam"`

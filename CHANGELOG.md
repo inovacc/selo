@@ -8,6 +8,22 @@ All notable changes to this project are documented here. The format is based on
 > (module `github.com/inovacc/selo`) in the 1.1.0 line. The `v1.0.0` tag predates the rename and
 > points at the original `brdoc` code; `github.com/inovacc/selo` is first installable at **v1.1.0**.
 
+## [Unreleased]
+
+### Added
+- **Seedable / deterministic generation.** A `RandGenerator` capability interface
+  (`GenerateRand(r *math/rand/v2.Rand) string`) implemented by every document type, a registry
+  `GenerateRand(kind, r)` helper, and `GeneratePerson` `WithSeed(int64)` / `WithRand(*rand.Rand)`
+  options — same seed produces identical output for deterministic fixtures. The default `Generate()`
+  remains random and unchanged. (PIX's default `Generate()` still uses `crypto/rand`.)
+
+### Changed
+- **RG now supports SP only.** `RG.ValidateUF(value, UFRJ)` now returns `ErrUFNotImplemented` and
+  `ImplementedUFs()` no longer lists RJ. Research found RJ uses a *different* check-digit algorithm
+  than SP, so validating RJ with SP's algorithm was likely incorrect; rather than return wrong
+  answers, RJ is unimplemented until an authoritative RJ algorithm + verifiable samples are sourced
+  (see `docs/ISSUES.md`). This is a behavior change for callers relying on `--uf RJ`.
+
 ## [1.2.0] - 2026-06-19
 
 Multi-language code generation, a bulk-generate CLI flag, and CLI/quality polish.

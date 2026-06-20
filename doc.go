@@ -1,6 +1,6 @@
 // Package selo provides validation, generation, formatting, and geolocation for
 // Brazilian documents — CPF, CNPJ (incl. alphanumeric), CNH, PIS/PASEP/NIS,
-// RENAVAM, Título Eleitoral, CEP, phone, license plate, CNS, RG (SP/RJ),
+// RENAVAM, Título Eleitoral, CEP, phone, license plate, CNS, RG (SP),
 // Inscrição Estadual (SP), and PIX keys — behind a common Document interface and
 // a self-registering type registry. The CLI and MCP server derive their surfaces
 // from that registry; the compat subpackage mirrors paemuri/brdoc for drop-in
