@@ -275,6 +275,7 @@ func ieMGDigits(base11 string) (d1, d2 int) {
 	base12 := base11[0:3] + "0" + base11[3:11]
 
 	total := 0
+
 	for i, w := range ieMGWeights1 {
 		p := int(base12[i]-'0') * w
 		total += p/10 + p%10
