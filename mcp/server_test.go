@@ -331,6 +331,7 @@ func TestGeneratePersonToolDeterministic(t *testing.T) {
 
 	a := call(42)
 	b := call(42)
+
 	require.Len(t, a.People, 3)
 	assert.Equal(t, a.People, b.People, "same seed must produce identical people")
 

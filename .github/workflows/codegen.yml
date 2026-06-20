@@ -89,4 +89,7 @@ jobs:
       - name: Verify Python vectors
         if: ${{ matrix.lang == 'python' }}
         working-directory: generated/python
-        run: pip install -e . && pytest
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e . pytest
+          python -m pytest -q
