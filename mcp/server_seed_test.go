@@ -28,6 +28,7 @@ func TestGenerateToolDeterministic(t *testing.T) {
 
 	a := gen(42)
 	b := gen(42)
+
 	require.Len(t, a, 4)
 	assert.Equal(t, a, b, "same seed must produce identical values")
 

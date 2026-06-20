@@ -224,6 +224,7 @@ func phpClassName(kind selo.Kind) string {
 	parts := strings.Split(kind.String(), "_")
 
 	var b strings.Builder
+
 	for _, p := range parts {
 		if p == "" {
 			continue
