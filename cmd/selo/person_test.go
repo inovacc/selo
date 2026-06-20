@@ -50,6 +50,32 @@ func TestPersonCmd_InvalidUF(t *testing.T) {
 	require.Error(t, err)
 }
 
+func TestPersonCmd_TextAddress(t *testing.T) {
+	out, err := runCmd(t, "person", "--uf", "SP")
+	require.NoError(t, err)
+	assert.Contains(t, out, "Address:")
+	assert.Contains(t, out, "SP")
+
+	// The printed city must be one of the real SP municipalities.
+	spCities := []string{
+		"São Paulo", "Guarulhos", "Campinas", "São Bernardo do Campo",
+		"Santo André", "Osasco", "Ribeirão Preto", "Sorocaba",
+		"Santos", "São José dos Campos",
+	}
+
+	found := false
+
+	for _, c := range spCities {
+		if strings.Contains(out, c) {
+			found = true
+
+			break
+		}
+	}
+
+	assert.True(t, found, "Address line must name a real SP city, got: %s", out)
+}
+
 func TestPersonCmd_Deterministic(t *testing.T) {
 	// Same seed → byte-identical output across runs.
 	out1, err := runCmd(t, "person", "--seed", "42", "--uf", "SP", "--count", "3", "--json")

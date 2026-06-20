@@ -88,7 +88,7 @@ type PersonInput struct {
 
 // PersonOutput is the typed output for the generate_person tool.
 type PersonOutput struct {
-	People []selo.Person `json:"people" jsonschema:"synthetic identities; all documents valid and UF-consistent"`
+	People []selo.Person `json:"people" jsonschema:"synthetic identities; all documents valid and UF-consistent, each including a UF-consistent address (real city in the person's UF)"`
 }
 
 // GenerateCodeInput is the typed input for the generate_code tool.

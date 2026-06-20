@@ -135,4 +135,10 @@ func printPerson(w io.Writer, p sdk.Person) {
 	if p.Company != nil {
 		_, _ = fmt.Fprintf(w, "Company: %s (%s)\n", p.Company.Name, p.Company.CNPJ)
 	}
+
+	if p.Address != nil {
+		a := p.Address
+		_, _ = fmt.Fprintf(w, "Address: %s, %s - %s, %s/%s  %s\n",
+			a.Street, a.Number, a.Neighborhood, a.City, a.UF, a.CEP)
+	}
 }

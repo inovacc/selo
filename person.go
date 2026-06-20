@@ -27,6 +27,7 @@ type Person struct {
 	PIXKeys []string `json:"pix_keys"`
 	Vehicle *Vehicle `json:"vehicle,omitempty"` // populated only with WithVehicle()
 	Company *Company `json:"company,omitempty"` // populated only with WithCompany()
+	Address *Address `json:"address,omitempty"` // UF-consistent locality; City is a real municipality in UF, CEP equals Person.CEP
 }
 
 // Vehicle is a synthetic vehicle linked to a Person.
@@ -115,25 +116,6 @@ var voterCodeByUF = map[UF]int{
 	UFRR: 26, UFTO: 27,
 }
 
-var personFirstNames = []string{
-	"João", "Maria", "José", "Ana", "Carlos", "Beatriz", "Pedro", "Juliana",
-	"Lucas", "Fernanda", "Rafael", "Camila", "Bruno", "Larissa", "Gabriel", "Mariana",
-}
-
-var personSurnames = []string{
-	"Silva", "Santos", "Oliveira", "Souza", "Lima", "Pereira", "Ferreira",
-	"Costa", "Rodrigues", "Almeida", "Nascimento", "Carvalho",
-}
-
-var personCompanySuffixes = []string{"ME", "LTDA", "S.A.", "EIRELI", "Comércio", "Serviços"}
-
-// asciiFold replaces the accented characters used in the name lists with their
-// ASCII equivalents, for building email local-parts.
-var asciiFold = strings.NewReplacer(
-	"ã", "a", "á", "a", "â", "a", "à", "a",
-	"é", "e", "ê", "e", "í", "i", "ó", "o", "ô", "o", "õ", "o", "ú", "u", "ç", "c",
-)
-
 // GeneratePerson returns a coherent synthetic Person whose geolocatable documents
 // all resolve to the same UF. By default the UF is random and documents are raw
 // (unformatted). Use the options to pin the UF, add a vehicle/company, or format.
@@ -211,6 +193,11 @@ func GeneratePerson(opts ...PersonOption) Person {
 			CNPJ: NewCNPJ().GenerateRand(r),
 		}
 	}
+
+	// Address is the final draw: appended after every other document and after
+	// the optional vehicle/company so that, for any given seed, all pre-existing
+	// field values stay byte-for-byte identical — only the new Address is added.
+	p.Address = genAddressForUFRand(uf, cep, r)
 
 	if o.formatted {
 		formatPerson(&p)
@@ -336,5 +323,9 @@ func formatPerson(p *Person) {
 
 	if p.Vehicle != nil {
 		p.Vehicle.Renavam = fmtOr(NewRenavam(), p.Vehicle.Renavam)
+	}
+
+	if p.Address != nil {
+		p.Address.CEP = fmtOr(NewCEP(), p.Address.CEP)
 	}
 }

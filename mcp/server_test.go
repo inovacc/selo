@@ -291,6 +291,12 @@ func TestGeneratePersonTool(t *testing.T) {
 		require.NotNil(t, p.Vehicle)
 		require.NotNil(t, p.Company)
 		assert.True(t, selo.NewCNPJ().Validate(p.Company.CNPJ))
+
+		// Address serializes through StructuredContent and is UF-consistent.
+		require.NotNil(t, p.Address)
+		assert.Equal(t, selo.UFSP, p.Address.UF)
+		assert.Equal(t, p.CEP, p.Address.CEP)
+		assert.NotEmpty(t, p.Address.City)
 	}
 
 	// Invalid UF yields an error result (not a transport error).
