@@ -100,14 +100,14 @@ RG — both blocked on authoritative per-UF algorithms plus ≥2 verifiable samp
 - See [CODEGEN.md](CODEGEN.md).
 
 ## Test Coverage
-**Current:** 94.2%  |  **Target:** 80%+ (met)
+**Current:** 94.6%  |  **Target:** 80%+ (met)
 
 | Package | Coverage | Status |
 |---------|----------|--------|
-| `github.com/inovacc/selo` (core) | 92.5% | Healthy |
+| `github.com/inovacc/selo` (core) | 93.1% | Healthy |
 | `github.com/inovacc/selo/compat` | 94.6% | Healthy |
-| `github.com/inovacc/selo/cmd/selo` (CLI) | 89.3% | Healthy |
-| `github.com/inovacc/selo/mcp` | 93.3% | Healthy |
-| `github.com/inovacc/selo/internal/codegen` | 95.6% | Healthy |
+| `github.com/inovacc/selo/cmd/selo` (CLI) | 88.3% | Healthy |
+| `github.com/inovacc/selo/mcp` | 93.7% | Healthy |
+| `github.com/inovacc/selo/internal/codegen` | 96.0% | Healthy |
 
 Measured with `task cover` (`go test -covermode=atomic -coverprofile=… ./...`) on 2026-06-20.
