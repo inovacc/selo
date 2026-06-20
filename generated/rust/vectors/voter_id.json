@@ -1,0 +1,240 @@
+{
+  "kind": "voter_id",
+  "group": "F",
+  "validate": [
+    {
+      "input": "722925212127",
+      "valid": true
+    },
+    {
+      "input": "591205041317",
+      "valid": true
+    },
+    {
+      "input": "184318431627",
+      "valid": true
+    },
+    {
+      "input": "193262950493",
+      "valid": true
+    },
+    {
+      "input": "957097561058",
+      "valid": true
+    },
+    {
+      "input": "012003501562",
+      "valid": true
+    },
+    {
+      "input": "156244682534",
+      "valid": true
+    },
+    {
+      "input": "410148761481",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "01200350156",
+      "valid": false
+    },
+    {
+      "input": "012003501563",
+      "valid": false
+    },
+    {
+      "input": "111111111111",
+      "valid": false
+    },
+    {
+      "input": "12345678",
+      "valid": false
+    },
+    {
+      "input": "1234567890123",
+      "valid": false
+    },
+    {
+      "input": "15624468253",
+      "valid": false
+    },
+    {
+      "input": "156244682535",
+      "valid": false
+    },
+    {
+      "input": "18431843162",
+      "valid": false
+    },
+    {
+      "input": "184318431628",
+      "valid": false
+    },
+    {
+      "input": "19326295049",
+      "valid": false
+    },
+    {
+      "input": "193262950494",
+      "valid": false
+    },
+    {
+      "input": "41014876148",
+      "valid": false
+    },
+    {
+      "input": "410148761482",
+      "valid": false
+    },
+    {
+      "input": "59120504131",
+      "valid": false
+    },
+    {
+      "input": "591205041318",
+      "valid": false
+    },
+    {
+      "input": "72292521212",
+      "valid": false
+    },
+    {
+      "input": "722925212128",
+      "valid": false
+    },
+    {
+      "input": "95709756105",
+      "valid": false
+    },
+    {
+      "input": "957097561059",
+      "valid": false
+    },
+    {
+      "input": "Z10148761481",
+      "valid": false
+    },
+    {
+      "input": "Z12003501562",
+      "valid": false
+    },
+    {
+      "input": "Z22925212127",
+      "valid": false
+    },
+    {
+      "input": "Z56244682534",
+      "valid": false
+    },
+    {
+      "input": "Z57097561058",
+      "valid": false
+    },
+    {
+      "input": "Z84318431627",
+      "valid": false
+    },
+    {
+      "input": "Z91205041317",
+      "valid": false
+    },
+    {
+      "input": "Z93262950493",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "722925212127",
+      "output": "7229 2521 2127"
+    },
+    {
+      "input": "591205041317",
+      "output": "5912 0504 1317"
+    },
+    {
+      "input": "184318431627",
+      "output": "1843 1843 1627"
+    },
+    {
+      "input": "193262950493",
+      "output": "1932 6295 0493"
+    },
+    {
+      "input": "957097561058",
+      "output": "9570 9756 1058"
+    },
+    {
+      "input": "012003501562",
+      "output": "0120 0350 1562"
+    },
+    {
+      "input": "156244682534",
+      "output": "1562 4468 2534"
+    },
+    {
+      "input": "410148761481",
+      "output": "4101 4876 1481"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidLength"
+    }
+  ],
+  "origin": [
+    {
+      "input": "722925212127",
+      "output": "Sergipe"
+    },
+    {
+      "input": "591205041317",
+      "output": "Pará"
+    },
+    {
+      "input": "184318431627",
+      "output": "Rio Grande do Norte"
+    },
+    {
+      "input": "193262950493",
+      "output": "Rio Grande do Sul"
+    },
+    {
+      "input": "957097561058",
+      "output": "Goiás"
+    },
+    {
+      "input": "012003501562",
+      "output": "Piauí"
+    },
+    {
+      "input": "156244682534",
+      "output": "Amapá"
+    },
+    {
+      "input": "410148761481",
+      "output": "Espírito Santo"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

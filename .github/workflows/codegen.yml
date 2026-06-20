@@ -26,7 +26,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        lang: [ts, js, ruby, java, csharp, python, php]
+        lang: [ts, js, ruby, java, csharp, python, php, rust]
     steps:
       - uses: actions/checkout@v4
 
@@ -67,6 +67,10 @@ jobs:
         with:
           php-version: '8.3'
 
+      - name: Set up Rust
+        if: ${{ matrix.lang == 'rust' }}
+        uses: dtolnay/rust-toolchain@stable
+
       - name: Verify TypeScript vectors
         if: ${{ matrix.lang == 'ts' }}
         working-directory: generated/typescript
@@ -104,3 +108,8 @@ jobs:
         if: ${{ matrix.lang == 'php' }}
         working-directory: generated/php
         run: composer install && vendor/bin/phpunit
+
+      - name: Verify Rust vectors
+        if: ${{ matrix.lang == 'rust' }}
+        working-directory: generated/rust
+        run: cargo test

@@ -105,10 +105,8 @@ func Vectors(k selo.Kind) (Vector, error) {
 	}
 
 	if plan.UFScoped {
-		if scoped, isScoped := doc.(selo.UFScoped); isScoped {
-			for _, uf := range scoped.ImplementedUFs() {
-				v.UFs = append(v.UFs, uf.String())
-			}
+		for _, uf := range codegenUFs(k, doc) {
+			v.UFs = append(v.UFs, uf.String())
 		}
 	}
 
@@ -155,9 +153,52 @@ func WriteVectors(dir string) error {
 	return nil
 }
 
+// codegenUFs returns the federative units the per-language emitters actually
+// implement for a UF-scoped kind. The emitters render a fixed UF set per kind
+// (RG: SP+RJ shared algorithm, IE: SP only — see spec.go KindIE and the emitter
+// UF lists), which can be a strict subset of selo's live selo.UFScoped
+// ImplementedUFs (selo's IE grew MG/PR/RS support after the codegen plan was
+// fixed at SP-only). The vector must reflect the emitter scope, not selo's full
+// scope, so the generated SP-only code can validate every committed sample.
+func codegenUFs(k selo.Kind, doc selo.Document) []selo.UF {
+	if k == selo.KindIE {
+		return []selo.UF{selo.UFSP}
+	}
+
+	if scoped, isScoped := doc.(selo.UFScoped); isScoped {
+		return scoped.ImplementedUFs()
+	}
+
+	return nil
+}
+
+// validForCodegenUFs reports whether s validates under at least one of the
+// emitter-supported UFs for a UF-scoped kind. For non-UF-scoped kinds it falls
+// back to the plain selo.Validate. This keeps generated UF-scoped samples within
+// the emitter's scope (e.g. drops selo-generated MG/PR/RS IE values that the
+// SP-only generated code cannot validate).
+func validForCodegenUFs(k selo.Kind, doc selo.Document, s string) bool {
+	scoped, isScoped := doc.(selo.UFScoped)
+	if !isScoped {
+		ok, err := selo.Validate(k, s)
+		return err == nil && ok
+	}
+
+	for _, uf := range codegenUFs(k, doc) {
+		if ok, err := scoped.ValidateUF(s, uf); err == nil && ok {
+			return true
+		}
+	}
+
+	return false
+}
+
 // buildValid returns confirmed-valid inputs for a kind: curated samples plus
-// selo.Generate output, deduplicated and order-stable.
+// selo.Generate output, deduplicated and order-stable. For UF-scoped kinds the
+// samples are restricted to the emitter-supported UFs (see codegenUFs).
 func buildValid(k selo.Kind) []string {
+	doc, _ := selo.Get(k)
+
 	seen := make(map[string]bool)
 
 	var out []string
@@ -167,8 +208,7 @@ func buildValid(k selo.Kind) []string {
 			return
 		}
 
-		ok, err := selo.Validate(k, s)
-		if err != nil || !ok {
+		if !validForCodegenUFs(k, doc, s) {
 			return
 		}
 
@@ -180,8 +220,8 @@ func buildValid(k selo.Kind) []string {
 		add(s)
 	}
 	// selo.Generate is non-deterministic; loop enough to reach the target after
-	// dedup/all-equal filtering without spinning forever.
-	for attempts := 0; len(out) < len(curatedValid[k])+generatedSamplesPerKind && attempts < generatedSamplesPerKind*20; attempts++ {
+	// dedup/all-equal/UF-scope filtering without spinning forever.
+	for attempts := 0; len(out) < len(curatedValid[k])+generatedSamplesPerKind && attempts < generatedSamplesPerKind*40; attempts++ {
 		g, err := selo.Generate(k)
 		if err != nil {
 			break

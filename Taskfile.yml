@@ -173,8 +173,24 @@ tasks:
             echo "php/composer not found; skipping PHPUnit (generated PHP still emitted)"
           fi
 
+  gen:rust:
+    desc: Emit the Rust target into generated/rust (all 13 kinds)
+    cmds:
+      - go run ./cmd/selo gen --lang rust --kind all --out generated/rust
+
+  gen:verify:rust:
+    desc: Emit the Rust target, then run the cargo test suite (needs cargo)
+    cmds:
+      - task: gen:rust
+      - cmd: |
+          if command -v cargo >/dev/null 2>&1; then
+            cd generated/rust && cargo test
+          else
+            echo "cargo not found; skipping cargo test (generated Rust still emitted)"
+          fi
+
   gen:all:
-    desc: Emit all seven language targets
+    desc: Emit all eight language targets
     cmds:
       - task: gen:ts
       - task: gen:js
@@ -183,3 +199,4 @@ tasks:
       - task: gen:csharp
       - task: gen:python
       - task: gen:php
+      - task: gen:rust

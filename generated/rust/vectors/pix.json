@@ -1,0 +1,210 @@
+{
+  "kind": "pix",
+  "group": "E",
+  "validate": [
+    {
+      "input": "6f6f0bd3-be69-431e-855f-d26ea5c2efa5",
+      "valid": true
+    },
+    {
+      "input": "a16674f8-3180-4a8b-8407-7b29adb522d5",
+      "valid": true
+    },
+    {
+      "input": "663c54bd-4690-431c-b654-d78366e75f90",
+      "valid": true
+    },
+    {
+      "input": "bf1a2407-6559-436c-970f-473d00440f86",
+      "valid": true
+    },
+    {
+      "input": "75cdd95b-57ac-49c8-ac09-ff95f3edab9e",
+      "valid": true
+    },
+    {
+      "input": "1bd86062-035d-4ea1-9923-081b097be465",
+      "valid": true
+    },
+    {
+      "input": "96fabe0b-9502-45eb-8703-8965ef111c95",
+      "valid": true
+    },
+    {
+      "input": "2d074c26-fe9b-473a-b4b8-f7610a1c3658",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "+5511",
+      "valid": false
+    },
+    {
+      "input": "+551199999999999999",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "00000000-0000-1000-8000-000000000000",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "111111111111111",
+      "valid": false
+    },
+    {
+      "input": "11111111111111111",
+      "valid": false
+    },
+    {
+      "input": "111111111111111111111",
+      "valid": false
+    },
+    {
+      "input": "1111111111111111111111",
+      "valid": false
+    },
+    {
+      "input": "11111111111111111111111",
+      "valid": false
+    },
+    {
+      "input": "111111111111111111111111",
+      "valid": false
+    },
+    {
+      "input": "1111111111111111111111111",
+      "valid": false
+    },
+    {
+      "input": "12345678900",
+      "valid": false
+    },
+    {
+      "input": "1bd86062-035d-4ea1-9923-081b097be46",
+      "valid": false
+    },
+    {
+      "input": "2d074c26-fe9b-473a-b4b8-f7610a1c365",
+      "valid": false
+    },
+    {
+      "input": "663c54bd-4690-431c-b654-d78366e75f9",
+      "valid": false
+    },
+    {
+      "input": "6f6f0bd3-be69-431e-855f-d26ea5c2efa",
+      "valid": false
+    },
+    {
+      "input": "75cdd95b-57ac-49c8-ac09-ff95f3edab9",
+      "valid": false
+    },
+    {
+      "input": "96fabe0b-9502-45eb-8703-8965ef111c9",
+      "valid": false
+    },
+    {
+      "input": "@example.com",
+      "valid": false
+    },
+    {
+      "input": "Z5cdd95b-57ac-49c8-ac09-ff95f3edab9e",
+      "valid": false
+    },
+    {
+      "input": "Z63c54bd-4690-431c-b654-d78366e75f90",
+      "valid": false
+    },
+    {
+      "input": "Z6fabe0b-9502-45eb-8703-8965ef111c95",
+      "valid": false
+    },
+    {
+      "input": "Zbd86062-035d-4ea1-9923-081b097be465",
+      "valid": false
+    },
+    {
+      "input": "Zd074c26-fe9b-473a-b4b8-f7610a1c3658",
+      "valid": false
+    },
+    {
+      "input": "Zf6f0bd3-be69-431e-855f-d26ea5c2efa5",
+      "valid": false
+    },
+    {
+      "input": "a16674f8-3180-4a8b-8407-7b29adb522d",
+      "valid": false
+    },
+    {
+      "input": "aZ6674f8-3180-4a8b-8407-7b29adb522d5",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    },
+    {
+      "input": "bf1a2407-6559-436c-970f-473d00440f8",
+      "valid": false
+    },
+    {
+      "input": "bfZa2407-6559-436c-970f-473d00440f86",
+      "valid": false
+    },
+    {
+      "input": "not-an-email",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "6f6f0bd3-be69-431e-855f-d26ea5c2efa5",
+      "output": "6f6f0bd3-be69-431e-855f-d26ea5c2efa5"
+    },
+    {
+      "input": "a16674f8-3180-4a8b-8407-7b29adb522d5",
+      "output": "a16674f8-3180-4a8b-8407-7b29adb522d5"
+    },
+    {
+      "input": "663c54bd-4690-431c-b654-d78366e75f90",
+      "output": "663c54bd-4690-431c-b654-d78366e75f90"
+    },
+    {
+      "input": "bf1a2407-6559-436c-970f-473d00440f86",
+      "output": "bf1a2407-6559-436c-970f-473d00440f86"
+    },
+    {
+      "input": "75cdd95b-57ac-49c8-ac09-ff95f3edab9e",
+      "output": "75cdd95b-57ac-49c8-ac09-ff95f3edab9e"
+    },
+    {
+      "input": "1bd86062-035d-4ea1-9923-081b097be465",
+      "output": "1bd86062-035d-4ea1-9923-081b097be465"
+    },
+    {
+      "input": "96fabe0b-9502-45eb-8703-8965ef111c95",
+      "output": "96fabe0b-9502-45eb-8703-8965ef111c95"
+    },
+    {
+      "input": "2d074c26-fe9b-473a-b4b8-f7610a1c3658",
+      "output": "2d074c26-fe9b-473a-b4b8-f7610a1c3658"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidLength"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

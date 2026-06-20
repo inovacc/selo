@@ -1,0 +1,180 @@
+{
+  "kind": "phone",
+  "group": "F",
+  "validate": [
+    {
+      "input": "98971410092",
+      "valid": true
+    },
+    {
+      "input": "5522083576",
+      "valid": true
+    },
+    {
+      "input": "42998956425",
+      "valid": true
+    },
+    {
+      "input": "51902323427",
+      "valid": true
+    },
+    {
+      "input": "96985799892",
+      "valid": true
+    },
+    {
+      "input": "3153447360",
+      "valid": true
+    },
+    {
+      "input": "7138716273",
+      "valid": true
+    },
+    {
+      "input": "32965898186",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "(00) 1234-5678",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "0099999999",
+      "valid": false
+    },
+    {
+      "input": "11111111111",
+      "valid": false
+    },
+    {
+      "input": "11912345",
+      "valid": false
+    },
+    {
+      "input": "315344736",
+      "valid": false
+    },
+    {
+      "input": "552208357",
+      "valid": false
+    },
+    {
+      "input": "713871627",
+      "valid": false
+    },
+    {
+      "input": "999999999999",
+      "valid": false
+    },
+    {
+      "input": "Z138716273",
+      "valid": false
+    },
+    {
+      "input": "Z153447360",
+      "valid": false
+    },
+    {
+      "input": "Z2965898186",
+      "valid": false
+    },
+    {
+      "input": "Z2998956425",
+      "valid": false
+    },
+    {
+      "input": "Z522083576",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "98971410092",
+      "output": "(98) 97141-0092"
+    },
+    {
+      "input": "5522083576",
+      "output": "(55) 2208-3576"
+    },
+    {
+      "input": "42998956425",
+      "output": "(42) 99895-6425"
+    },
+    {
+      "input": "51902323427",
+      "output": "(51) 90232-3427"
+    },
+    {
+      "input": "96985799892",
+      "output": "(96) 98579-9892"
+    },
+    {
+      "input": "3153447360",
+      "output": "(31) 5344-7360"
+    },
+    {
+      "input": "7138716273",
+      "output": "(71) 3871-6273"
+    },
+    {
+      "input": "32965898186",
+      "output": "(32) 96589-8186"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidLength"
+    }
+  ],
+  "origin": [
+    {
+      "input": "98971410092",
+      "output": "MA"
+    },
+    {
+      "input": "5522083576",
+      "output": "RS"
+    },
+    {
+      "input": "42998956425",
+      "output": "PR"
+    },
+    {
+      "input": "51902323427",
+      "output": "RS"
+    },
+    {
+      "input": "96985799892",
+      "output": "AP"
+    },
+    {
+      "input": "3153447360",
+      "output": "MG"
+    },
+    {
+      "input": "7138716273",
+      "output": "BA"
+    },
+    {
+      "input": "32965898186",
+      "output": "MG"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

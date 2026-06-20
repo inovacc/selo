@@ -1,0 +1,230 @@
+{
+  "kind": "cnpj",
+  "group": "C",
+  "validate": [
+    {
+      "input": "39.591.842/0000-10",
+      "valid": true
+    },
+    {
+      "input": "945HYB454H3560",
+      "valid": true
+    },
+    {
+      "input": "26E3IBY350N931",
+      "valid": true
+    },
+    {
+      "input": "682N664Z628P24",
+      "valid": true
+    },
+    {
+      "input": "QNS6I2R204QQ43",
+      "valid": true
+    },
+    {
+      "input": "U9JO40Q005EZ83",
+      "valid": true
+    },
+    {
+      "input": "DD237G2JL94B31",
+      "valid": true
+    },
+    {
+      "input": "7EJROAEFYM4494",
+      "valid": true
+    },
+    {
+      "input": "4CE0188D661H47",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "11111",
+      "valid": false
+    },
+    {
+      "input": "1111111",
+      "valid": false
+    },
+    {
+      "input": "11111111",
+      "valid": false
+    },
+    {
+      "input": "111111111",
+      "valid": false
+    },
+    {
+      "input": "1111111111",
+      "valid": false
+    },
+    {
+      "input": "11111111111",
+      "valid": false
+    },
+    {
+      "input": "11111111111111",
+      "valid": false
+    },
+    {
+      "input": "26E3IBY350N93",
+      "valid": false
+    },
+    {
+      "input": "26E3IBY350N932",
+      "valid": false
+    },
+    {
+      "input": "39.591.842/0000-1",
+      "valid": false
+    },
+    {
+      "input": "39.591.842/0000-11",
+      "valid": false
+    },
+    {
+      "input": "4CE0188D661H4",
+      "valid": false
+    },
+    {
+      "input": "4CE0188D661H48",
+      "valid": false
+    },
+    {
+      "input": "682N664Z628P2",
+      "valid": false
+    },
+    {
+      "input": "682N664Z628P25",
+      "valid": false
+    },
+    {
+      "input": "7EJROAEFYM449",
+      "valid": false
+    },
+    {
+      "input": "7EJROAEFYM4495",
+      "valid": false
+    },
+    {
+      "input": "945HYB454H356",
+      "valid": false
+    },
+    {
+      "input": "945HYB454H3561",
+      "valid": false
+    },
+    {
+      "input": "DD237G2JL94B3",
+      "valid": false
+    },
+    {
+      "input": "DD237G2JL94B32",
+      "valid": false
+    },
+    {
+      "input": "DDZ37G2JL94B31",
+      "valid": false
+    },
+    {
+      "input": "QNS6I2R204QQ4",
+      "valid": false
+    },
+    {
+      "input": "QNS6I2R204QQ44",
+      "valid": false
+    },
+    {
+      "input": "QNSZI2R204QQ43",
+      "valid": false
+    },
+    {
+      "input": "U9JO40Q005EZ8",
+      "valid": false
+    },
+    {
+      "input": "U9JO40Q005EZ84",
+      "valid": false
+    },
+    {
+      "input": "Z6E3IBY350N931",
+      "valid": false
+    },
+    {
+      "input": "Z82N664Z628P24",
+      "valid": false
+    },
+    {
+      "input": "Z9.591.842/0000-10",
+      "valid": false
+    },
+    {
+      "input": "ZCE0188D661H47",
+      "valid": false
+    },
+    {
+      "input": "ZEJROAEFYM4494",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "39.591.842/0000-10",
+      "output": "39.591.842/0000-10"
+    },
+    {
+      "input": "945HYB454H3560",
+      "output": "94.5HY.B45/4H35-60"
+    },
+    {
+      "input": "26E3IBY350N931",
+      "output": "26.E3I.BY3/50N9-31"
+    },
+    {
+      "input": "682N664Z628P24",
+      "output": "68.2N6.64Z/628P-24"
+    },
+    {
+      "input": "QNS6I2R204QQ43",
+      "output": "QN.S6I.2R2/04QQ-43"
+    },
+    {
+      "input": "U9JO40Q005EZ83",
+      "output": "U9.JO4.0Q0/05EZ-83"
+    },
+    {
+      "input": "DD237G2JL94B31",
+      "output": "DD.237.G2J/L94B-31"
+    },
+    {
+      "input": "7EJROAEFYM4494",
+      "output": "7E.JRO.AEF/YM44-94"
+    },
+    {
+      "input": "4CE0188D661H47",
+      "output": "4C.E01.88D/661H-47"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalid"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}
