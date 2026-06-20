@@ -3,35 +3,35 @@
   "group": "A",
   "validate": [
     {
-      "input": "52331375870",
+      "input": "75438291885",
       "valid": true
     },
     {
-      "input": "73983886160",
+      "input": "53505875080",
       "valid": true
     },
     {
-      "input": "19073774449",
+      "input": "76338230661",
       "valid": true
     },
     {
-      "input": "44834810893",
+      "input": "54324120035",
       "valid": true
     },
     {
-      "input": "44005380792",
+      "input": "69308551270",
       "valid": true
     },
     {
-      "input": "18788044934",
+      "input": "65781043071",
       "valid": true
     },
     {
-      "input": "72404352313",
+      "input": "68573448484",
       "valid": true
     },
     {
-      "input": "75833355734",
+      "input": "57716640841",
       "valid": true
     },
     {
@@ -51,99 +51,99 @@
       "valid": false
     },
     {
-      "input": "1878804493",
+      "input": "5350587508",
       "valid": false
     },
     {
-      "input": "18788044935",
+      "input": "53505875081",
       "valid": false
     },
     {
-      "input": "1907377444",
+      "input": "5432412003",
       "valid": false
     },
     {
-      "input": "19073774440",
+      "input": "54324120036",
       "valid": false
     },
     {
-      "input": "4400538079",
+      "input": "5771664084",
       "valid": false
     },
     {
-      "input": "44005380793",
+      "input": "57716640842",
       "valid": false
     },
     {
-      "input": "4483481089",
+      "input": "6578104307",
       "valid": false
     },
     {
-      "input": "44834810894",
+      "input": "65781043072",
       "valid": false
     },
     {
-      "input": "5233137587",
+      "input": "6857344848",
       "valid": false
     },
     {
-      "input": "52331375871",
+      "input": "68573448485",
       "valid": false
     },
     {
-      "input": "7240435231",
+      "input": "6930855127",
       "valid": false
     },
     {
-      "input": "72404352314",
+      "input": "69308551271",
       "valid": false
     },
     {
-      "input": "7398388616",
+      "input": "7543829188",
       "valid": false
     },
     {
-      "input": "73983886161",
+      "input": "75438291886",
       "valid": false
     },
     {
-      "input": "7583335573",
+      "input": "7633823066",
       "valid": false
     },
     {
-      "input": "75833355735",
+      "input": "76338230662",
       "valid": false
     },
     {
-      "input": "Z2331375870",
+      "input": "Z3505875080",
       "valid": false
     },
     {
-      "input": "Z2404352313",
+      "input": "Z4324120035",
       "valid": false
     },
     {
-      "input": "Z3983886160",
+      "input": "Z5438291885",
       "valid": false
     },
     {
-      "input": "Z4005380792",
+      "input": "Z5781043071",
       "valid": false
     },
     {
-      "input": "Z4834810893",
+      "input": "Z6338230661",
       "valid": false
     },
     {
-      "input": "Z5833355734",
+      "input": "Z7716640841",
       "valid": false
     },
     {
-      "input": "Z8788044934",
+      "input": "Z8573448484",
       "valid": false
     },
     {
-      "input": "Z9073774449",
+      "input": "Z9308551270",
       "valid": false
     },
     {
@@ -153,36 +153,36 @@
   ],
   "format": [
     {
-      "input": "52331375870",
-      "output": "52331375870"
+      "input": "75438291885",
+      "output": "75438291885"
     },
     {
-      "input": "73983886160",
-      "output": "73983886160"
+      "input": "53505875080",
+      "output": "53505875080"
     },
     {
-      "input": "19073774449",
-      "output": "19073774449"
+      "input": "76338230661",
+      "output": "76338230661"
     },
     {
-      "input": "44834810893",
-      "output": "44834810893"
+      "input": "54324120035",
+      "output": "54324120035"
     },
     {
-      "input": "44005380792",
-      "output": "44005380792"
+      "input": "69308551270",
+      "output": "69308551270"
     },
     {
-      "input": "18788044934",
-      "output": "18788044934"
+      "input": "65781043071",
+      "output": "65781043071"
     },
     {
-      "input": "72404352313",
-      "output": "72404352313"
+      "input": "68573448484",
+      "output": "68573448484"
     },
     {
-      "input": "75833355734",
-      "output": "75833355734"
+      "input": "57716640841",
+      "output": "57716640841"
     }
   ],
   "ufScoped": false,

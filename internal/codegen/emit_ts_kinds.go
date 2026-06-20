@@ -52,6 +52,17 @@ export function originCPF(value: string): string {
 `, dv1, dv2, formatErrorThrow("ErrInvalidLength"),
 		formatErrorThrow("ErrInvalidLength"), formatErrorThrow("ErrInvalidLength"))
 
+	b.WriteString(`
+/** generateCPF returns a random valid CPF in formatted form (XXX.XXX.XXX-XX). */
+export function generateCPF(): string {
+  const d: number[] = [];
+  for (let i = 0; i < 9; i++) d.push(Math.floor(Math.random() * 10));
+  d.push(computeDigit(weightedSum(d.slice(0, 9), DV1.weights), DV1));
+  d.push(computeDigit(weightedSum(d.slice(0, 10), DV2.weights), DV2));
+  return formatCPF(d.join(""));
+}
+`)
+
 	return b.String()
 }
 
@@ -85,6 +96,19 @@ export function format%[2]s(value: string): string {
 }
 `, dv, name, length, base, formatErrorThrow("ErrInvalidLength"), mask)
 
+	fmt.Fprintf(&b, `
+/** generate%[1]s returns a random valid %[1]s in formatted form. */
+export function generate%[1]s(): string {
+  let out: string;
+  do {
+    const d = Array.from({ length: %[2]d }, () => Math.floor(Math.random() * 10));
+    const dv = computeDigit(weightedSum(d, DV.weights), DV);
+    out = d.join("") + dv;
+  } while (allEqual(out));
+  return format%[1]s(out);
+}
+`, name, base)
+
 	return b.String()
 }
 
@@ -112,6 +136,17 @@ export function formatRenavam(value: string): string {
   let d = onlyDigits(value);
   if (d.length < 11) d = "0".repeat(11 - d.length) + d;
   return d;
+}
+
+/** generateRenavam returns a random valid 11-digit RENAVAM. */
+export function generateRenavam(): string {
+  let out: string;
+  do {
+    const d = Array.from({ length: 10 }, () => Math.floor(Math.random() * 10));
+    const dv = computeDigit(weightedSum(d, DV.weights), DV);
+    out = d.join("") + dv;
+  } while (allEqual(out));
+  return out;
 }
 `, dv)
 
@@ -161,6 +196,17 @@ export function formatCNH(value: string): string {
   if (d.length !== 11) ` + formatErrorThrow("ErrInvalidLength") + `
   return d;
 }
+
+/** generateCNH returns a random valid 11-digit CNH. */
+export function generateCNH(): string {
+  let out: string;
+  do {
+    const base = Array.from({ length: 9 }, () => Math.floor(Math.random() * 10)).join("");
+    const [dv1, dv2] = cnhCheckDigits(base);
+    out = base + dv1 + dv2;
+  } while (allEqual(out));
+  return out;
+}
 `)
 
 	return b.String()
@@ -194,6 +240,25 @@ export function formatCNS(value: string): string {
   return d;
 }
 `, dv, formatErrorThrow("ErrInvalidLength"))
+
+	b.WriteString(`const CNS_PREFIXES = ["1", "2", "7", "8", "9"];
+
+/** generateCNS returns a random valid 15-digit CNS. */
+export function generateCNS(): string {
+  while (true) {
+    const d: number[] = [];
+    d.push(Number(CNS_PREFIXES[Math.floor(Math.random() * CNS_PREFIXES.length)]));
+    for (let i = 1; i < 14; i++) d.push(Math.floor(Math.random() * 10));
+    let partial = 0;
+    for (let i = 0; i < 14; i++) partial += d[i] * (15 - i);
+    const last = (11 - (partial % 11)) % 11;
+    if (last === 10) continue;
+    d.push(last);
+    const out = d.join("");
+    if (!allEqual(out)) return out;
+  }
+}
+`)
 
 	return b.String()
 }
@@ -246,6 +311,19 @@ export function formatCNPJ(value: string): string {
   return `+"`${c.slice(0, 2)}.${c.slice(2, 5)}.${c.slice(5, 8)}/${c.slice(8, 12)}-${c.slice(12, 14)}`"+`;
 }
 `, dv, formatErrorThrow("ErrInvalidLength"))
+
+	b.WriteString(`const CNPJ_ALPHANUM = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+/** generateCNPJ returns a random valid alphanumeric CNPJ. */
+export function generateCNPJ(): string {
+  const base = Array.from({ length: 12 }, () =>
+    CNPJ_ALPHANUM[Math.floor(Math.random() * CNPJ_ALPHANUM.length)]
+  ).join("");
+  const dv1 = cnpjDV(base);
+  const dv2 = cnpjDV(base + String(dv1));
+  return base + dv1 + dv2;
+}
+`)
 
 	return b.String()
 }

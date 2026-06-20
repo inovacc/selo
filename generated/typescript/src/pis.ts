@@ -28,3 +28,14 @@ export function formatPIS(value: string): string {
   if (d.length !== 11) throw new Error("ErrInvalidLength");
   return `${d.slice(0, 3)}.${d.slice(3, 8)}.${d.slice(8, 10)}-${d.slice(10, 11)}`;
 }
+
+/** generatePIS returns a random valid PIS in formatted form. */
+export function generatePIS(): string {
+  let out: string;
+  do {
+    const d = Array.from({ length: 10 }, () => Math.floor(Math.random() * 10));
+    const dv = computeDigit(weightedSum(d, DV.weights), DV);
+    out = d.join("") + dv;
+  } while (allEqual(out));
+  return formatPIS(out);
+}

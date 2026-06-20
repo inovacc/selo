@@ -19,3 +19,16 @@ export function formatPlate(value: string): string {
   }
   throw new Error("ErrInvalidFormat");
 }
+
+const PLATE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+/** generatePlate returns a random valid plate (national or Mercosul). */
+export function generatePlate(): string {
+  const rl = () => PLATE_LETTERS[Math.floor(Math.random() * 26)];
+  const rd = () => String(Math.floor(Math.random() * 10));
+  const letters = rl() + rl() + rl();
+  if (Math.random() < 0.5) {
+    return letters + "-" + rd() + rd() + rd() + rd();
+  }
+  return letters + rd() + rl() + rd() + rd();
+}

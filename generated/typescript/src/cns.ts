@@ -31,3 +31,20 @@ export function formatCNS(value: string): string {
   if (d.length !== 15) throw new Error("ErrInvalidLength");
   return d;
 }
+const CNS_PREFIXES = ["1", "2", "7", "8", "9"];
+
+/** generateCNS returns a random valid 15-digit CNS. */
+export function generateCNS(): string {
+  while (true) {
+    const d: number[] = [];
+    d.push(Number(CNS_PREFIXES[Math.floor(Math.random() * CNS_PREFIXES.length)]));
+    for (let i = 1; i < 14; i++) d.push(Math.floor(Math.random() * 10));
+    let partial = 0;
+    for (let i = 0; i < 14; i++) partial += d[i] * (15 - i);
+    const last = (11 - (partial % 11)) % 11;
+    if (last === 10) continue;
+    d.push(last);
+    const out = d.join("");
+    if (!allEqual(out)) return out;
+  }
+}

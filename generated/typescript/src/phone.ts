@@ -50,3 +50,16 @@ export function originPhone(value: string): string {
   if (uf === undefined) throw new Error("ErrInvalidFormat");
   return uf;
 }
+
+/** generatePhone returns a random valid Brazilian phone number (national digits only). */
+export function generatePhone(): string {
+  const ddds = Object.keys(DDD_TO_UF);
+  const ddd = ddds[Math.floor(Math.random() * ddds.length)];
+  if (Math.random() < 0.5) {
+    const sub = "9" + Array.from({ length: 8 }, () => String(Math.floor(Math.random() * 10))).join("");
+    return ddd + sub;
+  }
+  const first = String(2 + Math.floor(Math.random() * 4));
+  const sub = first + Array.from({ length: 7 }, () => String(Math.floor(Math.random() * 10))).join("");
+  return ddd + sub;
+}

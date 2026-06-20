@@ -27,10 +27,11 @@ func (e tsEmitter) renderTest(kind selo.Kind, _ KindPlan, _ Vector) string {
 	validateFn := "validate" + name
 	formatFn := "format" + name
 	originFn := originFnName(kind)
+	generateFn := "generate" + name
 
 	var imports []string
 
-	imports = append(imports, validateFn, formatFn)
+	imports = append(imports, validateFn, formatFn, generateFn)
 	if originFn != "" {
 		imports = append(imports, originFn)
 	}
@@ -87,6 +88,15 @@ func (e tsEmitter) renderTest(kind selo.Kind, _ KindPlan, _ Vector) string {
 		b.WriteString("    }\n")
 		b.WriteString("  });\n")
 	}
+
+	// generate round-trip
+	b.WriteString("\n  describe(\"generate\", () => {\n")
+	b.WriteString("    it(\"round-trip: 100 generated values validate\", () => {\n")
+	b.WriteString("      for (let i = 0; i < 100; i++) {\n")
+	fmt.Fprintf(&b, "        expect(%s(%s())).toBe(true);\n", validateFn, generateFn)
+	b.WriteString("      }\n")
+	b.WriteString("    });\n")
+	b.WriteString("  });\n")
 
 	b.WriteString("});\n")
 
