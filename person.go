@@ -16,7 +16,7 @@ type Person struct {
 	UF      UF       `json:"uf"`
 	CPF     string   `json:"cpf"`
 	RG      string   `json:"rg,omitempty"` // only when UF is SP (the implemented RG algorithm); else ""
-	IE      string   `json:"ie,omitempty"` // Inscrição Estadual; only when the UF has a verified IE algorithm (currently SP)
+	IE      string   `json:"ie,omitempty"` // Inscrição Estadual; only when the UF has a verified IE algorithm (SP, MG, RS, PR)
 	CNH     string   `json:"cnh"`
 	PIS     string   `json:"pis"`
 	Renavam string   `json:"renavam"`
@@ -178,7 +178,7 @@ func GeneratePerson(opts ...PersonOption) Person {
 	}
 
 	// IE is UF-scoped; populate it only when the person's UF has a verified IE
-	// algorithm (currently SP), generating for that specific UF so it stays
+	// algorithm (SP, MG, RS, PR), generating for that specific UF so it stays
 	// UF-consistent even as more UFs are added.
 	ie := ""
 	if algo, ok := ieTable[uf]; ok && algo.generateRand != nil {

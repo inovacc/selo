@@ -51,6 +51,27 @@ var ieTable = map[UF]ieAlgo{
 		generateRand: ieSPGenerateRand,
 		mask:         ieSPMask,
 	},
+	UFMG: {
+		lengths:      []int{ieMGLength},
+		validate:     ieMGValidate,
+		generate:     ieMGGenerate,
+		generateRand: ieMGGenerateRand,
+		mask:         ieMGMask,
+	},
+	UFRS: {
+		lengths:      []int{ieRSLength},
+		validate:     ieRSValidate,
+		generate:     ieRSGenerate,
+		generateRand: ieRSGenerateRand,
+		mask:         ieRSMask,
+	},
+	UFPR: {
+		lengths:      []int{iePRLength},
+		validate:     iePRValidate,
+		generate:     iePRGenerate,
+		generateRand: iePRGenerateRand,
+		mask:         iePRMask,
+	},
 }
 
 // ImplementedUFs returns, sorted, the federative units with IE support.
@@ -207,3 +228,191 @@ func ieSPGenerateRand(r *rand.Rand) string {
 
 	return ieSPMask(string(d[:]))
 }
+
+// ieWeightedSum returns the sum of each digit of d multiplied by the weight at
+// the same index. weights must not be longer than d.
+func ieWeightedSum(d string, weights []int) int {
+	sum := 0
+	for i, w := range weights {
+		sum += int(d[i]-'0') * w
+	}
+
+	return sum
+}
+
+// ieMod11DV computes a "11 minus remainder" check digit from a weighted sum:
+// DV = 11 - (sum mod 11), with a result of 10 or 11 collapsing to 0. This is the
+// most common IE check-digit rule (RS, both PR digits, and MG's second digit).
+func ieMod11DV(sum int) int {
+	dv := 11 - (sum % 11)
+	if dv >= 10 {
+		return 0
+	}
+
+	return dv
+}
+
+// --- Minas Gerais (MG) --------------------------------------------------------
+// 13 digits, format AAA.AAA.AAA/AAAA (3 municipio + 6 inscricao + 2 ordem + 2
+// DV). D1 uses the "digit-sum" method: a 0 is inserted after the 3-digit
+// municipio code, the resulting 12 digits are multiplied left->right by
+// alternating weights 1,2,..., and the DIGITS of each product are summed; D1 is
+// the amount needed to reach the next multiple of ten. D2 is a mod-11 digit over
+// the 11 base digits plus D1. Source: SINTEGRA-MG roteiro de crítica, corroborated
+// by two independent reference implementations (see docs/IE-NOTES.md).
+
+const ieMGLength = 13
+
+var (
+	// ieMGWeights1 are the alternating digit-sum weights for D1 (over 12 digits).
+	ieMGWeights1 = []int{1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2}
+	// ieMGWeights2 are the mod-11 weights for D2, left->right over 12 digits.
+	ieMGWeights2 = []int{3, 2, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2}
+)
+
+// ieMGDigits computes MG's two check digits from the 11 base digits.
+func ieMGDigits(base11 string) (d1, d2 int) {
+	base12 := base11[0:3] + "0" + base11[3:11]
+
+	total := 0
+	for i, w := range ieMGWeights1 {
+		p := int(base12[i]-'0') * w
+		total += p/10 + p%10
+	}
+
+	d1 = (10 - total%10) % 10
+
+	base := base11 + string(byte('0'+d1))
+	d2 = ieMod11DV(ieWeightedSum(base, ieMGWeights2))
+
+	return d1, d2
+}
+
+func ieMGValidate(d string) bool {
+	if len(d) != ieMGLength {
+		return false
+	}
+
+	d1, d2 := ieMGDigits(d[:11])
+
+	return d1 == int(d[11]-'0') && d2 == int(d[12]-'0')
+}
+
+func ieMGMask(d string) string {
+	if len(d) != ieMGLength {
+		return d
+	}
+
+	return d[0:3] + "." + d[3:6] + "." + d[6:9] + "/" + d[9:13]
+}
+
+func ieMGGenerateRand(r *rand.Rand) string {
+	var d [ieMGLength]byte
+	for i := range 11 {
+		d[i] = byte('0' + r.IntN(10))
+	}
+
+	d1, d2 := ieMGDigits(string(d[:11]))
+	d[11] = byte('0' + d1)
+	d[12] = byte('0' + d2)
+
+	return ieMGMask(string(d[:]))
+}
+
+func ieMGGenerate() string { return ieMGGenerateRand(newRand()) }
+
+// --- Rio Grande do Sul (RS) ---------------------------------------------------
+// 10 digits, format AAA/AAAAAAA (3 municipio + 6 empresa + 1 DV). The DV is a
+// mod-11 digit (weights 2,9,8,...,2 left->right over the first 9 digits).
+// Source: SINTEGRA-RS roteiro de crítica, corroborated by two independent
+// reference implementations (see docs/IE-NOTES.md).
+
+const ieRSLength = 10
+
+// ieRSWeights are the mod-11 weights for RS's single DV, over the first 9 digits.
+var ieRSWeights = []int{2, 9, 8, 7, 6, 5, 4, 3, 2}
+
+func ieRSValidate(d string) bool {
+	if len(d) != ieRSLength {
+		return false
+	}
+
+	return ieMod11DV(ieWeightedSum(d[:9], ieRSWeights)) == int(d[9]-'0')
+}
+
+func ieRSMask(d string) string {
+	if len(d) != ieRSLength {
+		return d
+	}
+
+	return d[0:3] + "/" + d[3:10]
+}
+
+func ieRSGenerateRand(r *rand.Rand) string {
+	var d [ieRSLength]byte
+	for i := range 9 {
+		d[i] = byte('0' + r.IntN(10))
+	}
+
+	d[9] = byte('0' + ieMod11DV(ieWeightedSum(string(d[:9]), ieRSWeights)))
+
+	return ieRSMask(string(d[:]))
+}
+
+func ieRSGenerate() string { return ieRSGenerateRand(newRand()) }
+
+// --- Paraná (PR) --------------------------------------------------------------
+// 10 digits, format AAA.AAAAA-AA (8 base + 2 DV). Both DVs are mod-11: DV1 over
+// the 8 base digits (weights 3,2,7,6,5,4,3,2); DV2 over the 8 base digits
+// (weights 4,3,2,7,6,5,4,3) plus twice DV1 added to the sum. Source: SEFA-PR
+// digit-verifier reference routine + worked example (see docs/IE-NOTES.md).
+
+const iePRLength = 10
+
+var (
+	// iePRWeights1 are the mod-11 weights for PR's first DV, over 8 base digits.
+	iePRWeights1 = []int{3, 2, 7, 6, 5, 4, 3, 2}
+	// iePRWeights2 are the mod-11 weights for PR's second DV, over 8 base digits.
+	iePRWeights2 = []int{4, 3, 2, 7, 6, 5, 4, 3}
+)
+
+// iePRDigits computes PR's two check digits from the 8 base digits.
+func iePRDigits(base8 string) (d1, d2 int) {
+	d1 = ieMod11DV(ieWeightedSum(base8, iePRWeights1))
+	d2 = ieMod11DV(ieWeightedSum(base8, iePRWeights2) + 2*d1)
+
+	return d1, d2
+}
+
+func iePRValidate(d string) bool {
+	if len(d) != iePRLength {
+		return false
+	}
+
+	d1, d2 := iePRDigits(d[:8])
+
+	return d1 == int(d[8]-'0') && d2 == int(d[9]-'0')
+}
+
+func iePRMask(d string) string {
+	if len(d) != iePRLength {
+		return d
+	}
+
+	return d[0:3] + "." + d[3:8] + "-" + d[8:10]
+}
+
+func iePRGenerateRand(r *rand.Rand) string {
+	var d [iePRLength]byte
+	for i := range 8 {
+		d[i] = byte('0' + r.IntN(10))
+	}
+
+	d1, d2 := iePRDigits(string(d[:8]))
+	d[8] = byte('0' + d1)
+	d[9] = byte('0' + d2)
+
+	return iePRMask(string(d[:]))
+}
+
+func iePRGenerate() string { return iePRGenerateRand(newRand()) }

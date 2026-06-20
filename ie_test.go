@@ -28,7 +28,7 @@ func TestIE_ImplementedUFs(t *testing.T) {
 	e := NewIE()
 	ufs := e.ImplementedUFs()
 
-	want := map[UF]bool{UFSP: true}
+	want := map[UF]bool{UFSP: true, UFMG: true, UFRS: true, UFPR: true}
 	if len(ufs) != len(want) {
 		t.Fatalf("ImplementedUFs() = %v, want %d UF(s)", ufs, len(want))
 	}
@@ -65,6 +65,17 @@ func TestIE_AuthoritativeSamples(t *testing.T) {
 	}{
 		{"110.042.490.114", "SEFAZ-SP / Sintegra worked example"},
 		{"388.108.598.269", "published valid SP IE example"},
+		// MG — SINTEGRA-MG worked example + independent reference impls.
+		{"0623079040081", "SINTEGRA-MG roteiro de crítica worked example"},
+		{"4333908330177", "Thiagocfn/InscricaoEstadual MG fixture"},
+		{"7023259570005", "Printi/gammasoft MG fixture"},
+		// RS — SINTEGRA-RS worked example + independent reference impls.
+		{"2243658792", "SINTEGRA-RS roteiro de crítica worked example"},
+		{"0305169149", "Thiagocfn/InscricaoEstadual RS fixture"},
+		{"0963205056", "Printi/gammasoft RS fixture"},
+		// PR — SEFA-PR worked example + independent reference impl.
+		{"1234567850", "SEFA-PR digit-verifier worked example"},
+		{"4447953604", "Thiagocfn/InscricaoEstadual PR fixture"},
 	}
 	for _, s := range samples {
 		t.Run(s.value, func(t *testing.T) {
@@ -91,7 +102,17 @@ func TestIE_ValidateUF(t *testing.T) {
 		{"wrong second check digit", "388.108.598.260", UFSP, false, nil},
 		{"wrong first check digit", "110.042.490.914", UFSP, false, nil},
 		{"wrong length SP", "12345", UFSP, false, ErrInvalidFormat},
-		{"unimplemented UF MG", "110042490114", UFMG, false, ErrUFNotImplemented},
+		{"valid MG", "0623079040081", UFMG, true, nil},
+		{"valid MG second", "4333908330177", UFMG, true, nil},
+		{"MG bad D2", "4333908330176", UFMG, false, nil},
+		{"MG bad D1", "4333908330167", UFMG, false, nil},
+		{"wrong length MG", "110042490114", UFMG, false, ErrInvalidFormat},
+		{"valid RS", "2243658792", UFRS, true, nil},
+		{"valid RS second", "0305169149", UFRS, true, nil},
+		{"RS bad DV", "2007693232", UFRS, false, nil},
+		{"valid PR", "1234567850", UFPR, true, nil},
+		{"valid PR second", "4447953604", UFPR, true, nil},
+		{"PR bad DV", "4447953640", UFPR, false, nil},
 		{"unimplemented UF RJ", "110042490114", UFRJ, false, ErrUFNotImplemented},
 		{"invalid UF zz", "110042490114", UF("ZZ"), false, ErrUFNotImplemented},
 	}

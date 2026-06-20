@@ -2,6 +2,7 @@ package selo
 
 import (
 	"fmt"
+	"slices"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -37,16 +38,22 @@ func TestGeneratePerson_Consistency(t *testing.T) {
 			assert.NoError(t, err)
 			assert.Equal(t, string(uf), cepUF, "cep origin")
 
-			// RG and IE only for the implemented UF (SP).
+			// RG is implemented only for SP.
 			if uf == UFSP {
 				assert.NotEmpty(t, p.RG)
 				assert.Truef(t, NewRG().Validate(p.RG), "RG %q", p.RG)
-				assert.NotEmpty(t, p.IE)
-				ieOK, ieErr := NewIE().ValidateUF(p.IE, UFSP)
-				assert.NoError(t, ieErr)
-				assert.Truef(t, ieOK, "IE %q", p.IE)
 			} else {
 				assert.Empty(t, p.RG)
+			}
+
+			// IE is populated for every UF with a verified IE algorithm and
+			// validates under that UF; empty for the rest.
+			if slices.Contains(NewIE().ImplementedUFs(), uf) {
+				assert.NotEmpty(t, p.IE)
+				ieOK, ieErr := NewIE().ValidateUF(p.IE, uf)
+				assert.NoError(t, ieErr)
+				assert.Truef(t, ieOK, "IE %q for %s", p.IE, uf)
+			} else {
 				assert.Empty(t, p.IE)
 			}
 
