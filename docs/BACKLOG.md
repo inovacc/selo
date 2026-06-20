@@ -110,6 +110,13 @@ states instead of SP/RJ.
     algorithm is what's verified; the code applies the *same* algorithm to **RJ**, but no
     independent RJ-specific source was found — confirm RJ before relying on it or building
     multi-state RG on top.
+  - **Update (item 8, 2026-06-19):** research indicates **RJ uses a different RG algorithm than
+    SP** (an SP-valid RG can be invalid under RJ rules), so the current RJ reuse of the SP algorithm
+    is **likely incorrect**. No authoritative SSP-RJ algorithm or verifiable samples were
+    obtainable. Fix path: source the SSP-RJ spec + ≥2 real samples, or demote `UFRJ` to
+    `ErrUFNotImplemented` until verified. See ISSUES.md. **IE next batch (MG/RJ/RS/PR)** likewise
+    stays deferred — RJ IE's DV rule was found (mod 11, remainder ≤1→0 else 11−remainder) but its
+    weight vector and ≥2 verifiable samples were not.
 - **RNM (Registro Nacional Migratório)** — the foreigner ID on the CRNM card. **Researched
   2026-06-19, deferred** (owner's call) for lack of a verifiable spec: the RNM is an *opaque*
   alphanumeric sequence "derived from personal data + fingerprints" with **no public format or

@@ -11,10 +11,14 @@ prioritized work in [BACKLOG.md](BACKLOG.md).
 `(false, ErrUFNotImplemented)`. **RG check digits are not nationally standardized** — other states
 use different schemes. *Workaround:* check `ImplementedUFs()` before relying on a UF.
 
-### RJ RG uses the SP algorithm but is not independently verified
-The code applies the same algorithm to SP and RJ. The **SP** convention is verified against four
-independent sources (see `TestRG_AuthoritativeSamples` and BACKLOG); no independent **RJ**-specific
-source was found. Verify RJ before depending on it or building multi-state RG on top.
+### RG RJ likely uses the WRONG algorithm (it reuses SP's)
+`RG.ValidateUF(value, UFRJ)` reuses the **SP** algorithm. SP is verified against four independent
+sources (`TestRG_AuthoritativeSamples`), but research (2026-06-19, "steps:next" item 8) found that
+**RJ uses a *different* algorithm** — an RG valid under SP rules can be invalid under RJ's. No
+authoritative RJ algorithm or verifiable samples were obtainable, so **RJ validation is likely
+incorrect** (may accept fake RJ RGs and reject real ones). **Recommended:** obtain the SSP-RJ
+algorithm + ≥2 real samples and fix it, OR demote `UFRJ` to `ErrUFNotImplemented` until verified
+(stops returning wrong answers — a small behavior change). Tracked in BACKLOG (Multi-state RG).
 
 ### Inscrição Estadual supports only SP
 Only SP is implemented and verified (two sourced samples). MG/RJ/RS/PR were researched but deferred
