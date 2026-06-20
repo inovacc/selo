@@ -1,0 +1,200 @@
+{
+  "kind": "phone",
+  "group": "F",
+  "validate": [
+    {
+      "input": "53926726521",
+      "valid": true
+    },
+    {
+      "input": "5126738004",
+      "valid": true
+    },
+    {
+      "input": "2835896079",
+      "valid": true
+    },
+    {
+      "input": "7422298915",
+      "valid": true
+    },
+    {
+      "input": "13977178925",
+      "valid": true
+    },
+    {
+      "input": "5158232477",
+      "valid": true
+    },
+    {
+      "input": "42901930194",
+      "valid": true
+    },
+    {
+      "input": "4748901787",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "(00) 1234-5678",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "0099999999",
+      "valid": false
+    },
+    {
+      "input": "11111111111",
+      "valid": false
+    },
+    {
+      "input": "11912345",
+      "valid": false
+    },
+    {
+      "input": "283589607",
+      "valid": false
+    },
+    {
+      "input": "474890178",
+      "valid": false
+    },
+    {
+      "input": "512673800",
+      "valid": false
+    },
+    {
+      "input": "515823247",
+      "valid": false
+    },
+    {
+      "input": "742229891",
+      "valid": false
+    },
+    {
+      "input": "999999999999",
+      "valid": false
+    },
+    {
+      "input": "Z126738004",
+      "valid": false
+    },
+    {
+      "input": "Z158232477",
+      "valid": false
+    },
+    {
+      "input": "Z2901930194",
+      "valid": false
+    },
+    {
+      "input": "Z3926726521",
+      "valid": false
+    },
+    {
+      "input": "Z3977178925",
+      "valid": false
+    },
+    {
+      "input": "Z422298915",
+      "valid": false
+    },
+    {
+      "input": "Z748901787",
+      "valid": false
+    },
+    {
+      "input": "Z835896079",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "53926726521",
+      "output": "(53) 92672-6521"
+    },
+    {
+      "input": "5126738004",
+      "output": "(51) 2673-8004"
+    },
+    {
+      "input": "2835896079",
+      "output": "(28) 3589-6079"
+    },
+    {
+      "input": "7422298915",
+      "output": "(74) 2229-8915"
+    },
+    {
+      "input": "13977178925",
+      "output": "(13) 97717-8925"
+    },
+    {
+      "input": "5158232477",
+      "output": "(51) 5823-2477"
+    },
+    {
+      "input": "42901930194",
+      "output": "(42) 90193-0194"
+    },
+    {
+      "input": "4748901787",
+      "output": "(47) 4890-1787"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidLength"
+    }
+  ],
+  "origin": [
+    {
+      "input": "53926726521",
+      "output": "RS"
+    },
+    {
+      "input": "5126738004",
+      "output": "RS"
+    },
+    {
+      "input": "2835896079",
+      "output": "ES"
+    },
+    {
+      "input": "7422298915",
+      "output": "BA"
+    },
+    {
+      "input": "13977178925",
+      "output": "SP"
+    },
+    {
+      "input": "5158232477",
+      "output": "RS"
+    },
+    {
+      "input": "42901930194",
+      "output": "PR"
+    },
+    {
+      "input": "4748901787",
+      "output": "SC"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

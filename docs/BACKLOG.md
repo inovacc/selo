@@ -78,10 +78,11 @@ multi-document fake-person generator).
 **Status:** SHIPPED across library (`GeneratePerson`), CLI (`selo person`), and MCP
 (`generate_person`), with UF-consistency verified across all 27 UFs.
 
-**Remaining enhancement — `WithSeed` (reproducible output):** the per-document
-generators use the goroutine-safe global `math/rand/v2`, which cannot be seeded
-per-call. Deterministic fixtures need the generators to accept a `*rand.Rand` source
-(or a parallel seeded construction path). Deferred. **Value: M, Effort: M.**
+**Reproducible output — `WithSeed`: ✅ SHIPPED (v1.3.0).** Every document type now implements
+`RandGenerator` (`GenerateRand(*math/rand/v2.Rand)`), the registry exposes `GenerateRand(kind, r)`,
+and `GeneratePerson` accepts `WithSeed(int64)` / `WithRand(*rand.Rand)` for deterministic fixtures.
+**Remaining:** expose `--seed` at the CLI (`selo person`) and MCP (`generate_person`) surfaces
+(v1.4.0).
 
 **Depends on:** nothing blocking; multi-state RG (v2) would let `Person.RG` cover all
 states instead of SP/RJ.
@@ -98,9 +99,11 @@ states instead of SP/RJ.
   remaining** (MG/RJ/RS/PR researched but deferred for lack of ≥2 verifiable samples; the
   rest unstarted). Architecture, SP sources, and the per-UF roadmap are in
   `docs/IE-NOTES.md`. **Value: H, Effort: L (remaining).**
-- **Multi-state RG** — extend `rg.go` beyond SP/RJ wherever per-UF check-digit rules are
-  documented; explicit `ErrUFNotImplemented` elsewhere (paemuri issue #22 ships only
-  SP/RJ). Unblocks `Person.RG` for all states. **Value: M, Effort: L.**
+- **Multi-state RG** — extend `rg.go` beyond SP wherever per-UF check-digit rules are documented;
+  explicit `ErrUFNotImplemented` elsewhere. **RJ was removed in v1.3.0** (its algorithm differs
+  from SP — see the update below); re-adding RJ or any other UF is blocked on an authoritative
+  algorithm plus ≥2 verifiable samples. Unblocks `Person.RG` for more states.
+  **Value: M, Effort: L (blocked on sources).**
   - RG SP/RJ convention **verified (A)** 2026-06-19 (plan 004): the implemented
     `DV = 11 - (sum mod 11)` with ascending weights 2..9 (10→'X', 11→'0') matches four
     independent sources — NG Matemática and "Tudo em AdvPL"/siga0984 state it verbatim;
@@ -133,29 +136,26 @@ states instead of SP/RJ.
 
 ## Hardening / Tech Debt
 
-- **CNPJ accepts all-zeros.** `CNPJ.Validate("00000000000000")` returns `true` (all-zero
-  input is mathematically check-digit-valid and CNPJ has no all-equal guard, unlike CPF
-  which rejects repeated-digit inputs via `notAcceptedCPF`). Add a symmetric all-equal /
-  all-zeros rejection to `CNPJ.Validate` for parity with CPF. **Value: M, Effort: S.**
-  (Note: this is a behavior change — gate it deliberately and update the regression tests.)
-- **`scanBuf` shared package-level buffer** in `cmd/selo/iohelper.go` is passed to every
-  `streamValidate` call; safe today (CLI invokes it serially) but a latent data race if it
-  were ever called concurrently. Make the buffer call-local. **Value: L, Effort: S.**
-- **`golangci-lint` gate not enforced locally** — the tool is not installed in the dev
-  environment, so M2C-4/M5-4 lint gates were satisfied by `go vet` only. Ensure CI runs
-  `golangci-lint run --fix ./... --timeout=5m`. **Value: M, Effort: S.**
 - **Per-call `SilenceUsage` inconsistency** — `runFormat`/`runOrigin` set
   `cmd.SilenceUsage = true` per-call while `runValidate`/`runFrom` rely on the root-level
   flag. Cosmetic; pick one approach. **Value: L, Effort: S.**
 - **Go 1.25 requirement (release note, not debt).** Adding the MCP `go-sdk` (v1.6.1)
-  bumped `go.mod`'s go directive from 1.24.0 → 1.25.0 (the sdk requires it). Document this
-  minimum-Go bump in the README/release notes; it is a consumer-visible requirement.
-- **CRLF line endings repo-wide (no `.gitattributes`).** Every `.go` file carries CRLF in
-  the Windows working tree (`core.autocrlf=true`), so a local `gofmt -l` flags them even
-  though committed blobs are LF and Linux CI is unaffected. Confirmed twice (plan 005 review
-  + final whole-branch review 2026-06-19). Fix: add `.gitattributes` with `*.go text eol=lf`
-  (and `*.{yml,yaml,md} text eol=lf`), then `git add --renormalize .` in a dedicated commit.
-  Pre-existing, not introduced by any one change. **Value: L, Effort: S.**
+  bumped `go.mod`'s go directive from 1.24.0 → 1.25.0 (the sdk requires it). Documented as a
+  consumer-visible minimum in the README and CHANGELOG.
+
+## Resolved (shipped)
+
+- **CNPJ all-zeros rejection — ✅ v1.1.0.** `CNPJ.Validate` rejects all-equal inputs
+  (e.g. `00000000000000`) via `allEqualBytes` (`cnpj.go`), matching CPF.
+- **`scanBuf` data race — ✅ v1.2.0.** The shared package-level scanner buffer was made
+  call-local in `cmd/selo/iohelper.go`.
+- **`.gitattributes` / CRLF — ✅ v1.2.0.** `* text=auto eol=lf` enforces LF repo-wide, settling
+  the local-vs-CI `gofmt` divergence on Windows.
+- **`golangci-lint` CI gate — ✅ v1.2.0.** CI runs the full `default: all` lint via the reusable
+  workflow (84 pre-existing issues cleared). It may still be absent in some dev environments;
+  install locally for parity (`go vet` is the local fallback).
+- **CLI `--uf` "not implemented" message — ✅ v1.2.0.** UF-scoped kinds (RG/IE) now surface the
+  real reason instead of a bare "invalid".
 
 ---
 

@@ -42,9 +42,17 @@ fabric.properties
 .scripts/
 .claude/
 
+# Local AI-tooling routing config (context-mode/omni/rtk/kody); not part of the
+# selo project — kept out of the public repo.
+/CLAUDE.md
+
 # Generated-language toolchain artifacts: the source/test/vector/scaffold files
 # under generated/** ARE committed as the reference output, but installed
 # dependencies and lockfiles are not.
 generated/**/node_modules/
 generated/**/package-lock.json
 generated/**/target/
+generated/**/__pycache__/
+generated/**/*.egg-info/
+generated/**/.pytest_cache/
+generated/**/.venv/

@@ -1,0 +1,190 @@
+{
+  "kind": "renavam",
+  "group": "A",
+  "validate": [
+    {
+      "input": "87640494418",
+      "valid": true
+    },
+    {
+      "input": "47551224734",
+      "valid": true
+    },
+    {
+      "input": "09310503268",
+      "valid": true
+    },
+    {
+      "input": "85180334149",
+      "valid": true
+    },
+    {
+      "input": "08829788048",
+      "valid": true
+    },
+    {
+      "input": "46000917263",
+      "valid": true
+    },
+    {
+      "input": "18450365568",
+      "valid": true
+    },
+    {
+      "input": "66625449951",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "0882978804",
+      "valid": false
+    },
+    {
+      "input": "08829788049",
+      "valid": false
+    },
+    {
+      "input": "0931050326",
+      "valid": false
+    },
+    {
+      "input": "09310503269",
+      "valid": false
+    },
+    {
+      "input": "11111111111",
+      "valid": false
+    },
+    {
+      "input": "1845036556",
+      "valid": false
+    },
+    {
+      "input": "18450365569",
+      "valid": false
+    },
+    {
+      "input": "4600091726",
+      "valid": false
+    },
+    {
+      "input": "46000917264",
+      "valid": false
+    },
+    {
+      "input": "4755122473",
+      "valid": false
+    },
+    {
+      "input": "47551224735",
+      "valid": false
+    },
+    {
+      "input": "6662544995",
+      "valid": false
+    },
+    {
+      "input": "66625449952",
+      "valid": false
+    },
+    {
+      "input": "8518033414",
+      "valid": false
+    },
+    {
+      "input": "85180334140",
+      "valid": false
+    },
+    {
+      "input": "8764049441",
+      "valid": false
+    },
+    {
+      "input": "87640494419",
+      "valid": false
+    },
+    {
+      "input": "Z5180334149",
+      "valid": false
+    },
+    {
+      "input": "Z6000917263",
+      "valid": false
+    },
+    {
+      "input": "Z6625449951",
+      "valid": false
+    },
+    {
+      "input": "Z7551224734",
+      "valid": false
+    },
+    {
+      "input": "Z7640494418",
+      "valid": false
+    },
+    {
+      "input": "Z8450365568",
+      "valid": false
+    },
+    {
+      "input": "Z8829788048",
+      "valid": false
+    },
+    {
+      "input": "Z9310503268",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "87640494418",
+      "output": "87640494418"
+    },
+    {
+      "input": "47551224734",
+      "output": "47551224734"
+    },
+    {
+      "input": "09310503268",
+      "output": "09310503268"
+    },
+    {
+      "input": "85180334149",
+      "output": "85180334149"
+    },
+    {
+      "input": "08829788048",
+      "output": "08829788048"
+    },
+    {
+      "input": "46000917263",
+      "output": "46000917263"
+    },
+    {
+      "input": "18450365568",
+      "output": "18450365568"
+    },
+    {
+      "input": "66625449951",
+      "output": "66625449951"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

@@ -1,0 +1,230 @@
+{
+  "kind": "cnpj",
+  "group": "C",
+  "validate": [
+    {
+      "input": "39.591.842/0000-10",
+      "valid": true
+    },
+    {
+      "input": "83572096224624",
+      "valid": true
+    },
+    {
+      "input": "D208WO9R752995",
+      "valid": true
+    },
+    {
+      "input": "J39ZA6AD60C870",
+      "valid": true
+    },
+    {
+      "input": "1QS9AR9402J603",
+      "valid": true
+    },
+    {
+      "input": "7WRB48VG06US77",
+      "valid": true
+    },
+    {
+      "input": "28FNBQ51Y60Q56",
+      "valid": true
+    },
+    {
+      "input": "C108M770UG5Z19",
+      "valid": true
+    },
+    {
+      "input": "4R81T948G3G400",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "1111111",
+      "valid": false
+    },
+    {
+      "input": "11111111",
+      "valid": false
+    },
+    {
+      "input": "111111111",
+      "valid": false
+    },
+    {
+      "input": "1111111111",
+      "valid": false
+    },
+    {
+      "input": "11111111111111",
+      "valid": false
+    },
+    {
+      "input": "1QS9AR9402J60",
+      "valid": false
+    },
+    {
+      "input": "1QS9AR9402J604",
+      "valid": false
+    },
+    {
+      "input": "28FNBQ51Y60Q5",
+      "valid": false
+    },
+    {
+      "input": "28FNBQ51Y60Q57",
+      "valid": false
+    },
+    {
+      "input": "39.591.842/0000-1",
+      "valid": false
+    },
+    {
+      "input": "39.591.842/0000-11",
+      "valid": false
+    },
+    {
+      "input": "4R81T948G3G40",
+      "valid": false
+    },
+    {
+      "input": "4R81T948G3G401",
+      "valid": false
+    },
+    {
+      "input": "7WRB48VG06US7",
+      "valid": false
+    },
+    {
+      "input": "7WRB48VG06US78",
+      "valid": false
+    },
+    {
+      "input": "8357209622462",
+      "valid": false
+    },
+    {
+      "input": "83572096224625",
+      "valid": false
+    },
+    {
+      "input": "C108M770UG5Z1",
+      "valid": false
+    },
+    {
+      "input": "C108M770UG5Z10",
+      "valid": false
+    },
+    {
+      "input": "CZ08M770UG5Z19",
+      "valid": false
+    },
+    {
+      "input": "D208WO9R75299",
+      "valid": false
+    },
+    {
+      "input": "D208WO9R752996",
+      "valid": false
+    },
+    {
+      "input": "DZ08WO9R752995",
+      "valid": false
+    },
+    {
+      "input": "J39ZA6AD60C87",
+      "valid": false
+    },
+    {
+      "input": "J39ZA6AD60C871",
+      "valid": false
+    },
+    {
+      "input": "JZ9ZA6AD60C870",
+      "valid": false
+    },
+    {
+      "input": "Z3572096224624",
+      "valid": false
+    },
+    {
+      "input": "Z8FNBQ51Y60Q56",
+      "valid": false
+    },
+    {
+      "input": "Z9.591.842/0000-10",
+      "valid": false
+    },
+    {
+      "input": "ZQS9AR9402J603",
+      "valid": false
+    },
+    {
+      "input": "ZR81T948G3G400",
+      "valid": false
+    },
+    {
+      "input": "ZWRB48VG06US77",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "39.591.842/0000-10",
+      "output": "39.591.842/0000-10"
+    },
+    {
+      "input": "83572096224624",
+      "output": "83.572.096/2246-24"
+    },
+    {
+      "input": "D208WO9R752995",
+      "output": "D2.08W.O9R/7529-95"
+    },
+    {
+      "input": "J39ZA6AD60C870",
+      "output": "J3.9ZA.6AD/60C8-70"
+    },
+    {
+      "input": "1QS9AR9402J603",
+      "output": "1Q.S9A.R94/02J6-03"
+    },
+    {
+      "input": "7WRB48VG06US77",
+      "output": "7W.RB4.8VG/06US-77"
+    },
+    {
+      "input": "28FNBQ51Y60Q56",
+      "output": "28.FNB.Q51/Y60Q-56"
+    },
+    {
+      "input": "C108M770UG5Z19",
+      "output": "C1.08M.770/UG5Z-19"
+    },
+    {
+      "input": "4R81T948G3G400",
+      "output": "4R.81T.948/G3G4-00"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalid"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

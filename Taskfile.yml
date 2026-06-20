@@ -123,11 +123,30 @@ tasks:
             echo "dotnet not found; skipping xUnit (generated C# still emitted)"
           fi
 
+  gen:python:
+    desc: Emit the Python target into generated/python (all 13 kinds)
+    cmds:
+      - go run ./cmd/selo gen --lang python --kind all --out generated/python
+
+  gen:verify:python:
+    desc: Emit the Python target, then install it and run the pytest suite (needs python)
+    cmds:
+      - task: gen:python
+      - cmd: |
+          if command -v python >/dev/null 2>&1; then
+            cd generated/python && python -m pip install -e . pytest && python -m pytest -q
+          elif command -v python3 >/dev/null 2>&1; then
+            cd generated/python && python3 -m pip install -e . pytest && python3 -m pytest -q
+          else
+            echo "python not found; skipping pytest (generated Python still emitted)"
+          fi
+
   gen:all:
-    desc: Emit all five language targets
+    desc: Emit all six language targets
     cmds:
       - task: gen:ts
       - task: gen:js
       - task: gen:ruby
       - task: gen:java
       - task: gen:csharp
+      - task: gen:python

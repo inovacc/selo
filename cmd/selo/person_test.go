@@ -49,3 +49,25 @@ func TestPersonCmd_InvalidUF(t *testing.T) {
 	_, err := runCmd(t, "person", "--uf", "ZZ")
 	require.Error(t, err)
 }
+
+func TestPersonCmd_Deterministic(t *testing.T) {
+	// Same seed → byte-identical output across runs.
+	out1, err := runCmd(t, "person", "--seed", "42", "--uf", "SP", "--count", "3", "--json")
+	require.NoError(t, err)
+	out2, err := runCmd(t, "person", "--seed", "42", "--uf", "SP", "--count", "3", "--json")
+	require.NoError(t, err)
+	assert.Equal(t, out1, out2, "same seed must produce identical output")
+
+	// A different seed → different output.
+	out3, err := runCmd(t, "person", "--seed", "99", "--uf", "SP", "--count", "3", "--json")
+	require.NoError(t, err)
+	assert.NotEqual(t, out1, out3, "a different seed should produce different output")
+
+	// Within one seeded batch the people are distinct (shared advancing stream),
+	// not three copies of the same person.
+	var people []sdk.Person
+	require.NoError(t, json.Unmarshal([]byte(out1), &people))
+	require.Len(t, people, 3)
+	assert.NotEqual(t, people[0].CPF, people[1].CPF, "seeded batch must yield distinct people")
+	assert.NotEqual(t, people[1].CPF, people[2].CPF, "seeded batch must yield distinct people")
+}

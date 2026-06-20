@@ -65,11 +65,24 @@ func WithCompany() PersonOption { return func(o *personOpts) { o.withCompany = t
 // Formatted returns every document in its canonical masked form instead of raw digits.
 func Formatted() PersonOption { return func(o *personOpts) { o.formatted = true } }
 
+// NewSeededRand returns a deterministic *rand.Rand seeded from seed: the same
+// seed always yields the same sequence. Pass it to WithRand (or to a document
+// type's GenerateRand) for reproducible output. Sharing one source across
+// several GeneratePerson calls keeps the whole batch reproducible while still
+// yielding distinct people — the stream advances between draws.
+func NewSeededRand(seed int64) *rand.Rand {
+	return rand.New(rand.NewPCG(uint64(seed), uint64(seed>>32)))
+}
+
 // WithSeed pins the random source to a deterministic seed. Same seed + same
-// options always produces the same Person (useful for test fixtures).
+// options always produces the same Person (useful for a single test fixture).
+// Note: each GeneratePerson call re-runs this option and re-seeds, so reusing
+// one WithSeed across a batch yields identical people — for a reproducible
+// batch of distinct people, build one source with NewSeededRand and pass it
+// via WithRand.
 func WithSeed(seed int64) PersonOption {
 	return func(o *personOpts) {
-		o.r = rand.New(rand.NewPCG(uint64(seed), uint64(seed>>32)))
+		o.r = NewSeededRand(seed)
 	}
 }
 

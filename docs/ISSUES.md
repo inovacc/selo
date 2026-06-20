@@ -29,14 +29,13 @@ documented honestly in the tests and IE-NOTES.md.
 
 ## Behavioral limitations
 
-### `GeneratePerson` and generators are not reproducible
-Generators use `math/rand/v2`'s global, non-seedable source, so output cannot be pinned for
-deterministic fixtures. Tracked as a planned `WithSeed`/`*rand.Rand` refactor in BACKLOG/ROADMAP.
-
-### CLI reports unimplemented `--uf` as "invalid"
-For a UF-scoped kind, `selo rg --uf AC` (or `ie --uf AC`) prints `invalid` and exits 1 rather than a
-distinct "UF not implemented" message. The underlying API does return `ErrUFNotImplemented`; this is
-a CLI UX nicety, not a correctness issue. Shared by RG and IE.
+### Default `Generate()` is non-seedable; deterministic generation requires the seeded API
+The default `Generate()` / `GeneratePerson()` paths use `math/rand/v2`'s global, non-seedable
+source. For reproducible fixtures use the seeded API (shipped v1.3.0): `GeneratePerson(WithSeed(n))`
+or `WithRand(r)`, the registry `GenerateRand(kind, r)` helper, and the `RandGenerator` interface
+(`GenerateRand(*rand.Rand)`) on every document type — the same seed yields identical output. The
+same seed is available at the CLI (`selo person --seed N`) and MCP (`generate_person` `seed`)
+surfaces (v1.4.0).
 
 ### `Generate` returns masked output
 For consistency with the existing RG/IE generators, `Generate()` returns the canonical masked form

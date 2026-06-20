@@ -81,6 +81,7 @@ type PersonInput struct {
 	WithVehicle bool   `json:"with_vehicle,omitempty" jsonschema:"also generate a linked vehicle (plate + renavam)"`
 	WithCompany bool   `json:"with_company,omitempty" jsonschema:"also generate a linked company (cnpj)"`
 	Formatted   bool   `json:"formatted,omitempty" jsonschema:"return documents in canonical masked form"`
+	Seed        int64  `json:"seed,omitempty" jsonschema:"pin the random seed for deterministic, reproducible output; 0 (omitted) means random"`
 }
 
 // PersonOutput is the typed output for the generate_person tool.
@@ -90,7 +91,7 @@ type PersonOutput struct {
 
 // GenerateCodeInput is the typed input for the generate_code tool.
 type GenerateCodeInput struct {
-	Lang string `json:"lang" jsonschema:"target language: ts, js, ruby, java, or csharp"`
+	Lang string `json:"lang" jsonschema:"target language: ts, js, ruby, java, csharp, or python"`
 	Kind string `json:"kind" jsonschema:"document kind to generate code for, e.g. cpf"`
 }
 
@@ -234,6 +235,12 @@ func personHandler(_ context.Context, _ *mcp.CallToolRequest, in PersonInput) (*
 
 	var opts []selo.PersonOption
 
+	if in.Seed != 0 {
+		// One shared source so a count batch is reproducible yet still yields
+		// distinct people (the stream advances per draw).
+		opts = append(opts, selo.WithRand(selo.NewSeededRand(in.Seed)))
+	}
+
 	if in.UF != "" {
 		uf := selo.UF(in.UF)
 		if !uf.Valid() {
@@ -340,7 +347,7 @@ func NewServer(version string) *mcp.Server {
 
 	mcp.AddTool(srv, &mcp.Tool{
 		Name:        "generate_code",
-		Description: "Generate validate/format/origin code (with golden vectors and a test) for a Brazilian document kind in a target language (ts, js, ruby, java, csharp).",
+		Description: "Generate validate/format/origin code (with golden vectors and a test) for a Brazilian document kind in a target language (ts, js, ruby, java, csharp, python).",
 	}, generateCodeHandler)
 
 	return srv

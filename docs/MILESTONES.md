@@ -35,7 +35,7 @@ document toolkit, and the post-build hardening (advisor plans 001–006).
   check-digit convention verified against authoritative sources; Inscrição Estadual SP shipped.
 - **Test Coverage:** 92.2% total (core 94.2%, compat 95.3%, cmd/selo 87.0%, mcp 84.4%).
 
-## v1.2.0 — Multi-language code generation + CLI polish — 🔜 RELEASING (2026-06-19)
+## v1.2.0 — Multi-language code generation + CLI polish — ✅ RELEASED (2026-06-19, tag `v1.2.0`)
 - **Goal:** generate validators in other languages from the verified Go algorithms, plus CLI and
   quality polish.
 - **Code generation (`selo gen`):** validate/format/origin for all 13 kinds in TypeScript,
@@ -49,14 +49,38 @@ document toolkit, and the post-build hardening (advisor plans 001–006).
   error-path coverage 85% → 93%.
 - **Coverage target:** ≥85% per package (met).
 
-## v1.3.0 — Breadth — 🔜 PLANNED
-- **Goal:** broaden UF coverage and reproducibility.
-- Candidate scope:
-  - Inscrição Estadual next batch (MG, RJ, RS, PR) — each gated by an authoritative algorithm
-    plus ≥2 verifiable samples.
-  - Multi-state RG (verify RJ independently, then add documented UFs).
-  - `GenPerson` seedable generation for deterministic fixtures.
-  - Cross-language `generate()` parity in the codegen targets.
+## v1.3.0 — Generate parity + seedable generation + RG correctness — ✅ RELEASED (2026-06-19, tag `v1.3.0`)
+- **Goal:** cross-language generation parity, reproducible generation, and an RG correctness fix.
+- **Cross-language `generate()` parity:** every codegen target (TypeScript, JavaScript, Ruby,
+  Java, C#) now emits `generate<Kind>()` for all 13 kinds alongside validate/format/origin, each
+  with a generate→validate round-trip test verified by the CI matrix on real toolchains.
+- **Seedable / deterministic generation:** a `RandGenerator` capability interface
+  (`GenerateRand(*math/rand/v2.Rand)`) on every document type, a registry `GenerateRand(kind, r)`
+  helper, and `GeneratePerson` `WithSeed(int64)` / `WithRand(*rand.Rand)` options — the same seed
+  produces identical output. Default `Generate()` stays random (PIX still uses `crypto/rand`).
+- **RG correctness:** `UFRJ` demoted to `ErrUFNotImplemented` (research found RJ's algorithm
+  differs from SP; validating RJ with SP's algorithm was likely wrong). `ImplementedUFs()` lists
+  SP only. Behavior change for callers relying on `--uf RJ`.
+- **Test Coverage:** ≥85% per package (maintained).
+
+## v1.4.0 — Surface the seed + a 6th codegen language — 🔜 RELEASING (2026-06-19)
+- **Goal:** expose seedable generation at the CLI/MCP surfaces and widen codegen reach.
+- Shipped:
+  - ✅ CLI `selo person --seed N` and MCP `generate_person` `seed` param (library already supported
+    it via `WithSeed`); a `--count` batch shares one seeded source — reproducible yet distinct.
+  - ✅ **Python** codegen target (6th language) — validate/format/origin/generate for all 13 kinds,
+    Go-produced golden vectors + a pytest suite (686 tests) + a CI-matrix lane.
+  - ✅ CLI consistency: unified per-command `SilenceUsage` on the root command.
+- **Blocked (need verifiable sources):** Inscrição Estadual beyond SP (26 UFs), multi-state RG /
+  re-adding RJ, and RNM — each gated on an authoritative algorithm plus ≥2 verifiable samples.
+- **Coverage target:** maintain ≥85% per package.
+
+## v1.5.0 — Breadth — 🔜 PLANNED
+- **Goal:** broaden UF coverage once authoritative sources are obtained.
+- Candidate scope (each gated by an authoritative algorithm + ≥2 verifiable samples):
+  - Inscrição Estadual next batch (MG, RJ, RS, PR), then the remaining UFs.
+  - Multi-state RG (re-verify RJ independently, then add documented UFs).
+  - RNM (Registro Nacional Migratório) — blocked on a public format + check-digit spec.
 - **Coverage target:** maintain ≥85% per package.
 
 ## v2.0.0 — Cleanup (breaking) — 🔮 FUTURE

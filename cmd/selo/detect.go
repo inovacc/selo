@@ -19,7 +19,6 @@ func newDetectCmd() *cobra.Command {
 			kind, ok := sdk.Detect(args[0])
 			if !ok {
 				_, _ = fmt.Fprintln(cmd.OutOrStdout(), "unknown")
-				cmd.SilenceUsage = true
 
 				return errInvalidInput
 			}

@@ -18,6 +18,7 @@ func newPersonCmd() *cobra.Command {
 		ufFlag                           string
 		asJSON, withVehicle, withCompany bool
 		formatted                        bool
+		seed                             int64
 	)
 
 	cmd := &cobra.Command{
@@ -29,6 +30,7 @@ func newPersonCmd() *cobra.Command {
 		Args: cobra.NoArgs,
 		Example: "selo person\n" +
 			"selo person --count 5 --uf SP --json\n" +
+			"selo person --uf SP --seed 42 --json\n" +
 			"selo person --uf RJ --with-vehicle --with-company --formatted",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if count < 1 {
@@ -36,6 +38,12 @@ func newPersonCmd() *cobra.Command {
 			}
 
 			var opts []sdk.PersonOption
+
+			if cmd.Flags().Changed("seed") {
+				// One shared source so a --count batch is reproducible yet
+				// still yields distinct people (the stream advances per draw).
+				opts = append(opts, sdk.WithRand(sdk.NewSeededRand(seed)))
+			}
 
 			if ufFlag != "" {
 				uf := sdk.UF(strings.ToUpper(ufFlag))
@@ -92,6 +100,7 @@ func newPersonCmd() *cobra.Command {
 	cmd.Flags().BoolVar(&withVehicle, "with-vehicle", false, "also generate a vehicle (plate + RENAVAM)")
 	cmd.Flags().BoolVar(&withCompany, "with-company", false, "also generate a company (CNPJ)")
 	cmd.Flags().BoolVar(&formatted, "formatted", false, "output documents in masked form")
+	cmd.Flags().Int64Var(&seed, "seed", 0, "pin the random seed for deterministic, reproducible output")
 
 	return cmd
 }

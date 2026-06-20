@@ -17,19 +17,20 @@ import (
 // Lang is a target language identifier for code generation.
 type Lang string
 
-// The five supported target languages (design spec §1).
+// The six supported target languages (design spec §1).
 const (
 	LangTS     Lang = "ts"
 	LangJS     Lang = "js"
 	LangRuby   Lang = "ruby"
 	LangJava   Lang = "java"
 	LangCSharp Lang = "csharp"
+	LangPython Lang = "python"
 )
 
 // supportedLangs is the fixed, ordered set of languages the generator targets.
 // It is independent of which emitters are registered so the CLI/MCP can always
 // advertise the roadmap even before an emitter exists.
-var supportedLangs = []Lang{LangTS, LangJS, LangRuby, LangJava, LangCSharp}
+var supportedLangs = []Lang{LangTS, LangJS, LangRuby, LangJava, LangCSharp, LangPython}
 
 // File is a single generated artifact: a path relative to the output root and
 // its contents.

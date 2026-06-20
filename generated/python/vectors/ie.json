@@ -1,0 +1,237 @@
+{
+  "kind": "ie",
+  "group": "A",
+  "validate": [
+    {
+      "input": "110.042.490.114",
+      "valid": true
+    },
+    {
+      "input": "388.108.598.269",
+      "valid": true
+    },
+    {
+      "input": "025.544.538.005",
+      "valid": true
+    },
+    {
+      "input": "646.645.366.363",
+      "valid": true
+    },
+    {
+      "input": "807.592.903.777",
+      "valid": true
+    },
+    {
+      "input": "733.409.377.213",
+      "valid": true
+    },
+    {
+      "input": "161.387.290.828",
+      "valid": true
+    },
+    {
+      "input": "445.747.145.706",
+      "valid": true
+    },
+    {
+      "input": "110.957.771.611",
+      "valid": true
+    },
+    {
+      "input": "390.898.389.695",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "025.544.538.00",
+      "valid": false
+    },
+    {
+      "input": "025.544.538.006",
+      "valid": false
+    },
+    {
+      "input": "110.042.490.11",
+      "valid": false
+    },
+    {
+      "input": "110.042.490.115",
+      "valid": false
+    },
+    {
+      "input": "110.957.771.61",
+      "valid": false
+    },
+    {
+      "input": "110.957.771.612",
+      "valid": false
+    },
+    {
+      "input": "111111111111",
+      "valid": false
+    },
+    {
+      "input": "161.387.290.82",
+      "valid": false
+    },
+    {
+      "input": "161.387.290.829",
+      "valid": false
+    },
+    {
+      "input": "388.108.598.26",
+      "valid": false
+    },
+    {
+      "input": "388.108.598.260",
+      "valid": false
+    },
+    {
+      "input": "390.898.389.69",
+      "valid": false
+    },
+    {
+      "input": "390.898.389.696",
+      "valid": false
+    },
+    {
+      "input": "445.747.145.70",
+      "valid": false
+    },
+    {
+      "input": "445.747.145.707",
+      "valid": false
+    },
+    {
+      "input": "646.645.366.36",
+      "valid": false
+    },
+    {
+      "input": "646.645.366.364",
+      "valid": false
+    },
+    {
+      "input": "733.409.377.21",
+      "valid": false
+    },
+    {
+      "input": "733.409.377.214",
+      "valid": false
+    },
+    {
+      "input": "807.592.903.77",
+      "valid": false
+    },
+    {
+      "input": "807.592.903.778",
+      "valid": false
+    },
+    {
+      "input": "Z07.592.903.777",
+      "valid": false
+    },
+    {
+      "input": "Z10.042.490.114",
+      "valid": false
+    },
+    {
+      "input": "Z10.957.771.611",
+      "valid": false
+    },
+    {
+      "input": "Z25.544.538.005",
+      "valid": false
+    },
+    {
+      "input": "Z33.409.377.213",
+      "valid": false
+    },
+    {
+      "input": "Z45.747.145.706",
+      "valid": false
+    },
+    {
+      "input": "Z46.645.366.363",
+      "valid": false
+    },
+    {
+      "input": "Z61.387.290.828",
+      "valid": false
+    },
+    {
+      "input": "Z88.108.598.269",
+      "valid": false
+    },
+    {
+      "input": "Z90.898.389.695",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "110.042.490.114",
+      "output": "110.042.490.114"
+    },
+    {
+      "input": "388.108.598.269",
+      "output": "388.108.598.269"
+    },
+    {
+      "input": "025.544.538.005",
+      "output": "025.544.538.005"
+    },
+    {
+      "input": "646.645.366.363",
+      "output": "646.645.366.363"
+    },
+    {
+      "input": "807.592.903.777",
+      "output": "807.592.903.777"
+    },
+    {
+      "input": "733.409.377.213",
+      "output": "733.409.377.213"
+    },
+    {
+      "input": "161.387.290.828",
+      "output": "161.387.290.828"
+    },
+    {
+      "input": "445.747.145.706",
+      "output": "445.747.145.706"
+    },
+    {
+      "input": "110.957.771.611",
+      "output": "110.957.771.611"
+    },
+    {
+      "input": "390.898.389.695",
+      "output": "390.898.389.695"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidFormat"
+    }
+  ],
+  "ufScoped": true,
+  "ufs": [
+    "SP"
+  ],
+  "generateRoundTrip": 100
+}

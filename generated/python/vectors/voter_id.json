@@ -1,0 +1,240 @@
+{
+  "kind": "voter_id",
+  "group": "F",
+  "validate": [
+    {
+      "input": "991874151830",
+      "valid": true
+    },
+    {
+      "input": "327672632038",
+      "valid": true
+    },
+    {
+      "input": "012171470663",
+      "valid": true
+    },
+    {
+      "input": "547377341473",
+      "valid": true
+    },
+    {
+      "input": "052627611660",
+      "valid": true
+    },
+    {
+      "input": "904325601511",
+      "valid": true
+    },
+    {
+      "input": "544260462755",
+      "valid": true
+    },
+    {
+      "input": "950660312801",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "01217147066",
+      "valid": false
+    },
+    {
+      "input": "012171470664",
+      "valid": false
+    },
+    {
+      "input": "05262761166",
+      "valid": false
+    },
+    {
+      "input": "052627611661",
+      "valid": false
+    },
+    {
+      "input": "111111111111",
+      "valid": false
+    },
+    {
+      "input": "12345678",
+      "valid": false
+    },
+    {
+      "input": "1234567890123",
+      "valid": false
+    },
+    {
+      "input": "32767263203",
+      "valid": false
+    },
+    {
+      "input": "327672632039",
+      "valid": false
+    },
+    {
+      "input": "54426046275",
+      "valid": false
+    },
+    {
+      "input": "544260462756",
+      "valid": false
+    },
+    {
+      "input": "54737734147",
+      "valid": false
+    },
+    {
+      "input": "547377341474",
+      "valid": false
+    },
+    {
+      "input": "90432560151",
+      "valid": false
+    },
+    {
+      "input": "904325601512",
+      "valid": false
+    },
+    {
+      "input": "95066031280",
+      "valid": false
+    },
+    {
+      "input": "950660312802",
+      "valid": false
+    },
+    {
+      "input": "99187415183",
+      "valid": false
+    },
+    {
+      "input": "991874151831",
+      "valid": false
+    },
+    {
+      "input": "Z04325601511",
+      "valid": false
+    },
+    {
+      "input": "Z12171470663",
+      "valid": false
+    },
+    {
+      "input": "Z27672632038",
+      "valid": false
+    },
+    {
+      "input": "Z44260462755",
+      "valid": false
+    },
+    {
+      "input": "Z47377341473",
+      "valid": false
+    },
+    {
+      "input": "Z50660312801",
+      "valid": false
+    },
+    {
+      "input": "Z52627611660",
+      "valid": false
+    },
+    {
+      "input": "Z91874151830",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "991874151830",
+      "output": "9918 7415 1830"
+    },
+    {
+      "input": "327672632038",
+      "output": "3276 7263 2038"
+    },
+    {
+      "input": "012171470663",
+      "output": "0121 7147 0663"
+    },
+    {
+      "input": "547377341473",
+      "output": "5473 7734 1473"
+    },
+    {
+      "input": "052627611660",
+      "output": "0526 2761 1660"
+    },
+    {
+      "input": "904325601511",
+      "output": "9043 2560 1511"
+    },
+    {
+      "input": "544260462755",
+      "output": "5442 6046 2755"
+    },
+    {
+      "input": "950660312801",
+      "output": "9506 6031 2801"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidLength"
+    }
+  ],
+  "origin": [
+    {
+      "input": "991874151830",
+      "output": "Mato Grosso"
+    },
+    {
+      "input": "327672632038",
+      "output": "Distrito Federal"
+    },
+    {
+      "input": "012171470663",
+      "output": "Paraná"
+    },
+    {
+      "input": "547377341473",
+      "output": "Espírito Santo"
+    },
+    {
+      "input": "052627611660",
+      "output": "Rio Grande do Norte"
+    },
+    {
+      "input": "904325601511",
+      "output": "Piauí"
+    },
+    {
+      "input": "544260462755",
+      "output": "Tocantins"
+    },
+    {
+      "input": "950660312801",
+      "output": "Exterior"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

@@ -32,8 +32,8 @@
 **CLI/MCP**: derive from the registry's `Kinds()`, and the `--uf` flag is already wired for
 `UFScoped` kinds — so once IE registered, `selo ie --uf SP --validate <n>` works with **no
 CLI/MCP edits**. Verified: `selo ie --uf SP --validate 110.042.490.114` → `valid` (exit 0).
-Minor UX note (shared with RG, out of scope): an unimplemented `--uf` prints `invalid`/exit 1
-rather than a distinct "UF not implemented" message — a future CLI polish, not an IE bug.
+UX note (shared with RG): an unimplemented `--uf` now surfaces a distinct "UF not implemented"
+message (fixed in v1.2.0) — `ValidateUF` returns `ErrUFNotImplemented` and the CLI reports it.
 
 ## Per-UF status
 

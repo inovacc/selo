@@ -9,18 +9,18 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// TestSupportedLangs asserts the fixed five-language target set and its string
+// TestSupportedLangs asserts the fixed six-language target set and its string
 // form, which the CLI/MCP advertise.
 func TestSupportedLangs(t *testing.T) {
 	assert.Equal(t,
-		[]string{"ts", "js", "ruby", "java", "csharp"},
+		[]string{"ts", "js", "ruby", "java", "csharp", "python"},
 		codegen.SupportedLangStrings())
 
-	for _, l := range []string{"ts", "js", "ruby", "java", "csharp"} {
+	for _, l := range []string{"ts", "js", "ruby", "java", "csharp", "python"} {
 		assert.Truef(t, codegen.IsSupportedLang(l), "expected %q supported", l)
 	}
 
-	assert.False(t, codegen.IsSupportedLang("python"))
+	assert.False(t, codegen.IsSupportedLang("rust"))
 	assert.False(t, codegen.IsSupportedLang(""))
 }
 
@@ -39,10 +39,10 @@ func TestKindStrings(t *testing.T) {
 }
 
 // TestEmitterRegistry_AllRegistered asserts every target language's emitter is
-// registered (M2–M6: ts, js, ruby, java, csharp).
+// registered (M2–M6: ts, js, ruby, java, csharp, python).
 func TestEmitterRegistry_AllRegistered(t *testing.T) {
 	for _, l := range []codegen.Lang{
-		codegen.LangTS, codegen.LangJS, codegen.LangRuby, codegen.LangJava, codegen.LangCSharp,
+		codegen.LangTS, codegen.LangJS, codegen.LangRuby, codegen.LangJava, codegen.LangCSharp, codegen.LangPython,
 	} {
 		e, ok := codegen.EmitterFor(l)
 		require.Truef(t, ok, "emitter should be registered for %q", l)

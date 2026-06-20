@@ -313,6 +313,35 @@ func TestGeneratePersonTool(t *testing.T) {
 	require.Len(t, fmtOut.People, 1)
 }
 
+func TestGeneratePersonToolDeterministic(t *testing.T) {
+	ctx, cs := newTestSession(t)
+
+	call := func(seed int) PersonOutput {
+		res, err := cs.CallTool(ctx, &mcp.CallToolParams{
+			Name:      "generate_person",
+			Arguments: map[string]any{"uf": "SP", "count": 3, "seed": seed},
+		})
+		require.NoError(t, err)
+
+		var out PersonOutput
+		decodeResult(t, res, &out)
+
+		return out
+	}
+
+	a := call(42)
+	b := call(42)
+	require.Len(t, a.People, 3)
+	assert.Equal(t, a.People, b.People, "same seed must produce identical people")
+
+	c := call(99)
+	assert.NotEqual(t, a.People, c.People, "a different seed should produce different people")
+
+	// Distinct within the seeded batch (shared advancing stream).
+	assert.NotEqual(t, a.People[0].CPF, a.People[1].CPF, "seeded batch must yield distinct people")
+	assert.NotEqual(t, a.People[1].CPF, a.People[2].CPF, "seeded batch must yield distinct people")
+}
+
 func TestGenerateCodeTool(t *testing.T) {
 	ctx, cs := newTestSession(t)
 

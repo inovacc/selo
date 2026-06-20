@@ -189,7 +189,6 @@ func runFrom(cmd *cobra.Command, doc sdk.Document, from string) error {
 func runFormat(cmd *cobra.Command, doc sdk.Document, value string) error {
 	formatted, err := doc.Format(value)
 	if err != nil {
-		cmd.SilenceUsage = true
 		return err
 	}
 
@@ -206,7 +205,6 @@ func runOrigin(cmd *cobra.Command, doc sdk.Document, value string) error {
 
 	origin, err := r.Origin(value)
 	if err != nil {
-		cmd.SilenceUsage = true
 		return err
 	}
 

@@ -1,0 +1,186 @@
+{
+  "kind": "plate",
+  "group": "D",
+  "validate": [
+    {
+      "input": "ZAW9886",
+      "valid": true
+    },
+    {
+      "input": "UXO8872",
+      "valid": true
+    },
+    {
+      "input": "EDU9596",
+      "valid": true
+    },
+    {
+      "input": "RXF4701",
+      "valid": true
+    },
+    {
+      "input": "ASV8080",
+      "valid": true
+    },
+    {
+      "input": "HME5611",
+      "valid": true
+    },
+    {
+      "input": "FDD5291",
+      "valid": true
+    },
+    {
+      "input": "ORX5850",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "1111",
+      "valid": false
+    },
+    {
+      "input": "1234567",
+      "valid": false
+    },
+    {
+      "input": "AB-1234",
+      "valid": false
+    },
+    {
+      "input": "ABC-123",
+      "valid": false
+    },
+    {
+      "input": "ABC12345",
+      "valid": false
+    },
+    {
+      "input": "ABCD123",
+      "valid": false
+    },
+    {
+      "input": "ASV808",
+      "valid": false
+    },
+    {
+      "input": "ASVZ080",
+      "valid": false
+    },
+    {
+      "input": "EDU959",
+      "valid": false
+    },
+    {
+      "input": "EDUZ596",
+      "valid": false
+    },
+    {
+      "input": "FDD529",
+      "valid": false
+    },
+    {
+      "input": "FDDZ291",
+      "valid": false
+    },
+    {
+      "input": "HME561",
+      "valid": false
+    },
+    {
+      "input": "HMEZ611",
+      "valid": false
+    },
+    {
+      "input": "ORX585",
+      "valid": false
+    },
+    {
+      "input": "ORXZ850",
+      "valid": false
+    },
+    {
+      "input": "RXF470",
+      "valid": false
+    },
+    {
+      "input": "RXFZ701",
+      "valid": false
+    },
+    {
+      "input": "UXO887",
+      "valid": false
+    },
+    {
+      "input": "UXOZ872",
+      "valid": false
+    },
+    {
+      "input": "ZAW988",
+      "valid": false
+    },
+    {
+      "input": "ZAWZ886",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    },
+    {
+      "input": "abc-12e4",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "ZAW9886",
+      "output": "ZAW-9886"
+    },
+    {
+      "input": "UXO8872",
+      "output": "UXO-8872"
+    },
+    {
+      "input": "EDU9596",
+      "output": "EDU-9596"
+    },
+    {
+      "input": "RXF4701",
+      "output": "RXF-4701"
+    },
+    {
+      "input": "ASV8080",
+      "output": "ASV-8080"
+    },
+    {
+      "input": "HME5611",
+      "output": "HME-5611"
+    },
+    {
+      "input": "FDD5291",
+      "output": "FDD-5291"
+    },
+    {
+      "input": "ORX5850",
+      "output": "ORX-5850"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidFormat"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}
