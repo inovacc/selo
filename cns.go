@@ -41,17 +41,17 @@ func (c *CNS) Validate(value string) bool {
 	return cnsWeightedSum(d)%11 == 0
 }
 
-// Generate returns a syntactically valid random CNS (15 digits, sum % 11 == 0).
-func (c *CNS) Generate() string {
+// GenerateRand returns a valid CNS using the supplied random source.
+func (c *CNS) GenerateRand(r *rand.Rand) string {
 	prefixes := [5]byte{'1', '2', '7', '8', '9'}
 
 	for {
 		var d [CNSLength]byte
 
-		d[0] = prefixes[rand.IntN(len(prefixes))]
+		d[0] = prefixes[r.IntN(len(prefixes))]
 
 		for i := 1; i < CNSLength-1; i++ {
-			d[i] = byte('0' + rand.IntN(10))
+			d[i] = byte('0' + r.IntN(10))
 		}
 
 		// Sum of the first 14 positions (weights 15..2); position 15 has weight 1.
@@ -74,6 +74,9 @@ func (c *CNS) Generate() string {
 		}
 	}
 }
+
+// Generate returns a syntactically valid random CNS (15 digits, sum % 11 == 0).
+func (c *CNS) Generate() string { return c.GenerateRand(newRand()) }
 
 // Format returns the cleaned 15-digit CNS (identity; CNS has no official mask).
 func (c *CNS) Format(value string) (string, error) {

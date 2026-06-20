@@ -37,13 +37,12 @@ func (r *Renavam) Validate(value string) bool {
 	return int(d[10]-'0') == renavamCheckDigit(d)
 }
 
-// Generate returns a random, valid, 11-digit RENAVAM number.
-// It uses math/rand/v2 top-level funcs (goroutine-safe) and rejects all-equal results.
-func (r *Renavam) Generate() string {
+// GenerateRand returns a valid 11-digit RENAVAM number using the supplied random source.
+func (r *Renavam) GenerateRand(rng *rand.Rand) string {
 	for {
 		var b [RenavamLength]byte
 		for i := range 10 {
-			b[i] = byte('0' + rand.IntN(10))
+			b[i] = byte('0' + rng.IntN(10))
 		}
 
 		b[10] = byte('0' + renavamCheckDigit(string(b[:10])))
@@ -54,6 +53,10 @@ func (r *Renavam) Generate() string {
 		}
 	}
 }
+
+// Generate returns a random, valid, 11-digit RENAVAM number.
+// It uses math/rand/v2 top-level funcs (goroutine-safe) and rejects all-equal results.
+func (r *Renavam) Generate() string { return r.GenerateRand(newRand()) }
 
 // Format returns the canonical 11-digit RENAVAM string. RENAVAM has no separator
 // mask; shorter inputs (legacy 9-digit forms) are left-padded with zeros to 11 digits.

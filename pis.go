@@ -38,13 +38,12 @@ func (p *PIS) Validate(value string) bool {
 	return int(d[10]-'0') == pisCheckDigit(d)
 }
 
-// Generate returns a random, valid, unformatted PIS number.
-// It uses math/rand/v2 top-level funcs (goroutine-safe) and rejects all-equal results.
-func (p *PIS) Generate() string {
+// GenerateRand returns a valid unformatted PIS number using the supplied random source.
+func (p *PIS) GenerateRand(r *rand.Rand) string {
 	for {
 		var b [PisLength]byte
 		for i := range 10 {
-			b[i] = byte('0' + rand.IntN(10))
+			b[i] = byte('0' + r.IntN(10))
 		}
 
 		b[10] = byte('0' + pisCheckDigit(string(b[:10])))
@@ -55,6 +54,10 @@ func (p *PIS) Generate() string {
 		}
 	}
 }
+
+// Generate returns a random, valid, unformatted PIS number.
+// It uses math/rand/v2 top-level funcs (goroutine-safe) and rejects all-equal results.
+func (p *PIS) Generate() string { return p.GenerateRand(newRand()) }
 
 // Format renders a PIS number with the canonical ###.#####.##-# mask.
 // It returns ErrInvalidLength (wrapped with %w) when value has the wrong digit count.

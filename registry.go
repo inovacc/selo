@@ -2,6 +2,7 @@ package selo
 
 import (
 	"fmt"
+	"math/rand/v2"
 	"slices"
 	"sync"
 )
@@ -65,6 +66,23 @@ func Generate(kind Kind) (string, error) {
 	}
 
 	return d.Generate(), nil
+}
+
+// GenerateRand dispatches seeded generation to the registered type for kind.
+// It returns ErrUnknownKind when kind is not registered, and a wrapped error
+// when the registered type does not implement RandGenerator.
+func GenerateRand(kind Kind, r *rand.Rand) (string, error) {
+	d, ok := Get(kind)
+	if !ok {
+		return "", fmt.Errorf("%q: %w", kind, ErrUnknownKind)
+	}
+
+	rg, ok := d.(RandGenerator)
+	if !ok {
+		return "", fmt.Errorf("%q: does not implement RandGenerator", kind)
+	}
+
+	return rg.GenerateRand(r), nil
 }
 
 // Format dispatches formatting to the registered type for kind.

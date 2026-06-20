@@ -33,6 +33,9 @@ type ieAlgo struct {
 	// generate returns a freshly generated valid IE in masked form, or is nil
 	// when constructive generation is not implemented for this UF.
 	generate func() string
+	// generateRand returns a freshly generated valid IE using the supplied random source,
+	// or is nil when seeded generation is not implemented for this UF.
+	generateRand func(r *rand.Rand) string
 	// mask renders a cleaned digit string in the UF's canonical masked form, or
 	// returns it unchanged when no mask is defined.
 	mask func(d string) string
@@ -42,10 +45,11 @@ type ieAlgo struct {
 // authoritative algorithm plus >=2 sourced real samples) are listed here.
 var ieTable = map[UF]ieAlgo{
 	UFSP: {
-		lengths:  []int{ieSPLength},
-		validate: ieSPValidate,
-		generate: ieSPGenerate,
-		mask:     ieSPMask,
+		lengths:      []int{ieSPLength},
+		validate:     ieSPValidate,
+		generate:     ieSPGenerate,
+		generateRand: ieSPGenerateRand,
+		mask:         ieSPMask,
 	},
 }
 
@@ -108,14 +112,13 @@ func (e *IE) Format(value string) (string, error) {
 	return "", ErrInvalidFormat
 }
 
-// Generate returns a freshly generated valid IE in masked form, for a randomly
-// chosen implemented UF that supports constructive generation. It returns ""
-// only if no implemented UF supports generation (not the case while SP ships).
-func (e *IE) Generate() string {
+// GenerateRand returns a valid IE in masked form using the supplied random source,
+// for a randomly chosen implemented UF that supports seeded generation.
+func (e *IE) GenerateRand(r *rand.Rand) string {
 	var gen []UF
 
 	for _, uf := range e.ImplementedUFs() {
-		if ieTable[uf].generate != nil {
+		if ieTable[uf].generateRand != nil {
 			gen = append(gen, uf)
 		}
 	}
@@ -124,8 +127,13 @@ func (e *IE) Generate() string {
 		return ""
 	}
 
-	return ieTable[gen[rand.IntN(len(gen))]].generate()
+	return ieTable[gen[r.IntN(len(gen))]].generateRand(r)
 }
+
+// Generate returns a freshly generated valid IE in masked form, for a randomly
+// chosen implemented UF that supports constructive generation. It returns ""
+// only if no implemented UF supports generation (not the case while SP ships).
+func (e *IE) Generate() string { return e.GenerateRand(newRand()) }
 
 // ieRightmostDV computes a São Paulo-style check digit: the rightmost (units)
 // digit of (weighted sum mod 11). A remainder of 10 therefore yields 0. weights
@@ -181,6 +189,20 @@ func ieSPGenerate() string {
 	d[8] = byte('0' + ieRightmostDV(string(d[:8]), ieSPWeights1))
 	d[9] = byte('0' + rand.IntN(10))
 	d[10] = byte('0' + rand.IntN(10))
+	d[11] = byte('0' + ieRightmostDV(string(d[:11]), ieSPWeights2))
+
+	return ieSPMask(string(d[:]))
+}
+
+func ieSPGenerateRand(r *rand.Rand) string {
+	var d [ieSPLength]byte
+	for i := range 8 {
+		d[i] = byte('0' + r.IntN(10))
+	}
+
+	d[8] = byte('0' + ieRightmostDV(string(d[:8]), ieSPWeights1))
+	d[9] = byte('0' + r.IntN(10))
+	d[10] = byte('0' + r.IntN(10))
 	d[11] = byte('0' + ieRightmostDV(string(d[:11]), ieSPWeights2))
 
 	return ieSPMask(string(d[:]))

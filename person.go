@@ -46,6 +46,7 @@ type personOpts struct {
 	withVehicle bool
 	withCompany bool
 	formatted   bool
+	r           *rand.Rand // nil = use global random
 }
 
 // PersonOption configures GeneratePerson.
@@ -63,6 +64,20 @@ func WithCompany() PersonOption { return func(o *personOpts) { o.withCompany = t
 
 // Formatted returns every document in its canonical masked form instead of raw digits.
 func Formatted() PersonOption { return func(o *personOpts) { o.formatted = true } }
+
+// WithSeed pins the random source to a deterministic seed. Same seed + same
+// options always produces the same Person (useful for test fixtures).
+func WithSeed(seed int64) PersonOption {
+	return func(o *personOpts) {
+		o.r = rand.New(rand.NewPCG(uint64(seed), uint64(seed>>32)))
+	}
+}
+
+// WithRand supplies a caller-owned *rand.Rand. The caller is responsible for
+// seeding; GeneratePerson will consume from it sequentially.
+func WithRand(r *rand.Rand) PersonOption {
+	return func(o *personOpts) { o.r = r }
+}
 
 // cpfRegionByUF maps a UF to the CPF 9th-digit fiscal region (Receita Federal).
 var cpfRegionByUF = map[UF]int{
@@ -114,40 +129,45 @@ func GeneratePerson(opts ...PersonOption) Person {
 		fn(&o)
 	}
 
+	r := o.r
+	if r == nil {
+		r = newRand()
+	}
+
 	uf := o.uf
 	if !o.ufSet {
 		impl := personUFs()
-		uf = impl[rand.IntN(len(impl))]
+		uf = impl[r.IntN(len(impl))]
 	}
 
-	first := personFirstNames[rand.IntN(len(personFirstNames))]
-	last := personSurnames[rand.IntN(len(personSurnames))]
+	first := personFirstNames[r.IntN(len(personFirstNames))]
+	last := personSurnames[r.IntN(len(personSurnames))]
 	name := first + " " + last
 	email := fmt.Sprintf("%s.%s%d@example.com.br",
 		strings.ToLower(asciiFold.Replace(first)),
 		strings.ToLower(asciiFold.Replace(last)),
-		rand.IntN(1000))
+		r.IntN(1000))
 
-	cpf := genCPFForUF(uf)
-	phone := genPhoneForUF(uf)
-	cep := genCEPForUF(uf)
-	voter := genVoterIDForUF(uf)
+	cpf := genCPFForUFRand(uf, r)
+	phone := genPhoneForUFRand(uf, r)
+	cep := genCEPForUFRand(uf, r)
+	voter := genVoterIDForUFRand(uf, r)
 
-	cnh := NewCNH().Generate()
-	pis := NewPIS().Generate()
-	renavam := NewRenavam().Generate()
-	cns := NewCNS().Generate()
+	cnh := NewCNH().GenerateRand(r)
+	pis := NewPIS().GenerateRand(r)
+	renavam := NewRenavam().GenerateRand(r)
+	cns := NewCNS().GenerateRand(r)
 
 	rg := ""
 	if _, ok := rgImplemented[uf]; ok {
-		rg = NewRG().Generate() // already masked
+		rg = NewRG().GenerateRand(r)
 	}
 
 	pix := []string{
 		cpf,                       // CPF key
 		"+55" + onlyDigits(phone), // phone key (E.164)
 		email,                     // email key
-		NewPIX().Generate(),       // a random EVP (UUIDv4) key
+		NewPIX().GenerateRand(r),  // a random EVP (UUIDv4) key
 	}
 
 	p := Person{
@@ -157,13 +177,16 @@ func GeneratePerson(opts ...PersonOption) Person {
 	}
 
 	if o.withVehicle {
-		p.Vehicle = &Vehicle{Plate: (&Plate{Mercosul: true}).Generate(), Renavam: NewRenavam().Generate()}
+		p.Vehicle = &Vehicle{
+			Plate:   (&Plate{Mercosul: true}).GenerateRand(r),
+			Renavam: NewRenavam().GenerateRand(r),
+		}
 	}
 
 	if o.withCompany {
 		p.Company = &Company{
-			Name: last + " " + personCompanySuffixes[rand.IntN(len(personCompanySuffixes))],
-			CNPJ: NewCNPJ().Generate(),
+			Name: last + " " + personCompanySuffixes[r.IntN(len(personCompanySuffixes))],
+			CNPJ: NewCNPJ().GenerateRand(r),
 		}
 	}
 
@@ -188,42 +211,45 @@ func personUFs() []UF {
 	return out
 }
 
-// genCPFForUF returns a valid CPF whose 9th digit matches uf's fiscal region.
-func genCPFForUF(uf UF) string {
+// genCPFForUFRand returns a valid CPF whose 9th digit matches uf's fiscal region,
+// using the supplied random source.
+func genCPFForUFRand(uf UF, r *rand.Rand) string {
 	region := cpfRegionByUF[uf]
 
 	c := NewCPF()
 	for {
-		v := c.Generate()
+		v := c.GenerateRand(r)
 		if len(v) == CpfLength && int(v[8]-'0') == region {
 			return v
 		}
 	}
 }
 
-// genVoterIDForUF returns a valid Título Eleitoral whose embedded UF code matches uf.
-func genVoterIDForUF(uf UF) string {
+// genVoterIDForUFRand returns a valid Título Eleitoral whose embedded UF code matches uf,
+// using the supplied random source.
+func genVoterIDForUFRand(uf UF, r *rand.Rand) string {
 	code := fmt.Sprintf("%02d", voterCodeByUF[uf])
 
 	v := NewVoterID()
 	for {
-		got := v.Generate()
+		got := v.GenerateRand(r)
 		if len(got) == 12 && got[8:10] == code {
 			return got
 		}
 	}
 }
 
-// genPhoneForUF builds a valid 9-digit mobile for one of uf's DDD area codes.
-func genPhoneForUF(uf UF) string {
-	ddds := dddsForUF(uf)
-	ddd := ddds[rand.IntN(len(ddds))]
+// genPhoneForUFRand builds a valid 9-digit mobile for one of uf's DDD area codes,
+// using the supplied random source.
+func genPhoneForUFRand(uf UF, r *rand.Rand) string {
+	dddList := dddsForUF(uf)
+	ddd := dddList[r.IntN(len(dddList))]
 
 	var sb strings.Builder
 	fmt.Fprintf(&sb, "%02d9", ddd) // DDD + mobile leading 9
 
 	for range 8 {
-		sb.WriteByte(byte('0' + rand.IntN(10)))
+		sb.WriteByte(byte('0' + r.IntN(10)))
 	}
 
 	return sb.String()
@@ -242,20 +268,21 @@ func dddsForUF(uf UF) []int {
 	return out
 }
 
-// genCEPForUF builds a valid 8-digit CEP within one of uf's postal ranges.
-func genCEPForUF(uf UF) string {
+// genCEPForUFRand builds a valid 8-digit CEP within one of uf's postal ranges,
+// using the supplied random source.
+func genCEPForUFRand(uf UF, r *rand.Rand) string {
 	var ranges [][2]int
 
-	for _, r := range cepPrefixRanges {
-		if r.uf == uf {
-			ranges = append(ranges, [2]int{r.from, r.to})
+	for _, rng := range cepPrefixRanges {
+		if rng.uf == uf {
+			ranges = append(ranges, [2]int{rng.from, rng.to})
 		}
 	}
 
-	r := ranges[rand.IntN(len(ranges))]
-	prefix := r[0] + rand.IntN(r[1]-r[0]+1)
+	rng := ranges[r.IntN(len(ranges))]
+	prefix := rng[0] + r.IntN(rng[1]-rng[0]+1)
 
-	return fmt.Sprintf("%03d%05d", prefix, rand.IntN(100000))
+	return fmt.Sprintf("%03d%05d", prefix, r.IntN(100000))
 }
 
 // formatPerson rewrites each document field into its canonical masked form,

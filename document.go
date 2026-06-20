@@ -1,5 +1,7 @@
 package selo
 
+import "math/rand/v2"
+
 // Kind is the stable identifier for a document type, e.g. "cpf".
 type Kind string
 
@@ -52,4 +54,10 @@ type OriginResolver interface {
 type UFScoped interface {
 	ValidateUF(value string, uf UF) (bool, error)
 	ImplementedUFs() []UF
+}
+
+// RandGenerator is the optional capability for types that can generate from a
+// caller-supplied random source (for deterministic fixtures). Discovered via type assertion.
+type RandGenerator interface {
+	GenerateRand(r *rand.Rand) string
 }

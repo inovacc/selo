@@ -52,12 +52,12 @@ func NewCPF() *CPF {
 	return &CPF{}
 }
 
-// Generate generates a valid random CPF with unformatting
-func (c *CPF) Generate() string {
+// GenerateRand generates a valid CPF using the supplied random source.
+func (c *CPF) GenerateRand(r *rand.Rand) string {
 	number := make([]int, 9, 11)
 
 	for i := range 9 {
-		number[i] = rand.IntN(10)
+		number[i] = r.IntN(10)
 	}
 
 	number = append(number, c.calculateFirstDigit(number))
@@ -71,6 +71,9 @@ func (c *CPF) Generate() string {
 
 	return c.digits(sb.String())
 }
+
+// Generate generates a valid random CPF with unformatting
+func (c *CPF) Generate() string { return c.GenerateRand(newRand()) }
 
 // Validate validates a CPF number (with or without formatting)
 func (c *CPF) Validate(value string) bool {

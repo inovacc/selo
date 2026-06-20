@@ -33,17 +33,18 @@ func NewCNPJ() *CNPJ {
 	return &CNPJ{}
 }
 
-// Generate generates a valid alphanumeric CNPJ
-func (c *CNPJ) Generate() string {
-	return c.generateDigits(false)
+// GenerateRand generates a valid alphanumeric CNPJ using the supplied random source.
+func (c *CNPJ) GenerateRand(r *rand.Rand) string {
+	return c.generateDigitsRand(r, false)
 }
+
+// Generate generates a valid alphanumeric CNPJ
+func (c *CNPJ) Generate() string { return c.GenerateRand(newRand()) }
 
 // GenerateLegacy generates a valid numeric-only (legacy) CNPJ
 // It produces a 14-digit unformatted string where the first 12 positions are digits (0-9)
 // and the last two are check digits per modulo 11.
-func (c *CNPJ) GenerateLegacy() string {
-	return c.generateDigits(true)
-}
+func (c *CNPJ) GenerateLegacy() string { return c.generateDigitsRand(newRand(), true) }
 
 // Validate verifies if an alphanumeric CNPJ is valid per SERPRO specification
 func (c *CNPJ) Validate(value string) bool {
@@ -117,20 +118,20 @@ func (c *CNPJ) Kind() Kind { return KindCNPJ }
 
 // Private CNPJ methods
 
-func (c *CNPJ) generateDigits(legacy bool) string {
+func (c *CNPJ) generateDigitsRand(r *rand.Rand, legacy bool) string {
 	// Build a 12-char base directly into a fixed buffer
 	var base [12]byte
 
 	if legacy {
 		for i := range 12 {
-			base[i] = byte('0' + rand.IntN(10))
+			base[i] = byte('0' + r.IntN(10))
 		}
 	} else {
 		for i := range 12 {
-			if rand.IntN(2) == 0 {
-				base[i] = byte('0' + rand.IntN(10))
+			if r.IntN(2) == 0 {
+				base[i] = byte('0' + r.IntN(10))
 			} else {
-				base[i] = byte('A' + rand.IntN(26))
+				base[i] = byte('A' + r.IntN(26))
 			}
 		}
 	}
