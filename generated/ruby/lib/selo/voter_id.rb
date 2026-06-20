@@ -53,5 +53,23 @@ module Selo
 
       name
     end
+
+    # generate returns a random, valid Título Eleitoral (12 digits, unformatted).
+    def self.generate
+      loop do
+        d = Array.new(12, '0')
+        8.times { |i| d[i] = rand(10).to_s }
+        uf = 1 + rand(28)
+        d[8] = (uf / 10).to_s
+        d[9] = (uf % 10).to_s
+        s = d.join
+        dv1 = voter_dv1(s)
+        d[10] = dv1.to_s
+        d[11] = voter_dv2(s, dv1).to_s
+        out = d.join
+        next if Mod11.all_equal(out)
+        return out
+      end
+    end
   end
 end

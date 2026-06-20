@@ -28,4 +28,11 @@ class PhoneTest < Minitest::Test
       assert_equal c['output'], Selo::Phone.origin(c['input']), "origin #{c['input'].inspect}"
     end
   end
+
+  def test_generate
+    100.times do
+      val = Selo::Phone.generate
+      assert Selo::Phone.valid?(val), "generate produced invalid: #{val.inspect}"
+    end
+  end
 end

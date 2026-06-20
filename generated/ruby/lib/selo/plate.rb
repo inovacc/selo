@@ -23,5 +23,12 @@ module Selo
 
       raise ArgumentError, "ErrInvalidFormat"
     end
+
+    # generate returns a random valid national-pattern plate (ABC-1234).
+    def self.generate
+      letters = ('A'..'Z').to_a
+      digits_chars = ('0'..'9').to_a
+      "#{Array.new(3) { letters.sample }.join}-#{Array.new(4) { digits_chars.sample }.join}"
+    end
   end
 end

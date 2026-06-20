@@ -28,4 +28,11 @@ class CepTest < Minitest::Test
       assert_equal c['output'], Selo::CEP.origin(c['input']), "origin #{c['input'].inspect}"
     end
   end
+
+  def test_generate
+    100.times do
+      val = Selo::CEP.generate
+      assert Selo::CEP.valid?(val), "generate produced invalid: #{val.inspect}"
+    end
+  end
 end

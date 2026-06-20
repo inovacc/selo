@@ -46,5 +46,16 @@ module Selo
 
       "#{c[0, 2]}.#{c[2, 3]}.#{c[5, 3]}/#{c[8, 4]}-#{c[12, 2]}"
     end
+
+    # generate returns a random, valid alphanumeric CNPJ (14 chars, unformatted).
+    def self.generate
+      alphabet = ('0'..'9').to_a + ('A'..'Z').to_a
+      loop do
+        base = Array.new(12) { alphabet.sample }.join
+        dv1 = cnpj_dv(base)
+        dv2 = cnpj_dv(base + dv1.to_s)
+        return "#{base}#{dv1}#{dv2}"
+      end
+    end
   end
 end

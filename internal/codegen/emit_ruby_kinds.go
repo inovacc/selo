@@ -56,6 +56,19 @@ func (e rubyEmitter) renderCPF(plan KindPlan) string {
 
       region
     end
+
+    # generate returns a random, valid CPF (unformatted, 11 digits).
+    def self.generate
+      loop do
+        number = Array.new(9) { rand(10) }
+        d1 = Mod11.compute_digit(Mod11.weighted_sum(number, DV1[:weights]), DV1)
+        number << d1
+        d2 = Mod11.compute_digit(Mod11.weighted_sum(number, DV2[:weights]), DV2)
+        number << d2
+        out = number.join
+        return out unless Mod11.all_equal(out)
+      end
+    end
   end
 end
 `, dv1, dv2, rubyRaise("ErrInvalidLength"),
@@ -97,6 +110,16 @@ func (e rubyEmitter) renderSimpleNumeric(plan KindPlan, name string, length int)
 
       %[6]s
     end
+
+    # generate returns a random, valid %[1]s (unformatted).
+    def self.generate
+      loop do
+        b = Array.new(%[4]d) { rand(10) }
+        b << Mod11.compute_digit(Mod11.weighted_sum(b, DV[:weights]), DV)
+        out = b.join
+        return out unless Mod11.all_equal(out)
+      end
+    end
   end
 end
 `, name, dv, length, base, rubyRaise("ErrInvalidLength"), mask)
@@ -133,6 +156,16 @@ func (e rubyEmitter) renderRenavam(plan KindPlan) string {
       d = ('0' * (11 - d.length)) + d if d.length < 11
 
       d
+    end
+
+    # generate returns a random, valid RENAVAM (unformatted, 11 digits).
+    def self.generate
+      loop do
+        b = Array.new(10) { rand(10) }
+        b << Mod11.compute_digit(Mod11.weighted_sum(b, DV[:weights]), DV)
+        out = b.join
+        return out unless Mod11.all_equal(out)
+      end
     end
   end
 end
@@ -188,6 +221,16 @@ func (e rubyEmitter) renderCNH() string {
 
       d
     end
+
+    # generate returns a random, valid 11-digit CNH (unformatted).
+    def self.generate
+      loop do
+        base = Array.new(9) { rand(10) }.join
+        dv1, dv2 = cnh_check_digits(base)
+        out = base + dv1.to_s + dv2.to_s
+        return out unless Mod11.all_equal(out)
+      end
+    end
   end
 end
 `, rubyRaise("ErrInvalidLength"))
@@ -225,6 +268,24 @@ func (e rubyEmitter) renderCNS(plan KindPlan) string {
       %s if d.length != 15
 
       d
+    end
+
+    # generate returns a random, valid CNS (15 digits, sum %% 11 == 0).
+    def self.generate
+      prefixes = %%w[1 2 7 8 9]
+      loop do
+        d = Array.new(15) { '0' }
+        d[0] = prefixes.sample
+        1.upto(13) { |i| d[i] = rand(10).to_s }
+        partial = 0
+        0.upto(13) { |i| partial += d[i].to_i * (15 - i) }
+        last = (11 - (partial %% 11)) %% 11
+        next if last == 10
+        d[14] = last.to_s
+        out = d.join
+        next if Mod11.all_equal(out)
+        return out
+      end
     end
   end
 end
@@ -284,6 +345,17 @@ func (e rubyEmitter) renderCNPJ(plan KindPlan) string {
       %s if c.length != 14
 
       "#{c[0, 2]}.#{c[2, 3]}.#{c[5, 3]}/#{c[8, 4]}-#{c[12, 2]}"
+    end
+
+    # generate returns a random, valid alphanumeric CNPJ (14 chars, unformatted).
+    def self.generate
+      alphabet = ('0'..'9').to_a + ('A'..'Z').to_a
+      loop do
+        base = Array.new(12) { alphabet.sample }.join
+        dv1 = cnpj_dv(base)
+        dv2 = cnpj_dv(base + dv1.to_s)
+        return "#{base}#{dv1}#{dv2}"
+      end
     end
   end
 end

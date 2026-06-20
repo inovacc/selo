@@ -61,5 +61,14 @@ module Selo
       d = p[0].join
       "#{d[0, 2]}.#{d[2, 3]}.#{d[5, 3]}-#{check_char}"
     end
+
+    # generate returns a valid SP-style RG in masked form (XX.XXX.XXX-C).
+    def self.generate
+      base = Array.new(8) { rand(10) }
+      dv = Mod11.compute_digit(Mod11.weighted_sum(base, DV[:weights]), DV)
+      check_char = Mod11.encode_digit(dv, DV)
+      d = base.join
+      "#{d[0, 2]}.#{d[2, 3]}.#{d[5, 3]}-#{check_char}"
+    end
   end
 end

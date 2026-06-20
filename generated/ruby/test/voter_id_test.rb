@@ -28,4 +28,11 @@ class Voter_idTest < Minitest::Test
       assert_equal c['output'], Selo::VoterId.origin(c['input']), "origin #{c['input'].inspect}"
     end
   end
+
+  def test_generate
+    100.times do
+      val = Selo::VoterId.generate
+      assert Selo::VoterId.valid?(val), "generate produced invalid: #{val.inspect}"
+    end
+  end
 end

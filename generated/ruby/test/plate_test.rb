@@ -22,4 +22,11 @@ class PlateTest < Minitest::Test
       end
     end
   end
+
+  def test_generate
+    100.times do
+      val = Selo::Plate.generate
+      assert Selo::Plate.valid?(val), "generate produced invalid: #{val.inspect}"
+    end
+  end
 end

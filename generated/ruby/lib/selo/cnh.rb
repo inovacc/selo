@@ -41,5 +41,15 @@ module Selo
 
       d
     end
+
+    # generate returns a random, valid 11-digit CNH (unformatted).
+    def self.generate
+      loop do
+        base = Array.new(9) { rand(10) }.join
+        dv1, dv2 = cnh_check_digits(base)
+        out = base + dv1.to_s + dv2.to_s
+        return out unless Mod11.all_equal(out)
+      end
+    end
   end
 end

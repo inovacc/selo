@@ -55,5 +55,16 @@ module Selo
 
       uf
     end
+
+    # generate returns a random valid Brazilian phone (unformatted national digits).
+    def self.generate
+      ddds = Data::DDD_TO_UF.keys
+      ddd = ddds.sample
+      if rand(2) == 0
+        ddd + '9' + Array.new(8) { rand(10).to_s }.join
+      else
+        ddd + (2 + rand(4)).to_s + Array.new(7) { rand(10).to_s }.join
+      end
+    end
   end
 end

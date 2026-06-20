@@ -22,4 +22,11 @@ class RenavamTest < Minitest::Test
       end
     end
   end
+
+  def test_generate
+    100.times do
+      val = Selo::Renavam.generate
+      assert Selo::Renavam.valid?(val), "generate produced invalid: #{val.inspect}"
+    end
+  end
 end

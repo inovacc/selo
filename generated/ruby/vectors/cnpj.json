@@ -7,35 +7,35 @@
       "valid": true
     },
     {
-      "input": "6Z49S5H69L1F00",
+      "input": "4NRA7MARCZ1730",
       "valid": true
     },
     {
-      "input": "F572RDP1KMIC60",
+      "input": "KYT26LWC576I23",
       "valid": true
     },
     {
-      "input": "TB4E6L73E57733",
+      "input": "48I9COO4S01N28",
       "valid": true
     },
     {
-      "input": "5YZ1ZUBRO26N03",
+      "input": "84JU7AN8B4T951",
       "valid": true
     },
     {
-      "input": "B15EXL1YP70M90",
+      "input": "3AE867K9GF7D28",
       "valid": true
     },
     {
-      "input": "PC65350MGWV525",
+      "input": "3EBL3IC41FA359",
       "valid": true
     },
     {
-      "input": "XV2KW8Y8UVO979",
+      "input": "LFNY1YXQ6BC528",
       "valid": true
     },
     {
-      "input": "RE83HQL5IA7306",
+      "input": "CC5UUM6CJ50C81",
       "valid": true
     },
     {
@@ -51,6 +51,10 @@
       "valid": false
     },
     {
+      "input": "11111",
+      "valid": false
+    },
+    {
       "input": "111111",
       "valid": false
     },
@@ -60,10 +64,6 @@
     },
     {
       "input": "11111111",
-      "valid": false
-    },
-    {
-      "input": "111111111",
       "valid": false
     },
     {
@@ -79,91 +79,87 @@
       "valid": false
     },
     {
-      "input": "5YZ1ZUBRO26N0",
+      "input": "3AE867K9GF7D2",
       "valid": false
     },
     {
-      "input": "5YZ1ZUBRO26N04",
+      "input": "3AE867K9GF7D29",
       "valid": false
     },
     {
-      "input": "6Z49S5H69L1F0",
+      "input": "3EBL3IC41FA35",
       "valid": false
     },
     {
-      "input": "6Z49S5H69L1F01",
+      "input": "3EBL3IC41FA350",
       "valid": false
     },
     {
-      "input": "B15EXL1YP70M9",
+      "input": "48I9COO4S01N2",
       "valid": false
     },
     {
-      "input": "B15EXL1YP70M91",
+      "input": "48I9COO4S01N29",
       "valid": false
     },
     {
-      "input": "BZ5EXL1YP70M90",
+      "input": "4NRA7MARCZ173",
       "valid": false
     },
     {
-      "input": "F572RDP1KMIC6",
+      "input": "4NRA7MARCZ1731",
       "valid": false
     },
     {
-      "input": "F572RDP1KMIC61",
+      "input": "84JU7AN8B4T95",
       "valid": false
     },
     {
-      "input": "FZ72RDP1KMIC60",
+      "input": "84JU7AN8B4T952",
       "valid": false
     },
     {
-      "input": "PC65350MGWV52",
+      "input": "CC5UUM6CJ50C8",
       "valid": false
     },
     {
-      "input": "PC65350MGWV526",
+      "input": "CC5UUM6CJ50C82",
       "valid": false
     },
     {
-      "input": "PCZ5350MGWV525",
+      "input": "CCZUUM6CJ50C81",
       "valid": false
     },
     {
-      "input": "RE83HQL5IA730",
+      "input": "KYT26LWC576I2",
       "valid": false
     },
     {
-      "input": "RE83HQL5IA7307",
+      "input": "KYT26LWC576I24",
       "valid": false
     },
     {
-      "input": "REZ3HQL5IA7306",
+      "input": "KYTZ6LWC576I23",
       "valid": false
     },
     {
-      "input": "TB4E6L73E5773",
+      "input": "LFNY1YXQ6BC52",
       "valid": false
     },
     {
-      "input": "TB4E6L73E57734",
+      "input": "LFNY1YXQ6BC529",
       "valid": false
     },
     {
-      "input": "TBZE6L73E57733",
+      "input": "LFNYZYXQ6BC528",
       "valid": false
     },
     {
-      "input": "XV2KW8Y8UVO97",
+      "input": "Z4JU7AN8B4T951",
       "valid": false
     },
     {
-      "input": "XV2KW8Y8UVO970",
-      "valid": false
-    },
-    {
-      "input": "XVZKW8Y8UVO979",
+      "input": "Z8I9COO4S01N28",
       "valid": false
     },
     {
@@ -171,11 +167,15 @@
       "valid": false
     },
     {
-      "input": "ZYZ1ZUBRO26N03",
+      "input": "ZAE867K9GF7D28",
       "valid": false
     },
     {
-      "input": "ZZ49S5H69L1F00",
+      "input": "ZEBL3IC41FA359",
+      "valid": false
+    },
+    {
+      "input": "ZNRA7MARCZ1730",
       "valid": false
     },
     {
@@ -189,36 +189,36 @@
       "output": "39.591.842/0000-10"
     },
     {
-      "input": "6Z49S5H69L1F00",
-      "output": "6Z.49S.5H6/9L1F-00"
+      "input": "4NRA7MARCZ1730",
+      "output": "4N.RA7.MAR/CZ17-30"
     },
     {
-      "input": "F572RDP1KMIC60",
-      "output": "F5.72R.DP1/KMIC-60"
+      "input": "KYT26LWC576I23",
+      "output": "KY.T26.LWC/576I-23"
     },
     {
-      "input": "TB4E6L73E57733",
-      "output": "TB.4E6.L73/E577-33"
+      "input": "48I9COO4S01N28",
+      "output": "48.I9C.OO4/S01N-28"
     },
     {
-      "input": "5YZ1ZUBRO26N03",
-      "output": "5Y.Z1Z.UBR/O26N-03"
+      "input": "84JU7AN8B4T951",
+      "output": "84.JU7.AN8/B4T9-51"
     },
     {
-      "input": "B15EXL1YP70M90",
-      "output": "B1.5EX.L1Y/P70M-90"
+      "input": "3AE867K9GF7D28",
+      "output": "3A.E86.7K9/GF7D-28"
     },
     {
-      "input": "PC65350MGWV525",
-      "output": "PC.653.50M/GWV5-25"
+      "input": "3EBL3IC41FA359",
+      "output": "3E.BL3.IC4/1FA3-59"
     },
     {
-      "input": "XV2KW8Y8UVO979",
-      "output": "XV.2KW.8Y8/UVO9-79"
+      "input": "LFNY1YXQ6BC528",
+      "output": "LF.NY1.YXQ/6BC5-28"
     },
     {
-      "input": "RE83HQL5IA7306",
-      "output": "RE.83H.QL5/IA73-06"
+      "input": "CC5UUM6CJ50C81",
+      "output": "CC.5UU.M6C/J50C-81"
     },
     {
       "input": "1",

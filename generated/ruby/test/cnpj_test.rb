@@ -22,4 +22,11 @@ class CnpjTest < Minitest::Test
       end
     end
   end
+
+  def test_generate
+    100.times do
+      val = Selo::CNPJ.generate
+      assert Selo::CNPJ.valid?(val), "generate produced invalid: #{val.inspect}"
+    end
+  end
 end

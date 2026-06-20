@@ -80,6 +80,15 @@ func (e rubyEmitter) renderRG(plan KindPlan) string {
       d = p[0].join
       "#{d[0, 2]}.#{d[2, 3]}.#{d[5, 3]}-#{check_char}"
     end
+
+    # generate returns a valid SP-style RG in masked form (XX.XXX.XXX-C).
+    def self.generate
+      base = Array.new(8) { rand(10) }
+      dv = Mod11.compute_digit(Mod11.weighted_sum(base, DV[:weights]), DV)
+      check_char = Mod11.encode_digit(dv, DV)
+      d = base.join
+      "#{d[0, 2]}.#{d[2, 3]}.#{d[5, 3]}-#{check_char}"
+    end
   end
 end
 `, dv, ufs, rubyRaise("ErrInvalidFormat"))
@@ -139,6 +148,20 @@ func (e rubyEmitter) renderIE(plan KindPlan) string {
 
       %s
     end
+
+    # generate returns a valid SP IE in masked form (AAA.AAA.AAA.AAA).
+    def self.generate
+      d = Array.new(12, '0')
+      8.times { |i| d[i] = rand(10).to_s }
+      digits = d.map(&:to_i)
+      d[8] = Mod11.compute_digit(Mod11.weighted_sum(digits[0, 8], DV1[:weights]), DV1).to_s
+      d[9] = rand(10).to_s
+      d[10] = rand(10).to_s
+      digits = d.map(&:to_i)
+      d[11] = Mod11.compute_digit(Mod11.weighted_sum(digits[0, 11], DV2[:weights]), DV2).to_s
+      s = d.join
+      "#{s[0, 3]}.#{s[3, 3]}.#{s[6, 3]}.#{s[9, 3]}"
+    end
   end
 end
 `, dv1, dv2, ufs, rubyRaise("ErrInvalidFormat"))
@@ -174,6 +197,13 @@ func (e rubyEmitter) renderPlate() string {
       end
 
       ` + rubyRaise("ErrInvalidFormat") + `
+    end
+
+    # generate returns a random valid national-pattern plate (ABC-1234).
+    def self.generate
+      letters = ('A'..'Z').to_a
+      digits_chars = ('0'..'9').to_a
+      "#{Array.new(3) { letters.sample }.join}-#{Array.new(4) { digits_chars.sample }.join}"
     end
   end
 end
@@ -224,6 +254,15 @@ func (e rubyEmitter) renderPIX() string {
 
       v
     end
+
+    # generate returns a random UUIDv4 EVP PIX key.
+    def self.generate
+      b = Array.new(16) { rand(256) }
+      b[6] = (b[6] & 0x0f) | 0x40
+      b[8] = (b[8] & 0x3f) | 0x80
+      hex = b.map { |x| x.to_s(16).rjust(2, '0') }
+      "#{hex[0..3].join}-#{hex[4..5].join}-#{hex[6..7].join}-#{hex[8..9].join}-#{hex[10..15].join}"
+    end
   end
 end
 `)
@@ -273,6 +312,14 @@ func (e rubyEmitter) renderCEP() string {
       ` + rubyRaise("ErrInvalidFormat") + ` if uf.nil?
 
       uf
+    end
+
+    # generate returns a random, valid 8-digit CEP (unformatted).
+    def self.generate
+      r = Data::CEP_RANGES.sample
+      prefix = r[:from] + rand(r[:to] - r[:from] + 1)
+      suffix = rand(100_000)
+      format('%03d%05d', prefix, suffix)
     end
   end
 end
@@ -338,6 +385,17 @@ func (e rubyEmitter) renderPhone() string {
       ` + rubyRaise("ErrInvalidFormat") + ` if uf.nil?
 
       uf
+    end
+
+    # generate returns a random valid Brazilian phone (unformatted national digits).
+    def self.generate
+      ddds = Data::DDD_TO_UF.keys
+      ddd = ddds.sample
+      if rand(2) == 0
+        ddd + '9' + Array.new(8) { rand(10).to_s }.join
+      else
+        ddd + (2 + rand(4)).to_s + Array.new(7) { rand(10).to_s }.join
+      end
     end
   end
 end
@@ -405,6 +463,24 @@ func (e rubyEmitter) renderVoterID(plan KindPlan) string {
 
       name
     end
+
+    # generate returns a random, valid Título Eleitoral (12 digits, unformatted).
+    def self.generate
+      loop do
+        d = Array.new(12, '0')
+        8.times { |i| d[i] = rand(10).to_s }
+        uf = 1 + rand(28)
+        d[8] = (uf / 10).to_s
+        d[9] = (uf %% 10).to_s
+        s = d.join
+        dv1 = voter_dv1(s)
+        d[10] = dv1.to_s
+        d[11] = voter_dv2(s, dv1).to_s
+        out = d.join
+        next if Mod11.all_equal(out)
+        return out
+      end
+    end
   end
 end
 `, dv1, dv2, rubyRaise("ErrInvalidLength"),
@@ -466,6 +542,14 @@ func (e rubyEmitter) renderTest(kind selo.Kind) string {
 		b.WriteString("    end\n")
 		b.WriteString("  end\n")
 	}
+
+	// generate round-trip
+	b.WriteString("\n  def test_generate\n")
+	b.WriteString("    100.times do\n")
+	fmt.Fprintf(&b, "      val = Selo::%s.generate\n", name)
+	fmt.Fprintf(&b, "      assert Selo::%s.valid?(val), \"generate produced invalid: #{val.inspect}\"\n", name)
+	b.WriteString("    end\n")
+	b.WriteString("  end\n")
 
 	b.WriteString("end\n")
 
