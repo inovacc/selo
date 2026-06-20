@@ -38,5 +38,18 @@ module Selo
 
       region
     end
+
+    # generate returns a random, valid CPF (unformatted, 11 digits).
+    def self.generate
+      loop do
+        number = Array.new(9) { rand(10) }
+        d1 = Mod11.compute_digit(Mod11.weighted_sum(number, DV1[:weights]), DV1)
+        number << d1
+        d2 = Mod11.compute_digit(Mod11.weighted_sum(number, DV2[:weights]), DV2)
+        number << d2
+        out = number.join
+        return out unless Mod11.all_equal(out)
+      end
+    end
   end
 end

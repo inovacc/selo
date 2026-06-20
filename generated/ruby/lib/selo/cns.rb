@@ -26,5 +26,23 @@ module Selo
 
       d
     end
+
+    # generate returns a random, valid CNS (15 digits, sum % 11 == 0).
+    def self.generate
+      prefixes = %w[1 2 7 8 9]
+      loop do
+        d = Array.new(15) { '0' }
+        d[0] = prefixes.sample
+        1.upto(13) { |i| d[i] = rand(10).to_s }
+        partial = 0
+        0.upto(13) { |i| partial += d[i].to_i * (15 - i) }
+        last = (11 - (partial % 11)) % 11
+        next if last == 10
+        d[14] = last.to_s
+        out = d.join
+        next if Mod11.all_equal(out)
+        return out
+      end
+    end
   end
 end

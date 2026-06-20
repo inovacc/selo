@@ -44,5 +44,19 @@ module Selo
 
       raise ArgumentError, "ErrInvalidFormat"
     end
+
+    # generate returns a valid SP IE in masked form (AAA.AAA.AAA.AAA).
+    def self.generate
+      d = Array.new(12, '0')
+      8.times { |i| d[i] = rand(10).to_s }
+      digits = d.map(&:to_i)
+      d[8] = Mod11.compute_digit(Mod11.weighted_sum(digits[0, 8], DV1[:weights]), DV1).to_s
+      d[9] = rand(10).to_s
+      d[10] = rand(10).to_s
+      digits = d.map(&:to_i)
+      d[11] = Mod11.compute_digit(Mod11.weighted_sum(digits[0, 11], DV2[:weights]), DV2).to_s
+      s = d.join
+      "#{s[0, 3]}.#{s[3, 3]}.#{s[6, 3]}.#{s[9, 3]}"
+    end
   end
 end

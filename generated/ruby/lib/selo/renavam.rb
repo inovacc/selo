@@ -24,5 +24,15 @@ module Selo
 
       d
     end
+
+    # generate returns a random, valid RENAVAM (unformatted, 11 digits).
+    def self.generate
+      loop do
+        b = Array.new(10) { rand(10) }
+        b << Mod11.compute_digit(Mod11.weighted_sum(b, DV[:weights]), DV)
+        out = b.join
+        return out unless Mod11.all_equal(out)
+      end
+    end
   end
 end

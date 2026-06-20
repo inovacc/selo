@@ -36,5 +36,14 @@ module Selo
 
       v
     end
+
+    # generate returns a random UUIDv4 EVP PIX key.
+    def self.generate
+      b = Array.new(16) { rand(256) }
+      b[6] = (b[6] & 0x0f) | 0x40
+      b[8] = (b[8] & 0x3f) | 0x80
+      hex = b.map { |x| x.to_s(16).rjust(2, '0') }
+      "#{hex[0..3].join}-#{hex[4..5].join}-#{hex[6..7].join}-#{hex[8..9].join}-#{hex[10..15].join}"
+    end
   end
 end

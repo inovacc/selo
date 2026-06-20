@@ -22,4 +22,11 @@ class PixTest < Minitest::Test
       end
     end
   end
+
+  def test_generate
+    100.times do
+      val = Selo::PIX.generate
+      assert Selo::PIX.valid?(val), "generate produced invalid: #{val.inspect}"
+    end
+  end
 end

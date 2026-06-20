@@ -15,35 +15,35 @@
       "valid": true
     },
     {
-      "input": "97661339803",
+      "input": "00866697705",
       "valid": true
     },
     {
-      "input": "15375594196",
+      "input": "27060409041",
       "valid": true
     },
     {
-      "input": "78820497867",
+      "input": "85939745113",
       "valid": true
     },
     {
-      "input": "97027272865",
+      "input": "52331257493",
       "valid": true
     },
     {
-      "input": "03061290354",
+      "input": "88210775278",
       "valid": true
     },
     {
-      "input": "12685384855",
+      "input": "08090296505",
       "valid": true
     },
     {
-      "input": "83135393305",
+      "input": "71477045848",
       "valid": true
     },
     {
-      "input": "62263316230",
+      "input": "89168488815",
       "valid": true
     },
     {
@@ -59,11 +59,19 @@
       "valid": false
     },
     {
-      "input": "0306129035",
+      "input": "0086669770",
       "valid": false
     },
     {
-      "input": "03061290355",
+      "input": "00866697706",
+      "valid": false
+    },
+    {
+      "input": "0809029650",
+      "valid": false
+    },
+    {
+      "input": "08090296506",
       "valid": false
     },
     {
@@ -79,19 +87,19 @@
       "valid": false
     },
     {
-      "input": "1268538485",
+      "input": "2706040904",
       "valid": false
     },
     {
-      "input": "12685384856",
+      "input": "27060409042",
       "valid": false
     },
     {
-      "input": "1537559419",
+      "input": "5233125749",
       "valid": false
     },
     {
-      "input": "15375594197",
+      "input": "52331257494",
       "valid": false
     },
     {
@@ -111,55 +119,51 @@
       "valid": false
     },
     {
-      "input": "6226331623",
+      "input": "7147704584",
       "valid": false
     },
     {
-      "input": "62263316231",
+      "input": "71477045849",
       "valid": false
     },
     {
-      "input": "7882049786",
+      "input": "8593974511",
       "valid": false
     },
     {
-      "input": "78820497868",
+      "input": "85939745114",
       "valid": false
     },
     {
-      "input": "8313539330",
+      "input": "8821077527",
       "valid": false
     },
     {
-      "input": "83135393306",
+      "input": "88210775279",
       "valid": false
     },
     {
-      "input": "9702727286",
+      "input": "8916848881",
       "valid": false
     },
     {
-      "input": "97027272866",
+      "input": "89168488816",
       "valid": false
     },
     {
-      "input": "9766133980",
+      "input": "Z0866697705",
       "valid": false
     },
     {
-      "input": "97661339804",
+      "input": "Z1477045848",
       "valid": false
     },
     {
-      "input": "Z2263316230",
+      "input": "Z2331257493",
       "valid": false
     },
     {
       "input": "Z2345678909",
-      "valid": false
-    },
-    {
-      "input": "Z2685384855",
       "valid": false
     },
     {
@@ -171,27 +175,23 @@
       "valid": false
     },
     {
-      "input": "Z3061290354",
+      "input": "Z5939745113",
       "valid": false
     },
     {
-      "input": "Z3135393305",
+      "input": "Z7060409041",
       "valid": false
     },
     {
-      "input": "Z5375594196",
+      "input": "Z8090296505",
       "valid": false
     },
     {
-      "input": "Z7027272865",
+      "input": "Z8210775278",
       "valid": false
     },
     {
-      "input": "Z7661339803",
-      "valid": false
-    },
-    {
-      "input": "Z8820497867",
+      "input": "Z9168488815",
       "valid": false
     },
     {
@@ -213,36 +213,36 @@
       "output": "123.456.789-09"
     },
     {
-      "input": "97661339803",
-      "output": "976.613.398-03"
+      "input": "00866697705",
+      "output": "008.666.977-05"
     },
     {
-      "input": "15375594196",
-      "output": "153.755.941-96"
+      "input": "27060409041",
+      "output": "270.604.090-41"
     },
     {
-      "input": "78820497867",
-      "output": "788.204.978-67"
+      "input": "85939745113",
+      "output": "859.397.451-13"
     },
     {
-      "input": "97027272865",
-      "output": "970.272.728-65"
+      "input": "52331257493",
+      "output": "523.312.574-93"
     },
     {
-      "input": "03061290354",
-      "output": "030.612.903-54"
+      "input": "88210775278",
+      "output": "882.107.752-78"
     },
     {
-      "input": "12685384855",
-      "output": "126.853.848-55"
+      "input": "08090296505",
+      "output": "080.902.965-05"
     },
     {
-      "input": "83135393305",
-      "output": "831.353.933-05"
+      "input": "71477045848",
+      "output": "714.770.458-48"
     },
     {
-      "input": "62263316230",
-      "output": "622.633.162-30"
+      "input": "89168488815",
+      "output": "891.684.888-15"
     },
     {
       "input": "1",
@@ -263,36 +263,36 @@
       "output": "Paraná and Santa Catarina"
     },
     {
-      "input": "97661339803",
-      "output": "São Paulo"
+      "input": "00866697705",
+      "output": "Rio de Janeiro and Espírito Santo"
     },
     {
-      "input": "15375594196",
+      "input": "27060409041",
+      "output": "Rio Grande do Sul"
+    },
+    {
+      "input": "85939745113",
       "output": "Federal District, Goiás, Mato Grosso do Sul, and Tocantins"
     },
     {
-      "input": "78820497867",
-      "output": "São Paulo"
+      "input": "52331257493",
+      "output": "Pernambuco, Rio Grande do Norte, Paraíba, and Alagoas"
     },
     {
-      "input": "97027272865",
-      "output": "São Paulo"
-    },
-    {
-      "input": "03061290354",
-      "output": "Ceará, Maranhão, and Piauí"
-    },
-    {
-      "input": "12685384855",
-      "output": "São Paulo"
-    },
-    {
-      "input": "83135393305",
-      "output": "Ceará, Maranhão, and Piauí"
-    },
-    {
-      "input": "62263316230",
+      "input": "88210775278",
       "output": "Pará, Amazonas, Acre, Amapá, Rondônia, and Roraima"
+    },
+    {
+      "input": "08090296505",
+      "output": "Bahia and Sergipe"
+    },
+    {
+      "input": "71477045848",
+      "output": "São Paulo"
+    },
+    {
+      "input": "89168488815",
+      "output": "São Paulo"
     }
   ],
   "ufScoped": false,

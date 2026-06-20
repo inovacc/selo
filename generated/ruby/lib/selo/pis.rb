@@ -24,5 +24,15 @@ module Selo
 
       "#{d[0, 3]}.#{d[3, 5]}.#{d[8, 2]}-#{d[10, 1]}"
     end
+
+    # generate returns a random, valid PIS (unformatted).
+    def self.generate
+      loop do
+        b = Array.new(10) { rand(10) }
+        b << Mod11.compute_digit(Mod11.weighted_sum(b, DV[:weights]), DV)
+        out = b.join
+        return out unless Mod11.all_equal(out)
+      end
+    end
   end
 end

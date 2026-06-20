@@ -3,35 +3,35 @@
   "group": "D",
   "validate": [
     {
-      "input": "TLC7407",
+      "input": "KHF5885",
       "valid": true
     },
     {
-      "input": "SGY6571",
+      "input": "VQN0879",
       "valid": true
     },
     {
-      "input": "LAS7574",
+      "input": "HDS5362",
       "valid": true
     },
     {
-      "input": "QUN3737",
+      "input": "ZAI4584",
       "valid": true
     },
     {
-      "input": "ANQ4194",
+      "input": "QHO0313",
       "valid": true
     },
     {
-      "input": "KTA6720",
+      "input": "BKM2877",
       "valid": true
     },
     {
-      "input": "DOG7723",
+      "input": "HHU0394",
       "valid": true
     },
     {
-      "input": "ULI1420",
+      "input": "EOH0531",
       "valid": true
     },
     {
@@ -71,67 +71,67 @@
       "valid": false
     },
     {
-      "input": "ANQ419",
+      "input": "BKM287",
       "valid": false
     },
     {
-      "input": "ANQZ194",
+      "input": "BKMZ877",
       "valid": false
     },
     {
-      "input": "DOG772",
+      "input": "EOH053",
       "valid": false
     },
     {
-      "input": "DOGZ723",
+      "input": "EOHZ531",
       "valid": false
     },
     {
-      "input": "KTA672",
+      "input": "HDS536",
       "valid": false
     },
     {
-      "input": "KTAZ720",
+      "input": "HDSZ362",
       "valid": false
     },
     {
-      "input": "LAS757",
+      "input": "HHU039",
       "valid": false
     },
     {
-      "input": "LASZ574",
+      "input": "HHUZ394",
       "valid": false
     },
     {
-      "input": "QUN373",
+      "input": "KHF588",
       "valid": false
     },
     {
-      "input": "QUNZ737",
+      "input": "KHFZ885",
       "valid": false
     },
     {
-      "input": "SGY657",
+      "input": "QHO031",
       "valid": false
     },
     {
-      "input": "SGYZ571",
+      "input": "QHOZ313",
       "valid": false
     },
     {
-      "input": "TLC740",
+      "input": "VQN087",
       "valid": false
     },
     {
-      "input": "TLCZ407",
+      "input": "VQNZ879",
       "valid": false
     },
     {
-      "input": "ULI142",
+      "input": "ZAI458",
       "valid": false
     },
     {
-      "input": "ULIZ420",
+      "input": "ZAIZ584",
       "valid": false
     },
     {
@@ -145,36 +145,36 @@
   ],
   "format": [
     {
-      "input": "TLC7407",
-      "output": "TLC-7407"
+      "input": "KHF5885",
+      "output": "KHF-5885"
     },
     {
-      "input": "SGY6571",
-      "output": "SGY-6571"
+      "input": "VQN0879",
+      "output": "VQN-0879"
     },
     {
-      "input": "LAS7574",
-      "output": "LAS-7574"
+      "input": "HDS5362",
+      "output": "HDS-5362"
     },
     {
-      "input": "QUN3737",
-      "output": "QUN-3737"
+      "input": "ZAI4584",
+      "output": "ZAI-4584"
     },
     {
-      "input": "ANQ4194",
-      "output": "ANQ-4194"
+      "input": "QHO0313",
+      "output": "QHO-0313"
     },
     {
-      "input": "KTA6720",
-      "output": "KTA-6720"
+      "input": "BKM2877",
+      "output": "BKM-2877"
     },
     {
-      "input": "DOG7723",
-      "output": "DOG-7723"
+      "input": "HHU0394",
+      "output": "HHU-0394"
     },
     {
-      "input": "ULI1420",
-      "output": "ULI-1420"
+      "input": "EOH0531",
+      "output": "EOH-0531"
     },
     {
       "input": "1",
