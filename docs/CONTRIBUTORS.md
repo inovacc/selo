@@ -46,6 +46,9 @@ Without Task, the equivalents are `go test -short ./...`, `go test -race -p=1 ./
 4. Add `>kind<_test.go`: table tests, round-trip, fuzz, and — for check-digit types —
    **externally-sourced** sample(s) (never invent a sample to make a test pass).
 5. `task test:full && task lint`. CLI/MCP need no edits (registry-derived).
+6. *(For multi-language codegen)* add a `KindPlan` for the kind in `internal/codegen/spec.go` so
+   `selo gen` can emit it in the other languages; the per-language emitters, golden snapshot tests,
+   and the CI matrix then cover it (see [CODEGEN.md](CODEGEN.md)).
 
 ## Adding a new UF to a UF-scoped type (RG / IE)
 - Provide an **authoritative algorithm** and **≥2 independently-sourced samples** verified by hand.

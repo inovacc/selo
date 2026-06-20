@@ -69,13 +69,14 @@ per-UF algorithms plus ≥2 verifiable samples.
 - See [CODEGEN.md](CODEGEN.md).
 
 ## Test Coverage
-**Current:** 92.2%  |  **Target:** 80%+ (met)
+**Current:** 94.2%  |  **Target:** 80%+ (met)
 
 | Package | Coverage | Status |
 |---------|----------|--------|
-| `github.com/inovacc/selo` (core) | 94.2% | Healthy |
-| `github.com/inovacc/selo/compat` | 95.3% | Healthy |
-| `github.com/inovacc/selo/cmd/selo` (CLI) | 87.0% | Healthy |
-| `github.com/inovacc/selo/mcp` | 84.4% | Healthy (error-path branches lightest) |
+| `github.com/inovacc/selo` (core) | 92.5% | Healthy |
+| `github.com/inovacc/selo/compat` | 94.6% | Healthy |
+| `github.com/inovacc/selo/cmd/selo` (CLI) | 89.3% | Healthy |
+| `github.com/inovacc/selo/mcp` | 93.3% | Healthy |
+| `github.com/inovacc/selo/internal/codegen` | 95.6% | Healthy |
 
-Measured with `task cover` (`go test -covermode=atomic -coverprofile=… ./...`) on 2026-06-19.
+Measured with `task cover` (`go test -covermode=atomic -coverprofile=… ./...`) on 2026-06-20.

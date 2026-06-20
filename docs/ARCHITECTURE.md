@@ -11,7 +11,7 @@ document type requires no changes to them.
 flowchart TB
     subgraph surfaces["Surfaces"]
         CLI["CLI — cmd/selo<br/>(Cobra; subcommand per Kind)"]
-        MCP["MCP server — mcp<br/>(stdio; 6 tools)"]
+        MCP["MCP server — mcp<br/>(stdio; 7 tools)"]
         LIB["Library API<br/>(NewCPF()… + registry funcs)"]
         COMPAT["compat<br/>(paemuri/brdoc Is* drop-in)"]
     end
@@ -32,6 +32,11 @@ flowchart TB
     REG -->|dispatch by Kind| TYPES
     TYPES -.implement.-> IFACE
     REG -.consumes.-> IFACE
+
+    GEN["Code generation — internal/codegen<br/>selo gen · generate_code<br/>emits TS · JS · Ruby · Java · C# · Python"]
+    CLI --> GEN
+    MCP --> GEN
+    GEN -.derives from.-> REG
 
     AGENT["AI agent"] -->|JSON-RPC / stdio| MCP
     USER["User / script"] -->|argv, exit codes| CLI
@@ -64,7 +69,7 @@ sequenceDiagram
     else MCP start
         MCP->>Reg: Kinds()
         Reg-->>MCP: sorted kinds (tool enums)
-        MCP->>MCP: register 6 tools
+        MCP->>MCP: register 7 tools
     end
 ```
 
@@ -119,7 +124,7 @@ sequenceDiagram
 
 ```mermaid
 flowchart LR
-    OPT["Options<br/>WithUF / WithVehicle / WithCompany"] --> GEN["GeneratePerson"]
+    OPT["Options<br/>WithUF / WithSeed / WithVehicle / WithCompany"] --> GEN["GeneratePerson"]
     GEN --> UF{"UF chosen<br/>(explicit or random)"}
     UF --> CPF["CPF (region matches UF)"]
     UF --> VOTER["Voter ID (UF code)"]
@@ -129,14 +134,43 @@ flowchart LR
     CPF & VOTER & PHONE & CEP & REST --> P["Person (all valid, UF-consistent)"]
 ```
 
+## Code generation
+
+`selo gen` (and the MCP `generate_code` tool) emit standalone validators in other languages from
+the *same* verified Go algorithms. The `internal/codegen` package holds a declarative per-kind spec
+and Go-produced golden vectors; per-language emitters render an installable module plus a test suite
+for each target. A CI matrix runs every target's golden vectors on its real toolchain, so a wrong
+port fails its own tests.
+
+```mermaid
+flowchart LR
+    SPEC["spec.go<br/>(per-kind KindPlan + check-digit rules)"]
+    VEC["vectors.go<br/>(golden vectors from live selo)"]
+    DATA["data.go<br/>(CEP ranges, DDD→UF)"]
+    EMIT["per-language emitters<br/>emit_&lt;lang&gt;*.go + templates/&lt;lang&gt;"]
+    SPEC --> EMIT
+    VEC --> EMIT
+    DATA --> EMIT
+    EMIT --> OUT["validate / format / origin / generate<br/>for all 13 kinds"]
+    OUT --> TS["TypeScript"]
+    OUT --> JSL["JavaScript"]
+    OUT --> RB["Ruby"]
+    OUT --> JV["Java"]
+    OUT --> CS["C#"]
+    OUT --> PY["Python"]
+```
+
+See [CODEGEN.md](CODEGEN.md).
+
 ## Packages
 
 | Package | Path | Responsibility |
 |---------|------|----------------|
 | core | `github.com/inovacc/selo` | `Document` interface, registry, all document types, `GeneratePerson`, errors |
-| CLI | `cmd/selo` | Cobra CLI; registry-derived subcommands; `detect`, `person`, `mcp`, `version` |
-| MCP | `mcp` | stdio Model Context Protocol server; 6 registry-backed tools |
+| CLI | `cmd/selo` | Cobra CLI; registry-derived subcommands; `detect`, `person`, `gen`, `mcp`, `version` |
+| MCP | `mcp` | stdio Model Context Protocol server; 7 registry-backed tools |
 | compat | `compat` | drop-in mirror of `paemuri/brdoc` v3 `Is*` API + signature-parity guard |
+| codegen | `internal/codegen` | multi-language code generation (spec + golden vectors + per-language emitters) backing `selo gen` and the `generate_code` MCP tool |
 
 ## Key design decisions
 See the ADRs: [interface + registry architecture](adr/0001-interface-registry-architecture.md) and

@@ -46,10 +46,13 @@
 //	    fmt.Println("Valid CNPJ")
 //	}
 //
-// Auto-detection example:
+// Auto-detection example (ValidateDocument is deprecated; use Detect + Validate):
 //
-//	docType, isValid := selo.ValidateDocument("123.456.789-09")
-//	fmt.Printf("Type: %s, Valid: %v\n", docType, isValid)
+//	kind, ok := selo.Detect("123.456.789-09")
+//	if ok {
+//	    valid, _ := selo.Validate(kind, "123.456.789-09")
+//	    fmt.Printf("Type: %s, Valid: %v\n", kind, valid)
+//	}
 //
 // # Generation
 //

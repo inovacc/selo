@@ -9,17 +9,18 @@ This repository contains the complete **selo** toolkit for validating, generatin
 ```
 selo/
 ├── cmd/
-│   └── selo/
-│       └── main.go             # Cobra CLI (generate/validate, bulk support)
+│   └── selo/                   # Cobra CLI (subcommand per kind; detect/person/gen/mcp/version)
 ├── cpf.go, cnpj.go, rg.go, ie.go, …  # One file per document type
 ├── document.go                 # Document interface + Kind constants
 ├── registry.go                 # Self-registering type registry
-├── person.go                   # GeneratePerson (synthetic identities)
+├── person.go                   # GeneratePerson (synthetic identities; seedable)
 ├── compat/                     # paemuri/brdoc drop-in compat layer
-├── mcp/                        # MCP server (stdio)
+├── mcp/                        # MCP server (stdio; 7 tools)
+├── internal/codegen/           # multi-language code generation (selo gen)
+├── generated/                  # committed reference output per target language
 ├── cpf_cnpj_test.go, *_test.go # Test suites (per type)
 ├── doc.go                      # Package documentation
-├── docs/                       # ROADMAP, ARCHITECTURE, ADRs, …
+├── docs/                       # ROADMAP, ARCHITECTURE, CODEGEN, ADRs, …
 ├── CHANGELOG.md                # Version history
 ├── LICENSE                     # MIT License
 ├── README.md                   # Complete documentation
@@ -71,6 +72,16 @@ type cnpjs.txt | selo cnpj --validate --from -
 # Generate many
 selo cpf  --generate --count 10
 selo cnpj --generate --count 5
+
+# Synthetic identities (deterministic with --seed)
+selo person --uf SP --json
+selo person --uf SP --seed 42 --count 3 --json
+
+# Generate validators in other languages (ts, js, ruby, java, csharp, python)
+selo gen --lang python --kind all --out ./generated/python
+
+# Run the MCP server over stdio
+selo mcp
 ```
 
 ## 📚 Usage in Your Project
@@ -157,8 +168,8 @@ After pushing to GitHub:
 ### Report vulnerabilities
 
 ```bash
-# Check for known vulnerabilities
-go list -json -m all | nancy sleuth
+# Check for known vulnerabilities (also enforced in CI via the quality-check workflow)
+go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 ```
 
 ## 🚀 Release Process
@@ -183,7 +194,7 @@ go list -json -m all | nancy sleuth
 1. ✅ Upload to GitHub: `https://github.com/inovacc/selo`
 2. ✅ Enable GitHub Actions (CI will run automatically)
 3. ✅ Add repository description and topics
-4. ✅ Create first release (v0.1.0)
+4. ✅ Releases published through v1.4.0 (see CHANGELOG.md)
 5. 📝 Share on social media/communities
 6. 📊 Monitor usage via pkg.go.dev
 

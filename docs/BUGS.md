@@ -3,9 +3,9 @@
 Confirmed defects in `github.com/inovacc/selo`. Limitations and by-design constraints live in
 [ISSUES.md](ISSUES.md); future work in [BACKLOG.md](BACKLOG.md).
 
-**Status as of 2026-06-19:** no open bugs. `go build/vet/test ./...` pass on all four packages
-(total coverage 92.2%), and an independent whole-branch review of the latest changes (plans 001–006)
-found zero Critical and zero Important issues.
+**Status as of 2026-06-20:** no open bugs. `go build/vet/test ./...` pass on all five packages
+(total coverage 94.2%), and the codegen CI matrix is green across all six target languages
+(TypeScript, JavaScript, Ruby, Java, C#, Python).
 
 ## Open
 _None._
@@ -30,6 +30,12 @@ _None._
 ```
 
 ## Fixed
+- **Python golden test broke after `task gen:verify:python`.** `TestGoldenPython_NoExtraDeterministicFiles`
+  walked `generated/python` without skipping Python toolchain dirs, so `pip install -e .` / pytest
+  artifacts (`*.egg-info/`, `__pycache__/`, `.pytest_cache/`) were flagged as "extra" files and failed
+  the test. Fixed 2026-06-20 by skipping those dirs, mirroring how the TS/JS gates skip `node_modules`.
+  (CI never hit it — its `go test` runs on a clean checkout — but a local `gen:verify:python` then
+  `go test` would.)
 - **CNPJ accepted all-equal inputs** (e.g. `00000000000000`). Fixed 2026-06 (commit `3797e6c`,
   advisor plan 002) by adding a shared `allEqualBytes` guard to `CNPJ.Validate`, matching CPF.
   Regression test present.

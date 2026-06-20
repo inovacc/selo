@@ -82,6 +82,15 @@ func TestGoldenPython_NoExtraDeterministicFiles(t *testing.T) {
 		}
 
 		if info.IsDir() {
+			// Skip Python toolchain artifacts (created by `pip install -e .` /
+			// pytest, e.g. via `task gen:verify:python`); they are gitignored and
+			// not emitter output, mirroring how the TS/JS gates skip node_modules.
+			name := info.Name()
+			if name == "__pycache__" || name == ".pytest_cache" || name == ".venv" ||
+				name == "build" || strings.HasSuffix(name, ".egg-info") {
+				return filepath.SkipDir
+			}
+
 			return nil
 		}
 

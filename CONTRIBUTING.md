@@ -1,6 +1,6 @@
-# Contributing to brdoc
+# Contributing to selo
 
-First off, thank you for considering contributing to brdoc! 🎉
+First off, thank you for considering contributing to selo! 🎉
 
 ## 🤝 How Can I Contribute?
 
@@ -54,9 +54,10 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
    golangci-lint run
    ```
 
-7. Commit your changes:
+7. Commit your changes (the project uses [Conventional Commits](https://www.conventionalcommits.org/);
+   no AI attribution / `Co-Authored-By` lines):
    ```bash
-   git commit -m 'Add amazing feature'
+   git commit -m 'feat: add amazing feature'
    ```
 
 8. Push to your fork:
@@ -128,12 +129,17 @@ func TestFeature(t *testing.T) {
 ## 🏗️ Project Structure
 
 ```
-brdoc/
-├── brdoc.go              # Main implementation
-├── brdoc_test.go         # Test suite
-├── cmd/
-│   └── brdoc/
-│       └── main.go       # Cobra CLI (generate/validate, bulk support)
+selo/
+├── *.go                  # core library: one document type per file
+│                         # (cpf.go, cnpj.go, cnh.go, …, rg.go, ie.go, pix.go),
+│                         # plus document.go (interface), registry.go, person.go
+├── compat/               # paemuri/brdoc Is* drop-in compat layer
+├── cmd/selo/             # Cobra CLI (subcommand per kind; detect/person/gen/mcp/version)
+├── mcp/                  # stdio MCP server (registry-backed tools)
+├── internal/codegen/     # multi-language code generation (selo gen)
+├── generated/            # committed reference output per target language
+├── docs/                 # ROADMAP, MILESTONES, ARCHITECTURE, CODEGEN, …
+├── Taskfile.yml          # task runner (test/lint/cover/gen)
 ├── go.mod
 ├── LICENSE
 └── README.md
@@ -161,11 +167,11 @@ Before submitting your PR, ensure:
 
 We're particularly interested in contributions for:
 
-- Additional Brazilian document validators (RG, CNH, PIS, etc.)
-- Performance improvements
-- Documentation improvements
-- Bug fixes
-- Test coverage improvements
+- **Inscrição Estadual breadth** — UFs beyond SP (authoritative algorithm + ≥2 verifiable samples
+  required; see [docs/IE-NOTES.md](docs/IE-NOTES.md))
+- **Multi-state RG** — UFs beyond SP, each with a sourced algorithm + samples
+- **Additional code-generation target languages** (beyond TS / JS / Ruby / Java / C# / Python)
+- Performance improvements, bug fixes, and test-coverage improvements
 
 ## ❓ Questions?
 
@@ -180,4 +186,4 @@ By contributing, you agree that your contributions will be licensed under the MI
 
 ---
 
-Thank you for contributing to brdoc! 🚀
+Thank you for contributing to selo! 🚀

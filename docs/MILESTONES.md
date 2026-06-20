@@ -63,7 +63,7 @@ document toolkit, and the post-build hardening (advisor plans 001–006).
   SP only. Behavior change for callers relying on `--uf RJ`.
 - **Test Coverage:** ≥85% per package (maintained).
 
-## v1.4.0 — Surface the seed + a 6th codegen language — 🔜 RELEASING (2026-06-19)
+## v1.4.0 — Surface the seed + a 6th codegen language — ✅ RELEASED (2026-06-19, tag `v1.4.0`)
 - **Goal:** expose seedable generation at the CLI/MCP surfaces and widen codegen reach.
 - Shipped:
   - ✅ CLI `selo person --seed N` and MCP `generate_person` `seed` param (library already supported
@@ -73,7 +73,8 @@ document toolkit, and the post-build hardening (advisor plans 001–006).
   - ✅ CLI consistency: unified per-command `SilenceUsage` on the root command.
 - **Blocked (need verifiable sources):** Inscrição Estadual beyond SP (26 UFs), multi-state RG /
   re-adding RJ, and RNM — each gated on an authoritative algorithm plus ≥2 verifiable samples.
-- **Coverage target:** maintain ≥85% per package.
+- **Test Coverage:** 94.2% total (core 92.5%, compat 94.6%, cmd/selo 89.3%, mcp 93.3%,
+  internal/codegen 95.6%).
 
 ## v1.5.0 — Breadth — 🔜 PLANNED
 - **Goal:** broaden UF coverage once authoritative sources are obtained.

@@ -27,8 +27,9 @@ PIX keys (CPF/CNPJ/email/phone/EVP).
 ### Surfaces
 - **Library** — ergonomic per-type API (`NewCPF()…`) and a generic registry-driven API.
 - **CLI** (`cmd/selo`) — one subcommand per kind, derived from the registry; bulk `--from FILE|-`,
-  `--count`, `--uf`, scriptable exit codes; plus `detect`, `person`, `version`.
-- **MCP server** (`selo mcp`) — 6 stdio tools with registry-sourced kind enums.
+  `--count`, `--bulk`, `--uf`, scriptable exit codes; plus `detect`, `person` (`--seed`), `gen`,
+  `mcp`, `version`.
+- **MCP server** (`selo mcp`) — 7 stdio tools with registry-sourced kind enums.
 
 ### Compatibility
 - **`compat` subpackage** — drop-in replacement for `paemuri/brdoc` v3's `Is*` API, with a
@@ -36,17 +37,28 @@ PIX keys (CPF/CNPJ/email/phone/EVP).
 
 ### Synthetic data
 - **`GeneratePerson`** — one coherent fake identity carrying every document type, all valid and
-  UF-consistent; options `WithUF`, `WithVehicle`, `WithCompany`.
+  UF-consistent; options `WithUF`, `WithSeed`/`WithRand`, `WithVehicle`, `WithCompany`, `Formatted`.
+
+### Code generation
+- **`selo gen`** (and the MCP `generate_code` tool) — emit standalone validate/format/origin/generate
+  code for all 13 kinds in **TypeScript, JavaScript, Ruby, Java, C#, and Python**, each with
+  Go-produced golden vectors and a runnable test suite; a CI matrix verifies every target on its real
+  toolchain ([CODEGEN.md](CODEGEN.md)).
+
+### Deterministic generation
+- **Seedable generation** — `WithSeed(int64)` / `WithRand(*rand.Rand)` on `GeneratePerson`, the
+  `RandGenerator` interface (`GenerateRand(*rand.Rand)`) on every document type, and the registry
+  `GenerateRand(kind, r)` helper; exposed at the CLI (`selo person --seed`) and MCP
+  (`generate_person` `seed`). Same seed → identical output.
 
 ## In progress
 - **Inscrição Estadual breadth** — SP shipped; MG/RJ/RS/PR + remaining UFs pending verified
   algorithms/samples ([IE-NOTES.md](IE-NOTES.md)).
 
 ## Proposed
-- **Multi-state RG** — extend RG beyond SP/RJ where per-UF check-digit rules are documented
-  (verify RJ independently first).
-- **Seedable generation** — `WithSeed` / `*rand.Rand` so `GeneratePerson` and per-type `Generate`
-  produce deterministic fixtures.
+- **Multi-state RG** — extend RG beyond SP where per-UF check-digit rules are documented. RJ was
+  removed in v1.3.0 (its algorithm differs from SP); re-adding it (or any UF) is blocked on an
+  authoritative algorithm + ≥2 verifiable samples.
+- **More codegen targets** — additional languages beyond the current six (e.g. Go, Kotlin, Rust).
 - **IE field in `GeneratePerson`** — include the person's UF Inscrição Estadual once IE coverage
   is broad enough.
-- **Richer CLI UX** — distinct "UF not implemented" message for UF-scoped kinds (vs. plain `invalid`).
