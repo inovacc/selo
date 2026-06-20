@@ -7,6 +7,8 @@ namespace Inovacc.Selo
     /// <summary>CNH validation and formatting (coupled check digits).</summary>
     public static class Cnh
     {
+        private static readonly Random Rng = new Random();
+
         /// <summary>CheckDigits computes both coupled CNH check digits over the 9-digit base.</summary>
         private static (int Dv1, int Dv2) CheckDigits(string baseDigits)
         {
@@ -73,6 +75,27 @@ namespace Inovacc.Selo
             }
 
             return d;
+        }
+
+        /// <summary>Generate returns a random valid 11-digit CNH.</summary>
+        public static string Generate()
+        {
+            string outv;
+            do
+            {
+                var baseDigits = new char[9];
+                for (var i = 0; i < 9; i++)
+                {
+                    baseDigits[i] = (char)('0' + Rng.Next(10));
+                }
+
+                var baseStr = new string(baseDigits);
+                var (dv1, dv2) = CheckDigits(baseStr);
+                outv = baseStr + dv1.ToString(System.Globalization.CultureInfo.InvariantCulture) + dv2.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            }
+            while (Mod11.AllEqual(outv));
+
+            return outv;
         }
     }
 }

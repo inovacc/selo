@@ -7,6 +7,8 @@ namespace Inovacc.Selo
     /// <summary>CEP validation, formatting, and UF origin.</summary>
     public static class Cep
     {
+        private static readonly Random Rng = new Random();
+
         /// <summary>RangeFor returns the UF whose prefix range contains prefix, or null.</summary>
         private static string? RangeFor(int prefix)
         {
@@ -62,6 +64,16 @@ namespace Inovacc.Selo
             }
 
             return uf;
+        }
+
+        /// <summary>Generate returns a random valid 8-digit CEP (unformatted).</summary>
+        public static string Generate()
+        {
+            var r = Data.CepRanges[Rng.Next(Data.CepRanges.Length)];
+            var prefix = r.From + Rng.Next(r.To - r.From + 1);
+            var suffix = Rng.Next(100000);
+            return prefix.ToString(System.Globalization.CultureInfo.InvariantCulture).PadLeft(3, '0') +
+                suffix.ToString(System.Globalization.CultureInfo.InvariantCulture).PadLeft(5, '0');
         }
     }
 }

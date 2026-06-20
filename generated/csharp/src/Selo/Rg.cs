@@ -9,6 +9,8 @@ namespace Inovacc.Selo
     {
         private static readonly CheckDigit Dv = new CheckDigit { Weights = new[] { 2, 3, 4, 5, 6, 7, 8, 9 }, Rule = DVRule.ElevenMinus, EncodeXAt = 10, EncodeZeroAt = 11 };
 
+        private static readonly Random Rng = new Random();
+
         /// <summary>RgUfs lists the implemented federative units (shared SP/RJ algorithm).</summary>
         public static readonly string[] RgUfs = { "SP", "RJ" };
 
@@ -106,6 +108,21 @@ namespace Inovacc.Selo
 
             var checkChar = Mod11.EncodeDigit(p.Value.Check, Dv);
             var d = string.Concat(Array.ConvertAll(p.Value.Base, x => x.ToString(System.Globalization.CultureInfo.InvariantCulture)));
+            return $"{d.Substring(0, 2)}.{d.Substring(2, 3)}.{d.Substring(5, 3)}-{checkChar}";
+        }
+
+        /// <summary>Generate returns a random valid SP-style RG in masked form (XX.XXX.XXX-C).</summary>
+        public static string Generate()
+        {
+            var baseDigits = new int[8];
+            for (var i = 0; i < 8; i++)
+            {
+                baseDigits[i] = Rng.Next(10);
+            }
+
+            var dv = Mod11.ComputeDigit(Mod11.WeightedSum(baseDigits, Dv.Weights), Dv);
+            var checkChar = Mod11.EncodeDigit(dv, Dv);
+            var d = string.Concat(Array.ConvertAll(baseDigits, x => x.ToString(System.Globalization.CultureInfo.InvariantCulture)));
             return $"{d.Substring(0, 2)}.{d.Substring(2, 3)}.{d.Substring(5, 3)}-{checkChar}";
         }
     }

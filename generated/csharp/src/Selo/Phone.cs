@@ -7,6 +7,8 @@ namespace Inovacc.Selo
     /// <summary>Phone validation, formatting, and UF origin (DDD lookup).</summary>
     public static class Phone
     {
+        private static readonly Random Rng = new Random();
+
         /// <summary>NationalNumber strips a +55/0055 country prefix, returning the rest, or null.</summary>
         private static string? NationalNumber(string d)
         {
@@ -95,6 +97,34 @@ namespace Inovacc.Selo
             }
 
             return uf;
+        }
+
+        /// <summary>Generate returns a random valid Brazilian phone number (national digits only).</summary>
+        public static string Generate()
+        {
+            var ddds = new string[Data.DddToUf.Count];
+            Data.DddToUf.Keys.CopyTo(ddds, 0);
+            var ddd = ddds[Rng.Next(ddds.Length)];
+            if (Rng.NextDouble() < 0.5)
+            {
+                var sub = new char[9];
+                sub[0] = '9';
+                for (var i = 1; i < 9; i++)
+                {
+                    sub[i] = (char)('0' + Rng.Next(10));
+                }
+
+                return ddd + new string(sub);
+            }
+
+            var landline = new char[8];
+            landline[0] = (char)('0' + 2 + Rng.Next(4));
+            for (var i = 1; i < 8; i++)
+            {
+                landline[i] = (char)('0' + Rng.Next(10));
+            }
+
+            return ddd + new string(landline);
         }
     }
 }

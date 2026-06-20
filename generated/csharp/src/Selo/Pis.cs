@@ -9,6 +9,8 @@ namespace Inovacc.Selo
     {
         private static readonly CheckDigit Dv = new CheckDigit { Weights = new[] { 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 }, Rule = DVRule.ModRemainder, RemainderTo0 = new[] { 0, 1 } };
 
+        private static readonly Random Rng = new Random();
+
         /// <summary>Validate reports whether value is a valid Pis.</summary>
         public static bool Validate(string value)
         {
@@ -38,6 +40,26 @@ namespace Inovacc.Selo
             }
 
             return $"{d.Substring(0, 3)}.{d.Substring(3, 5)}.{d.Substring(8, 2)}-{d.Substring(10, 1)}";
+        }
+
+        /// <summary>Generate returns a random valid Pis in formatted form.</summary>
+        public static string Generate()
+        {
+            string outv;
+            do
+            {
+                var d = new int[10];
+                for (var i = 0; i < 10; i++)
+                {
+                    d[i] = Rng.Next(10);
+                }
+
+                var dv = Mod11.ComputeDigit(Mod11.WeightedSum(d, Dv.Weights), Dv);
+                outv = string.Concat(Array.ConvertAll(d, x => x.ToString(System.Globalization.CultureInfo.InvariantCulture))) + dv.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            }
+            while (Mod11.AllEqual(outv));
+
+            return Format(outv);
         }
 
         private static int[] Slice(int[] xs, int from, int to)
