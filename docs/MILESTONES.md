@@ -35,13 +35,28 @@ document toolkit, and the post-build hardening (advisor plans 001–006).
   check-digit convention verified against authoritative sources; Inscrição Estadual SP shipped.
 - **Test Coverage:** 92.2% total (core 94.2%, compat 95.3%, cmd/selo 87.0%, mcp 84.4%).
 
-## v1.2.0 — Breadth — 🔜 PLANNED
+## v1.2.0 — Multi-language code generation + CLI polish — 🔜 RELEASING (2026-06-19)
+- **Goal:** generate validators in other languages from the verified Go algorithms, plus CLI and
+  quality polish.
+- **Code generation (`selo gen`):** validate/format/origin for all 13 kinds in TypeScript,
+  JavaScript, Ruby, Java, and C# — Go-produced golden vectors + per-language test suites; a CI
+  matrix verifies all five on real toolchains. `internal/codegen` framework + `selo gen` CLI + MCP
+  `generate_code` tool. See [CODEGEN.md](CODEGEN.md).
+- **CLI:** `--bulk N` bulk document generation (implies `--generate`); `--uf` now surfaces the real
+  reason ("UF not implemented") instead of a bare "invalid".
+- **Hardening:** `.gitattributes` enforces LF repo-wide (fixed the CRLF/CI divergence + the
+  `default: all` golangci-lint pass); `scanBuf` made call-local (latent data race removed); MCP
+  error-path coverage 85% → 93%.
+- **Coverage target:** ≥85% per package (met).
+
+## v1.3.0 — Breadth — 🔜 PLANNED
 - **Goal:** broaden UF coverage and reproducibility.
 - Candidate scope:
   - Inscrição Estadual next batch (MG, RJ, RS, PR) — each gated by an authoritative algorithm
     plus ≥2 verifiable samples.
   - Multi-state RG (verify RJ independently, then add documented UFs).
   - `GenPerson` seedable generation for deterministic fixtures.
+  - Cross-language `generate()` parity in the codegen targets.
 - **Coverage target:** maintain ≥85% per package.
 
 ## v2.0.0 — Cleanup (breaking) — 🔮 FUTURE

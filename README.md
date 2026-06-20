@@ -139,8 +139,23 @@ go run ./cmd/selo mcp
 ```
 
 Tools (kind enums sourced from the registry): `validate_document`, `generate_document`,
-`format_document`, `detect_document`, `list_document_types`, `generate_person`. Logs go to stderr; the protocol
-runs on stdin/stdout.
+`format_document`, `detect_document`, `list_document_types`, `generate_person`, `generate_code`.
+Logs go to stderr; the protocol runs on stdin/stdout.
+
+## 🌍 Code generation
+
+Generate validators in other languages from the *same verified algorithms*. `selo gen` emits
+**validate / format / origin** code for all 13 kinds in **TypeScript, JavaScript, Ruby, Java, and
+C#**, each shipped with Go-produced golden test vectors and a runnable test suite:
+
+```bash
+selo gen --lang ts   --kind cpf --out ./out      # one kind, one language
+selo gen --lang ruby --kind all --out ./generated/ruby   # all 13 kinds
+```
+
+Supported languages: `ts`, `js`, `ruby`, `java`, `csharp`. A CI matrix runs each target's golden
+vectors on real toolchains, so a wrong port fails its own tests. The MCP `generate_code` tool
+returns the same file set. Full details in [`docs/CODEGEN.md`](docs/CODEGEN.md).
 
 ## 🔁 Migrating from `paemuri/brdoc`
 

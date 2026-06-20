@@ -8,6 +8,33 @@ All notable changes to this project are documented here. The format is based on
 > (module `github.com/inovacc/selo`) in the 1.1.0 line. The `v1.0.0` tag predates the rename and
 > points at the original `brdoc` code; `github.com/inovacc/selo` is first installable at **v1.1.0**.
 
+## [1.2.0] - 2026-06-19
+
+Multi-language code generation, a bulk-generate CLI flag, and CLI/quality polish.
+
+### Added
+- **`selo gen` — multi-language code generation.** Emits **validate / format / origin** code for
+  all 13 document kinds in **TypeScript, JavaScript, Ruby, Java, and C#**, each with Go-produced
+  golden test vectors and a runnable test suite. Includes the `internal/codegen` framework (spec +
+  vectors + data tables + per-language emitters), the `selo gen` CLI, the MCP `generate_code` tool,
+  `Taskfile` `gen:*` / `gen:verify:*` targets, and a CI matrix (`codegen.yml`) verifying every
+  target on real toolchains (node / ruby / JDK+Maven / .NET). See `docs/CODEGEN.md`.
+- **CLI `--bulk N` / `-b N`** — bulk-generate N documents (implies `--generate`).
+- `.gitattributes` enforcing LF line endings repo-wide.
+
+### Changed
+- CLI `--uf` for a UF-scoped kind (RG/IE) now surfaces the real reason ("UF not implemented")
+  instead of a bare "invalid".
+- The MCP server now exposes **7 tools** (added `generate_code`).
+
+### Fixed
+- `scanBuf` shared package-level scanner buffer made call-local in `cmd/selo/iohelper.go`
+  (removed a latent data race).
+- Repaired CI (red since CI was first enabled): `setup-go go-version: latest` → `stable`;
+  satisfied the strict `golangci-lint default: all` config (84 pre-existing issues); resolved the
+  CRLF/LF divergence that broke local-vs-CI parity.
+- Raised MCP error-path test coverage 85% → 93%.
+
 ## [1.1.0] - 2026-06-19
 
 First release under the `github.com/inovacc/selo` module path: the rebrand, the complete
@@ -107,6 +134,7 @@ Superseded by the `selo` rebrand in 1.1.0. See the entries below for the early h
 - `Fixed` for any bug fixes
 - `Security` in case of vulnerabilities
 
+[1.2.0]: https://github.com/inovacc/selo/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/inovacc/selo/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/inovacc/selo/releases/tag/v1.0.0
 [0.1.0]: https://github.com/inovacc/selo/releases/tag/v0.1.0

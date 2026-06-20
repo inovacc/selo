@@ -41,13 +41,24 @@ is breadth (more Inscrição Estadual UFs, multi-state RG) and reproducible gene
   `WithUF`, `WithVehicle`, `WithCompany`.
 
 ## Phase 6 — Breadth & polish — 🚧 IN PROGRESS
+- [COMPLETE] Repo hygiene: `.gitattributes` enforces LF repo-wide (settled the CRLF/CI noise).
+- [COMPLETE] CLI: `--bulk N` bulk document generation; `--uf` now surfaces "UF not implemented"
+  instead of a bare "invalid"; `scanBuf` shared buffer made call-local (latent data race removed).
 - [IN PROGRESS] **Inscrição Estadual** beyond SP — MG/RJ/RS/PR researched but deferred for lack
   of ≥2 verifiable samples; 26 UFs remain (see [IE-NOTES.md](IE-NOTES.md)).
 - [PLANNED] **Multi-state RG** — extend beyond SP/RJ where per-UF rules are documented; verify
   the RJ algorithm independently first.
 - [PLANNED] **Reproducible `GenPerson`** — accept a `*rand.Rand` seed for deterministic fixtures.
 - [PLANNED] Remove the deprecated `ValidateDocument` after 2026-07-18 (see BACKLOG).
-- [PLANNED] Repo hygiene: add `.gitattributes` (`*.go text eol=lf`) to settle CRLF noise.
+
+## Phase 7 — Multi-language code generation — ✅ COMPLETE
+- [COMPLETE] `selo gen` emits validate/format/origin code for all 13 kinds in **TypeScript,
+  JavaScript, Ruby, Java, and C#**, each with Go-produced golden vectors and a runnable test suite.
+- [COMPLETE] `internal/codegen` framework (spec + golden vectors + data tables + per-language
+  emitters), the `selo gen` CLI, and the MCP `generate_code` tool.
+- [COMPLETE] CI matrix (`codegen.yml`) verifies every target on real toolchains (all 5 green).
+- [PLANNED] Cross-language `generate()` parity (targets currently validate/format/origin only).
+- See [CODEGEN.md](CODEGEN.md).
 
 ## Test Coverage
 **Current:** 92.2%  |  **Target:** 80%+ (met)
