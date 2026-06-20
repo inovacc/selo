@@ -21,9 +21,21 @@ func TestVersionFuncDefault(t *testing.T) {
 	assert.NotEmpty(t, version())
 }
 
-func TestRootHasNoCompletionCmd(t *testing.T) {
+func TestRootHasCompletionCmd(t *testing.T) {
 	root := newRootCmd()
-	assert.Nil(t, findCmd(root, "completion"))
+	assert.NotNil(t, findCmd(root, "completion"))
+}
+
+func TestCompletionBashGenerates(t *testing.T) {
+	out, err := runCmd(t, "completion", "bash")
+	require.NoError(t, err)
+	assert.Contains(t, out, "# bash completion")
+	assert.Contains(t, out, sdk.CLIUse)
+}
+
+func TestCompletionRejectsUnknownShell(t *testing.T) {
+	_, err := runCmd(t, "completion", "tcsh")
+	require.Error(t, err)
 }
 
 func TestRootSilences(t *testing.T) {

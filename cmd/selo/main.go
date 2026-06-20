@@ -51,8 +51,9 @@ func main() {
 
 // newRootCmd assembles the Cobra root command: registry-driven per-kind
 // subcommands plus the top-level detect and version commands. UX niceties from
-// the original CLI are preserved (SilenceUsage/SilenceErrors, no default
-// completion command).
+// the original CLI are preserved (SilenceUsage/SilenceErrors). Cobra's default
+// completion command is disabled in favour of an explicit, documented one
+// (newCompletionCmd).
 func newRootCmd() *cobra.Command {
 	root := &cobra.Command{
 		Use:   sdk.CLIUse,
@@ -71,6 +72,7 @@ func newRootCmd() *cobra.Command {
 	root.AddCommand(newMCPCmd())
 	root.AddCommand(newPersonCmd())
 	root.AddCommand(newGenCmd())
+	root.AddCommand(newCompletionCmd())
 
 	return root
 }
