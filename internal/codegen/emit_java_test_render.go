@@ -32,7 +32,8 @@ func (e javaEmitter) renderTest(kind selo.Kind, plan KindPlan, _ Vector) string 
 	b.WriteString(javaHeaderComment())
 	b.WriteString("package com.inovacc.selo;\n\n")
 	b.WriteString("import static org.junit.jupiter.api.Assertions.assertEquals;\n")
-	b.WriteString("import static org.junit.jupiter.api.Assertions.assertThrows;\n\n")
+	b.WriteString("import static org.junit.jupiter.api.Assertions.assertThrows;\n")
+	b.WriteString("import static org.junit.jupiter.api.Assertions.assertTrue;\n\n")
 	b.WriteString("import com.fasterxml.jackson.databind.JsonNode;\n")
 	b.WriteString("import com.fasterxml.jackson.databind.ObjectMapper;\n")
 	b.WriteString("import java.io.InputStream;\n")
@@ -104,6 +105,14 @@ func (e javaEmitter) renderTest(kind selo.Kind, plan KindPlan, _ Vector) string 
 		b.WriteString("        }\n")
 		b.WriteString("    }\n")
 	}
+
+	// generate round-trip: 100 generated values must validate.
+	b.WriteString("\n    @Test\n")
+	b.WriteString("    void generate() {\n")
+	b.WriteString("        for (int i = 0; i < 100; i++) {\n")
+	fmt.Fprintf(&b, "            assertTrue(%s.validate(%s.generate()), \"generated value must validate\");\n", name, name)
+	b.WriteString("        }\n")
+	b.WriteString("    }\n")
 
 	b.WriteString("}\n")
 

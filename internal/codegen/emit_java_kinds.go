@@ -12,11 +12,20 @@ import (
 // coupled DVs, CNS sum-zero, CNPJ char-map) carry bespoke fragments, exactly as
 // the spec Notes flag.
 
-// javaClassOpen writes the generated-file banner, the package declaration, and
-// the class header for a kind class.
-func javaClassOpen(b *strings.Builder, className, doc string) {
+// javaClassOpen writes the generated-file banner, the package declaration,
+// optional imports, and the class header for a kind class.
+func javaClassOpen(b *strings.Builder, className, doc string, imports ...string) {
 	b.WriteString(javaHeaderComment())
 	b.WriteString("package com.inovacc.selo;\n\n")
+
+	for _, imp := range imports {
+		fmt.Fprintf(b, "import %s;\n", imp)
+	}
+
+	if len(imports) > 0 {
+		b.WriteString("\n")
+	}
+
 	fmt.Fprintf(b, "/** %s */\n", doc)
 	fmt.Fprintf(b, "public final class %s {\n", className)
 	fmt.Fprintf(b, "    private %s() {\n", className)
@@ -27,7 +36,8 @@ func javaClassOpen(b *strings.Builder, className, doc string) {
 // rejection, mask format, and ninth-digit origin.
 func (e javaEmitter) renderCPF(plan KindPlan) string {
 	var b strings.Builder
-	javaClassOpen(&b, "CPF", "CPF validates, formats, and resolves the origin of a Brazilian CPF.")
+	javaClassOpen(&b, "CPF", "CPF validates, formats, and resolves the origin of a Brazilian CPF.",
+		"java.util.Random")
 
 	dv1 := checkDigitNew(plan.Checks[0])
 	dv2 := checkDigitNew(plan.Checks[1])
@@ -71,6 +81,22 @@ func (e javaEmitter) renderCPF(plan KindPlan) string {
         }
         return region;
     }
+
+    /** generate returns a random valid CPF in formatted form (XXX.XXX.XXX-XX). */
+    public static String generate() {
+        Random rng = new Random();
+        int[] d = new int[11];
+        for (int i = 0; i < 9; i++) {
+            d[i] = rng.nextInt(10);
+        }
+        d[9] = Mod11.computeDigit(Mod11.weightedSum(Mod11.slice(d, 0, 9), DV1.weights), DV1);
+        d[10] = Mod11.computeDigit(Mod11.weightedSum(Mod11.slice(d, 0, 10), DV2.weights), DV2);
+        StringBuilder sb = new StringBuilder();
+        for (int v : d) {
+            sb.append(v);
+        }
+        return format(sb.toString());
+    }
 }
 `, dv1, dv2, javaThrow("ErrInvalidLength"), javaThrow("ErrInvalidLength"), javaThrow("ErrInvalidLength"))
 
@@ -81,7 +107,8 @@ func (e javaEmitter) renderCPF(plan KindPlan) string {
 // first length-1 digits, all-equal rejection, and a mask format.
 func (e javaEmitter) renderSimpleNumeric(plan KindPlan, name string, length int) string {
 	var b strings.Builder
-	javaClassOpen(&b, name, name+" validates and formats this single-check-digit numeric document.")
+	javaClassOpen(&b, name, name+" validates and formats this single-check-digit numeric document.",
+		"java.util.Random")
 
 	dv := checkDigitNew(plan.Checks[0])
 	base := length - 1
@@ -111,6 +138,26 @@ func (e javaEmitter) renderSimpleNumeric(plan KindPlan, name string, length int)
         }
         return %[6]s;
     }
+
+    /** generate returns a random valid %[2]s in formatted form. */
+    public static String generate() {
+        Random rng = new Random();
+        String out;
+        do {
+            int[] d = new int[%[4]d];
+            for (int i = 0; i < %[4]d; i++) {
+                d[i] = rng.nextInt(10);
+            }
+            int dv = Mod11.computeDigit(Mod11.weightedSum(d, DV.weights), DV);
+            StringBuilder sb = new StringBuilder();
+            for (int v : d) {
+                sb.append(v);
+            }
+            sb.append(dv);
+            out = sb.toString();
+        } while (Mod11.allEqual(out));
+        return format(out);
+    }
 }
 `, dv, name, length, base, javaThrow("ErrInvalidLength"), mask)
 
@@ -121,7 +168,8 @@ func (e javaEmitter) renderSimpleNumeric(plan KindPlan, name string, length int)
 // left-pad-to-11 format (no separator mask).
 func (e javaEmitter) renderRenavam(plan KindPlan) string {
 	var b strings.Builder
-	javaClassOpen(&b, "Renavam", "Renavam validates and formats a Brazilian RENAVAM.")
+	javaClassOpen(&b, "Renavam", "Renavam validates and formats a Brazilian RENAVAM.",
+		"java.util.Random")
 
 	dv := checkDigitNew(plan.Checks[0])
 	fmt.Fprintf(&b, `    private static final Mod11.CheckDigit DV = %s;
@@ -152,6 +200,26 @@ func (e javaEmitter) renderRenavam(plan KindPlan) string {
         }
         return d;
     }
+
+    /** generate returns a random valid 11-digit RENAVAM. */
+    public static String generate() {
+        Random rng = new Random();
+        String out;
+        do {
+            int[] d = new int[10];
+            for (int i = 0; i < 10; i++) {
+                d[i] = rng.nextInt(10);
+            }
+            int dv = Mod11.computeDigit(Mod11.weightedSum(d, DV.weights), DV);
+            StringBuilder sb = new StringBuilder();
+            for (int v : d) {
+                sb.append(v);
+            }
+            sb.append(dv);
+            out = sb.toString();
+        } while (Mod11.allEqual(out));
+        return out;
+    }
 }
 `, dv)
 
@@ -163,7 +231,8 @@ func (e javaEmitter) renderRenavam(plan KindPlan) string {
 // ascending 1..9 with the offset subtracted before the mod-11 fold.
 func (e javaEmitter) renderCNH(_ KindPlan) string {
 	var b strings.Builder
-	javaClassOpen(&b, "CNH", "CNH validates and formats a Brazilian CNH (coupled check digits).")
+	javaClassOpen(&b, "CNH", "CNH validates and formats a Brazilian CNH (coupled check digits).",
+		"java.util.Random")
 
 	fmt.Fprintf(&b, `    /** cnhCheckDigits computes both coupled CNH check digits over the 9-digit base. */
     private static int[] cnhCheckDigits(String base) {
@@ -213,6 +282,22 @@ func (e javaEmitter) renderCNH(_ KindPlan) string {
         }
         return d;
     }
+
+    /** generate returns a random valid 11-digit CNH. */
+    public static String generate() {
+        Random rng = new Random();
+        String out;
+        do {
+            StringBuilder baseSb = new StringBuilder();
+            for (int i = 0; i < 9; i++) {
+                baseSb.append(rng.nextInt(10));
+            }
+            String base = baseSb.toString();
+            int[] dv = cnhCheckDigits(base);
+            out = base + dv[0] + dv[1];
+        } while (Mod11.allEqual(out));
+        return out;
+    }
 }
 `, javaThrow("ErrInvalidLength"))
 
@@ -222,7 +307,8 @@ func (e javaEmitter) renderCNH(_ KindPlan) string {
 // renderCNS emits the verify-only sum-zero class with prefix constraint.
 func (e javaEmitter) renderCNS(plan KindPlan) string {
 	var b strings.Builder
-	javaClassOpen(&b, "CNS", "CNS validates and formats a Brazilian CNS (sum mod 11 == 0).")
+	javaClassOpen(&b, "CNS", "CNS validates and formats a Brazilian CNS (sum mod 11 == 0).",
+		"java.util.Random")
 
 	dv := checkDigitNew(plan.Checks[0])
 	fmt.Fprintf(&b, `    private static final Mod11.CheckDigit DV = %s;
@@ -252,6 +338,37 @@ func (e javaEmitter) renderCNS(plan KindPlan) string {
         }
         return d;
     }
+
+    private static final int[] CNS_PREFIXES = {1, 2, 7, 8, 9};
+
+    /** generate returns a random valid 15-digit CNS. */
+    public static String generate() {
+        Random rng = new Random();
+        while (true) {
+            int[] d = new int[15];
+            d[0] = CNS_PREFIXES[rng.nextInt(CNS_PREFIXES.length)];
+            for (int i = 1; i < 14; i++) {
+                d[i] = rng.nextInt(10);
+            }
+            int partial = 0;
+            for (int i = 0; i < 14; i++) {
+                partial += d[i] * (15 - i);
+            }
+            int last = (11 - (partial %% 11)) %% 11;
+            if (last == 10) {
+                continue;
+            }
+            d[14] = last;
+            StringBuilder sb = new StringBuilder();
+            for (int v : d) {
+                sb.append(v);
+            }
+            String out = sb.toString();
+            if (!Mod11.allEqual(out)) {
+                return out;
+            }
+        }
+    }
 }
 `, dv, javaThrow("ErrInvalidLength"))
 
@@ -262,7 +379,8 @@ func (e javaEmitter) renderCNS(plan KindPlan) string {
 // weights per the Note): two DVs, last two chars numeric, all-equal rejection.
 func (e javaEmitter) renderCNPJ(plan KindPlan) string {
 	var b strings.Builder
-	javaClassOpen(&b, "CNPJ", "CNPJ validates and formats an alphanumeric Brazilian CNPJ.")
+	javaClassOpen(&b, "CNPJ", "CNPJ validates and formats an alphanumeric Brazilian CNPJ.",
+		"java.util.Random")
 
 	dv := checkDigitNew(plan.Checks[0])
 	fmt.Fprintf(&b, `    private static final Mod11.CheckDigit DV = %s;
@@ -320,6 +438,21 @@ func (e javaEmitter) renderCNPJ(plan KindPlan) string {
         }
         return c.substring(0, 2) + "." + c.substring(2, 5) + "." + c.substring(5, 8)
                 + "/" + c.substring(8, 12) + "-" + c.substring(12, 14);
+    }
+
+    private static final String CNPJ_ALPHANUM = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    /** generate returns a random valid alphanumeric CNPJ. */
+    public static String generate() {
+        Random rng = new Random();
+        StringBuilder baseSb = new StringBuilder();
+        for (int i = 0; i < 12; i++) {
+            baseSb.append(CNPJ_ALPHANUM.charAt(rng.nextInt(CNPJ_ALPHANUM.length())));
+        }
+        String base = baseSb.toString();
+        int dv1 = cnpjDV(base);
+        int dv2 = cnpjDV(base + dv1);
+        return base + dv1 + dv2;
     }
 }
 `, dv, javaThrow("ErrInvalidLength"))

@@ -3,6 +3,7 @@ package com.inovacc.selo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,6 +41,13 @@ class CNHTest {
             } else {
                 assertEquals(c.get("output").asText(), CNH.format(input), "format " + input);
             }
+        }
+    }
+
+    @Test
+    void generate() {
+        for (int i = 0; i < 100; i++) {
+            assertTrue(CNH.validate(CNH.generate()), "generated value must validate");
         }
     }
 }

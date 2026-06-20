@@ -3,35 +3,35 @@
   "group": "D",
   "validate": [
     {
-      "input": "LFH9510",
+      "input": "JLL4903",
       "valid": true
     },
     {
-      "input": "RZX1476",
+      "input": "WTO9585",
       "valid": true
     },
     {
-      "input": "KPD0635",
+      "input": "KON1638",
       "valid": true
     },
     {
-      "input": "GST0180",
+      "input": "FOJ1241",
       "valid": true
     },
     {
-      "input": "WZD5403",
+      "input": "CRJ8816",
       "valid": true
     },
     {
-      "input": "PKW0094",
+      "input": "CTA0897",
       "valid": true
     },
     {
-      "input": "CJZ5344",
+      "input": "LUT1021",
       "valid": true
     },
     {
-      "input": "DAR3086",
+      "input": "RSD8307",
       "valid": true
     },
     {
@@ -71,67 +71,67 @@
       "valid": false
     },
     {
-      "input": "CJZ534",
+      "input": "CRJ881",
       "valid": false
     },
     {
-      "input": "CJZZ344",
+      "input": "CRJZ816",
       "valid": false
     },
     {
-      "input": "DAR308",
+      "input": "CTA089",
       "valid": false
     },
     {
-      "input": "DARZ086",
+      "input": "CTAZ897",
       "valid": false
     },
     {
-      "input": "GST018",
+      "input": "FOJ124",
       "valid": false
     },
     {
-      "input": "GSTZ180",
+      "input": "FOJZ241",
       "valid": false
     },
     {
-      "input": "KPD063",
+      "input": "JLL490",
       "valid": false
     },
     {
-      "input": "KPDZ635",
+      "input": "JLLZ903",
       "valid": false
     },
     {
-      "input": "LFH951",
+      "input": "KON163",
       "valid": false
     },
     {
-      "input": "LFHZ510",
+      "input": "KONZ638",
       "valid": false
     },
     {
-      "input": "PKW009",
+      "input": "LUT102",
       "valid": false
     },
     {
-      "input": "PKWZ094",
+      "input": "LUTZ021",
       "valid": false
     },
     {
-      "input": "RZX147",
+      "input": "RSD830",
       "valid": false
     },
     {
-      "input": "RZXZ476",
+      "input": "RSDZ307",
       "valid": false
     },
     {
-      "input": "WZD540",
+      "input": "WTO958",
       "valid": false
     },
     {
-      "input": "WZDZ403",
+      "input": "WTOZ585",
       "valid": false
     },
     {
@@ -145,36 +145,36 @@
   ],
   "format": [
     {
-      "input": "LFH9510",
-      "output": "LFH-9510"
+      "input": "JLL4903",
+      "output": "JLL-4903"
     },
     {
-      "input": "RZX1476",
-      "output": "RZX-1476"
+      "input": "WTO9585",
+      "output": "WTO-9585"
     },
     {
-      "input": "KPD0635",
-      "output": "KPD-0635"
+      "input": "KON1638",
+      "output": "KON-1638"
     },
     {
-      "input": "GST0180",
-      "output": "GST-0180"
+      "input": "FOJ1241",
+      "output": "FOJ-1241"
     },
     {
-      "input": "WZD5403",
-      "output": "WZD-5403"
+      "input": "CRJ8816",
+      "output": "CRJ-8816"
     },
     {
-      "input": "PKW0094",
-      "output": "PKW-0094"
+      "input": "CTA0897",
+      "output": "CTA-0897"
     },
     {
-      "input": "CJZ5344",
-      "output": "CJZ-5344"
+      "input": "LUT1021",
+      "output": "LUT-1021"
     },
     {
-      "input": "DAR3086",
-      "output": "DAR-3086"
+      "input": "RSD8307",
+      "output": "RSD-8307"
     },
     {
       "input": "1",
