@@ -319,7 +319,7 @@ func (e rubyEmitter) renderCEP() string {
       r = Data::CEP_RANGES.sample
       prefix = r[:from] + rand(r[:to] - r[:from] + 1)
       suffix = rand(100_000)
-      format('%03d%05d', prefix, suffix)
+      sprintf('%03d%05d', prefix, suffix)
     end
   end
 end

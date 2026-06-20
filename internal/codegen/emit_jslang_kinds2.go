@@ -186,7 +186,7 @@ export function generateIE() {
   d[10] = Math.floor(Math.random() * 10);
   d[11] = ieRightmostDV(d.slice(0, 11), IE_W2);
   const s = d.join("");
-  return `+"`${s.slice(0, 3)}.${s.slice(3, 6)}.${s.slice(6, 9)}.${s.slice(9, 12)}`"+`;
+  return ` + "`${s.slice(0, 3)}.${s.slice(3, 6)}.${s.slice(6, 9)}.${s.slice(9, 12)}`" + `;
 }
 `)
 
