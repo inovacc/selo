@@ -28,3 +28,14 @@ export function formatRenavam(value: string): string {
   if (d.length < 11) d = "0".repeat(11 - d.length) + d;
   return d;
 }
+
+/** generateRenavam returns a random valid 11-digit RENAVAM. */
+export function generateRenavam(): string {
+  let out: string;
+  do {
+    const d = Array.from({ length: 10 }, () => Math.floor(Math.random() * 10));
+    const dv = computeDigit(weightedSum(d, DV.weights), DV);
+    out = d.join("") + dv;
+  } while (allEqual(out));
+  return out;
+}

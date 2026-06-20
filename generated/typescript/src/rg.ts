@@ -60,3 +60,12 @@ export function formatRG(value: string): string {
   const d = p.base.join("");
   return `${d.slice(0, 2)}.${d.slice(2, 5)}.${d.slice(5, 8)}-${checkChar}`;
 }
+
+/** generateRG returns a random valid SP-style RG in masked form (XX.XXX.XXX-C). */
+export function generateRG(): string {
+  const base = Array.from({ length: 8 }, () => Math.floor(Math.random() * 10));
+  const dv = computeDigit(weightedSum(base, DV.weights), DV);
+  const checkChar = encodeDigit(dv, DV);
+  const d = base.join("");
+  return `${d.slice(0, 2)}.${d.slice(2, 5)}.${d.slice(5, 8)}-${checkChar}`;
+}

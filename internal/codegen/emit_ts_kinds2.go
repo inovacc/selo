@@ -126,6 +126,15 @@ export function formatRG(value: string): string {
   const d = p.base.join("");
   return `+"`${d.slice(0, 2)}.${d.slice(2, 5)}.${d.slice(5, 8)}-${checkChar}`"+`;
 }
+
+/** generateRG returns a random valid SP-style RG in masked form (XX.XXX.XXX-C). */
+export function generateRG(): string {
+  const base = Array.from({ length: 8 }, () => Math.floor(Math.random() * 10));
+  const dv = computeDigit(weightedSum(base, DV.weights), DV);
+  const checkChar = encodeDigit(dv, DV);
+  const d = base.join("");
+  return `+"`${d.slice(0, 2)}.${d.slice(2, 5)}.${d.slice(5, 8)}-${checkChar}`"+`;
+}
 `, dv, ufs, formatErrorThrow("ErrInvalidFormat"))
 
 	return b.String()
@@ -179,6 +188,28 @@ export function formatIE(value: string): string {
 }
 `, dv1, dv2, ufs, formatErrorThrow("ErrInvalidFormat"))
 
+	b.WriteString(`const IE_W1 = [1, 3, 4, 5, 6, 7, 8, 10];
+const IE_W2 = [3, 2, 10, 9, 8, 7, 6, 5, 4, 3, 2];
+
+function ieRightmostDV(digits: number[], weights: number[]): number {
+  let sum = 0;
+  for (let i = 0; i < weights.length; i++) sum += digits[i] * weights[i];
+  return (sum % 11) % 10;
+}
+
+/** generateIE returns a random valid SP IE in masked form (AAA.AAA.AAA.AAA). */
+export function generateIE(): string {
+  const d = new Array(12).fill(0) as number[];
+  for (let i = 0; i < 8; i++) d[i] = Math.floor(Math.random() * 10);
+  d[8] = ieRightmostDV(d.slice(0, 8), IE_W1);
+  d[9] = Math.floor(Math.random() * 10);
+  d[10] = Math.floor(Math.random() * 10);
+  d[11] = ieRightmostDV(d.slice(0, 11), IE_W2);
+  const s = d.join("");
+  return `+"`${s.slice(0, 3)}.${s.slice(3, 6)}.${s.slice(6, 9)}.${s.slice(9, 12)}`"+`;
+}
+`)
+
 	return b.String()
 }
 
@@ -204,6 +235,19 @@ export function formatPlate(value: string): string {
     return ` + "`${s.slice(0, 3)}-${s.slice(3, 7)}`" + `;
   }
   ` + formatErrorThrow("ErrInvalidFormat") + `
+}
+
+const PLATE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+/** generatePlate returns a random valid plate (national or Mercosul). */
+export function generatePlate(): string {
+  const rl = () => PLATE_LETTERS[Math.floor(Math.random() * 26)];
+  const rd = () => String(Math.floor(Math.random() * 10));
+  const letters = rl() + rl() + rl();
+  if (Math.random() < 0.5) {
+    return letters + "-" + rd() + rd() + rd() + rd();
+  }
+  return letters + rd() + rl() + rd() + rd();
 }
 `)
 
@@ -245,6 +289,16 @@ export function formatPIX(value: string): string {
   if (detectPIXKind(v) === null) ` + formatErrorThrow("ErrInvalidLength") + `
   return v;
 }
+
+/** generatePIX returns a random valid EVP (UUIDv4) PIX key. */
+export function generatePIX(): string {
+  const b = new Uint8Array(16);
+  for (let i = 0; i < 16; i++) b[i] = Math.floor(Math.random() * 256);
+  b[6] = (b[6] & 0x0f) | 0x40;
+  b[8] = (b[8] & 0x3f) | 0x80;
+  const h = Array.from(b, (x) => x.toString(16).padStart(2, "0"));
+  return h.slice(0, 4).join("") + "-" + h.slice(4, 6).join("") + "-" + h.slice(6, 8).join("") + "-" + h.slice(8, 10).join("") + "-" + h.slice(10).join("");
+}
 `)
 
 	return b.String()
@@ -285,6 +339,14 @@ export function originCEP(value: string): string {
   const uf = cepRangeFor(Number(d.slice(0, 3)));
   if (uf === null) ` + formatErrorThrow("ErrInvalidFormat") + `
   return uf;
+}
+
+/** generateCEP returns a random valid 8-digit CEP (unformatted). */
+export function generateCEP(): string {
+  const r = CEP_RANGES[Math.floor(Math.random() * CEP_RANGES.length)];
+  const prefix = r.from + Math.floor(Math.random() * (r.to - r.from + 1));
+  const suffix = Math.floor(Math.random() * 100000);
+  return String(prefix).padStart(3, "0") + String(suffix).padStart(5, "0");
 }
 `)
 
@@ -334,6 +396,19 @@ export function originPhone(value: string): string {
   const uf = DDD_TO_UF[ddd];
   if (uf === undefined) ` + formatErrorThrow("ErrInvalidFormat") + `
   return uf;
+}
+
+/** generatePhone returns a random valid Brazilian phone number (national digits only). */
+export function generatePhone(): string {
+  const ddds = Object.keys(DDD_TO_UF);
+  const ddd = ddds[Math.floor(Math.random() * ddds.length)];
+  if (Math.random() < 0.5) {
+    const sub = "9" + Array.from({ length: 8 }, () => String(Math.floor(Math.random() * 10))).join("");
+    return ddd + sub;
+  }
+  const first = String(2 + Math.floor(Math.random() * 4));
+  const sub = first + Array.from({ length: 7 }, () => String(Math.floor(Math.random() * 10))).join("");
+  return ddd + sub;
 }
 `)
 
@@ -393,6 +468,25 @@ export function originVoterId(value: string): string {
 }
 `, dv1, dv2, formatErrorThrow("ErrInvalidLength"),
 		formatErrorThrow("ErrInvalidLength"), formatErrorThrow("ErrInvalidFormat"))
+
+	b.WriteString(`
+/** generateVoterId returns a random valid 12-digit Título Eleitoral. */
+export function generateVoterId(): string {
+  while (true) {
+    const d = new Array(12).fill(0) as number[];
+    for (let i = 0; i < 8; i++) d[i] = Math.floor(Math.random() * 10);
+    const uf = 1 + Math.floor(Math.random() * 28);
+    d[8] = Math.floor(uf / 10);
+    d[9] = uf % 10;
+    const s = d.slice(0, 10).join("");
+    const dv1 = voterDV1(s);
+    d[10] = dv1;
+    d[11] = voterDV2(s, dv1);
+    const out = d.join("");
+    if (!allEqual(out)) return out;
+  }
+}
+`)
 
 	return b.String()
 }

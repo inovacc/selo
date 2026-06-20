@@ -42,3 +42,11 @@ export function originCEP(value: string): string {
   if (uf === null) throw new Error("ErrInvalidFormat");
   return uf;
 }
+
+/** generateCEP returns a random valid 8-digit CEP (unformatted). */
+export function generateCEP(): string {
+  const r = CEP_RANGES[Math.floor(Math.random() * CEP_RANGES.length)];
+  const prefix = r.from + Math.floor(Math.random() * (r.to - r.from + 1));
+  const suffix = Math.floor(Math.random() * 100000);
+  return String(prefix).padStart(3, "0") + String(suffix).padStart(5, "0");
+}

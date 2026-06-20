@@ -3,35 +3,35 @@
   "group": "F",
   "validate": [
     {
-      "input": "327308720493",
+      "input": "301567872550",
       "valid": true
     },
     {
-      "input": "563059992208",
+      "input": "960019912500",
       "valid": true
     },
     {
-      "input": "015778112089",
+      "input": "635528411007",
       "valid": true
     },
     {
-      "input": "988429021600",
+      "input": "321214820604",
       "valid": true
     },
     {
-      "input": "483080671252",
+      "input": "461107361880",
       "valid": true
     },
     {
-      "input": "117031871295",
+      "input": "266353040655",
       "valid": true
     },
     {
-      "input": "407502172631",
+      "input": "147265022593",
       "valid": true
     },
     {
-      "input": "300125982844",
+      "input": "256279982054",
       "valid": true
     },
     {
@@ -51,23 +51,7 @@
       "valid": false
     },
     {
-      "input": "01577811208",
-      "valid": false
-    },
-    {
-      "input": "015778112080",
-      "valid": false
-    },
-    {
       "input": "111111111111",
-      "valid": false
-    },
-    {
-      "input": "11703187129",
-      "valid": false
-    },
-    {
-      "input": "117031871296",
       "valid": false
     },
     {
@@ -79,83 +63,99 @@
       "valid": false
     },
     {
-      "input": "30012598284",
+      "input": "14726502259",
       "valid": false
     },
     {
-      "input": "300125982845",
+      "input": "147265022594",
       "valid": false
     },
     {
-      "input": "32730872049",
+      "input": "25627998205",
       "valid": false
     },
     {
-      "input": "327308720494",
+      "input": "256279982055",
       "valid": false
     },
     {
-      "input": "40750217263",
+      "input": "26635304065",
       "valid": false
     },
     {
-      "input": "407502172632",
+      "input": "266353040656",
       "valid": false
     },
     {
-      "input": "48308067125",
+      "input": "30156787255",
       "valid": false
     },
     {
-      "input": "483080671253",
+      "input": "301567872551",
       "valid": false
     },
     {
-      "input": "56305999220",
+      "input": "32121482060",
       "valid": false
     },
     {
-      "input": "563059992209",
+      "input": "321214820605",
       "valid": false
     },
     {
-      "input": "98842902160",
+      "input": "46110736188",
       "valid": false
     },
     {
-      "input": "988429021601",
+      "input": "461107361881",
       "valid": false
     },
     {
-      "input": "Z00125982844",
+      "input": "63552841100",
       "valid": false
     },
     {
-      "input": "Z07502172631",
+      "input": "635528411008",
       "valid": false
     },
     {
-      "input": "Z15778112089",
+      "input": "96001991250",
       "valid": false
     },
     {
-      "input": "Z17031871295",
+      "input": "960019912501",
       "valid": false
     },
     {
-      "input": "Z27308720493",
+      "input": "Z01567872550",
       "valid": false
     },
     {
-      "input": "Z63059992208",
+      "input": "Z21214820604",
       "valid": false
     },
     {
-      "input": "Z83080671252",
+      "input": "Z35528411007",
       "valid": false
     },
     {
-      "input": "Z88429021600",
+      "input": "Z47265022593",
+      "valid": false
+    },
+    {
+      "input": "Z56279982054",
+      "valid": false
+    },
+    {
+      "input": "Z60019912500",
+      "valid": false
+    },
+    {
+      "input": "Z61107361880",
+      "valid": false
+    },
+    {
+      "input": "Z66353040655",
       "valid": false
     },
     {
@@ -165,36 +165,36 @@
   ],
   "format": [
     {
-      "input": "327308720493",
-      "output": "3273 0872 0493"
+      "input": "301567872550",
+      "output": "3015 6787 2550"
     },
     {
-      "input": "563059992208",
-      "output": "5630 5999 2208"
+      "input": "960019912500",
+      "output": "9600 1991 2500"
     },
     {
-      "input": "015778112089",
-      "output": "0157 7811 2089"
+      "input": "635528411007",
+      "output": "6355 2841 1007"
     },
     {
-      "input": "988429021600",
-      "output": "9884 2902 1600"
+      "input": "321214820604",
+      "output": "3212 1482 0604"
     },
     {
-      "input": "483080671252",
-      "output": "4830 8067 1252"
+      "input": "461107361880",
+      "output": "4611 0736 1880"
     },
     {
-      "input": "117031871295",
-      "output": "1170 3187 1295"
+      "input": "266353040655",
+      "output": "2663 5304 0655"
     },
     {
-      "input": "407502172631",
-      "output": "4075 0217 2631"
+      "input": "147265022593",
+      "output": "1472 6502 2593"
     },
     {
-      "input": "300125982844",
-      "output": "3001 2598 2844"
+      "input": "256279982054",
+      "output": "2562 7998 2054"
     },
     {
       "input": "1",
@@ -203,36 +203,36 @@
   ],
   "origin": [
     {
-      "input": "327308720493",
-      "output": "Rio Grande do Sul"
+      "input": "301567872550",
+      "output": "Amapá"
     },
     {
-      "input": "563059992208",
-      "output": "Amazonas"
+      "input": "960019912500",
+      "output": "Amapá"
     },
     {
-      "input": "015778112089",
+      "input": "635528411007",
+      "output": "Goiás"
+    },
+    {
+      "input": "321214820604",
+      "output": "Paraná"
+    },
+    {
+      "input": "461107361880",
+      "output": "Mato Grosso"
+    },
+    {
+      "input": "266353040655",
+      "output": "Paraná"
+    },
+    {
+      "input": "147265022593",
+      "output": "Amapá"
+    },
+    {
+      "input": "256279982054",
       "output": "Distrito Federal"
-    },
-    {
-      "input": "988429021600",
-      "output": "Rio Grande do Norte"
-    },
-    {
-      "input": "483080671252",
-      "output": "Paraíba"
-    },
-    {
-      "input": "117031871295",
-      "output": "Paraíba"
-    },
-    {
-      "input": "407502172631",
-      "output": "Roraima"
-    },
-    {
-      "input": "300125982844",
-      "output": "Exterior"
     }
   ],
   "ufScoped": false,

@@ -3,35 +3,35 @@
   "group": "D",
   "validate": [
     {
-      "input": "JFQ3751",
+      "input": "AZV0990",
       "valid": true
     },
     {
-      "input": "HWO5221",
+      "input": "DIF5873",
       "valid": true
     },
     {
-      "input": "IUU0032",
+      "input": "RVZ6211",
       "valid": true
     },
     {
-      "input": "NOH1078",
+      "input": "QRB5276",
       "valid": true
     },
     {
-      "input": "NWN6724",
+      "input": "CNY6284",
       "valid": true
     },
     {
-      "input": "TJI0955",
+      "input": "BQM9249",
       "valid": true
     },
     {
-      "input": "OQC0670",
+      "input": "ATB5465",
       "valid": true
     },
     {
-      "input": "XVO2930",
+      "input": "FYV9433",
       "valid": true
     },
     {
@@ -71,67 +71,67 @@
       "valid": false
     },
     {
-      "input": "HWO522",
+      "input": "ATB546",
       "valid": false
     },
     {
-      "input": "HWOZ221",
+      "input": "ATBZ465",
       "valid": false
     },
     {
-      "input": "IUU003",
+      "input": "AZV099",
       "valid": false
     },
     {
-      "input": "IUUZ032",
+      "input": "AZVZ990",
       "valid": false
     },
     {
-      "input": "JFQ375",
+      "input": "BQM924",
       "valid": false
     },
     {
-      "input": "JFQZ751",
+      "input": "BQMZ249",
       "valid": false
     },
     {
-      "input": "NOH107",
+      "input": "CNY628",
       "valid": false
     },
     {
-      "input": "NOHZ078",
+      "input": "CNYZ284",
       "valid": false
     },
     {
-      "input": "NWN672",
+      "input": "DIF587",
       "valid": false
     },
     {
-      "input": "NWNZ724",
+      "input": "DIFZ873",
       "valid": false
     },
     {
-      "input": "OQC067",
+      "input": "FYV943",
       "valid": false
     },
     {
-      "input": "OQCZ670",
+      "input": "FYVZ433",
       "valid": false
     },
     {
-      "input": "TJI095",
+      "input": "QRB527",
       "valid": false
     },
     {
-      "input": "TJIZ955",
+      "input": "QRBZ276",
       "valid": false
     },
     {
-      "input": "XVO293",
+      "input": "RVZ621",
       "valid": false
     },
     {
-      "input": "XVOZ930",
+      "input": "RVZZ211",
       "valid": false
     },
     {
@@ -145,36 +145,36 @@
   ],
   "format": [
     {
-      "input": "JFQ3751",
-      "output": "JFQ-3751"
+      "input": "AZV0990",
+      "output": "AZV-0990"
     },
     {
-      "input": "HWO5221",
-      "output": "HWO-5221"
+      "input": "DIF5873",
+      "output": "DIF-5873"
     },
     {
-      "input": "IUU0032",
-      "output": "IUU-0032"
+      "input": "RVZ6211",
+      "output": "RVZ-6211"
     },
     {
-      "input": "NOH1078",
-      "output": "NOH-1078"
+      "input": "QRB5276",
+      "output": "QRB-5276"
     },
     {
-      "input": "NWN6724",
-      "output": "NWN-6724"
+      "input": "CNY6284",
+      "output": "CNY-6284"
     },
     {
-      "input": "TJI0955",
-      "output": "TJI-0955"
+      "input": "BQM9249",
+      "output": "BQM-9249"
     },
     {
-      "input": "OQC0670",
-      "output": "OQC-0670"
+      "input": "ATB5465",
+      "output": "ATB-5465"
     },
     {
-      "input": "XVO2930",
-      "output": "XVO-2930"
+      "input": "FYV9433",
+      "output": "FYV-9433"
     },
     {
       "input": "1",

@@ -40,3 +40,12 @@ export function originCPF(value: string): string {
   if (region === undefined) throw new Error("ErrInvalidLength");
   return region;
 }
+
+/** generateCPF returns a random valid CPF in formatted form (XXX.XXX.XXX-XX). */
+export function generateCPF(): string {
+  const d: number[] = [];
+  for (let i = 0; i < 9; i++) d.push(Math.floor(Math.random() * 10));
+  d.push(computeDigit(weightedSum(d.slice(0, 9), DV1.weights), DV1));
+  d.push(computeDigit(weightedSum(d.slice(0, 10), DV2.weights), DV2));
+  return formatCPF(d.join(""));
+}

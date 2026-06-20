@@ -3,35 +3,35 @@
   "group": "F",
   "validate": [
     {
-      "input": "3127468965",
+      "input": "2756574713",
       "valid": true
     },
     {
-      "input": "91925003287",
+      "input": "4658448159",
       "valid": true
     },
     {
-      "input": "8156729321",
+      "input": "4845948532",
       "valid": true
     },
     {
-      "input": "5334587160",
+      "input": "88999453363",
       "valid": true
     },
     {
-      "input": "6551843683",
+      "input": "4446847626",
       "valid": true
     },
     {
-      "input": "86947879512",
+      "input": "68905720860",
       "valid": true
     },
     {
-      "input": "2259461112",
+      "input": "3829194855",
       "valid": true
     },
     {
-      "input": "55997973671",
+      "input": "61960684396",
       "valid": true
     },
     {
@@ -63,23 +63,23 @@
       "valid": false
     },
     {
-      "input": "225946111",
+      "input": "275657471",
       "valid": false
     },
     {
-      "input": "312746896",
+      "input": "382919485",
       "valid": false
     },
     {
-      "input": "533458716",
+      "input": "444684762",
       "valid": false
     },
     {
-      "input": "655184368",
+      "input": "465844815",
       "valid": false
     },
     {
-      "input": "815672932",
+      "input": "484594853",
       "valid": false
     },
     {
@@ -87,27 +87,23 @@
       "valid": false
     },
     {
-      "input": "Z127468965",
+      "input": "Z446847626",
       "valid": false
     },
     {
-      "input": "Z156729321",
+      "input": "Z658448159",
       "valid": false
     },
     {
-      "input": "Z259461112",
+      "input": "Z756574713",
       "valid": false
     },
     {
-      "input": "Z334587160",
+      "input": "Z829194855",
       "valid": false
     },
     {
-      "input": "Z551843683",
-      "valid": false
-    },
-    {
-      "input": "Z5997973671",
+      "input": "Z845948532",
       "valid": false
     },
     {
@@ -117,36 +113,36 @@
   ],
   "format": [
     {
-      "input": "3127468965",
-      "output": "(31) 2746-8965"
+      "input": "2756574713",
+      "output": "(27) 5657-4713"
     },
     {
-      "input": "91925003287",
-      "output": "(91) 92500-3287"
+      "input": "4658448159",
+      "output": "(46) 5844-8159"
     },
     {
-      "input": "8156729321",
-      "output": "(81) 5672-9321"
+      "input": "4845948532",
+      "output": "(48) 4594-8532"
     },
     {
-      "input": "5334587160",
-      "output": "(53) 3458-7160"
+      "input": "88999453363",
+      "output": "(88) 99945-3363"
     },
     {
-      "input": "6551843683",
-      "output": "(65) 5184-3683"
+      "input": "4446847626",
+      "output": "(44) 4684-7626"
     },
     {
-      "input": "86947879512",
-      "output": "(86) 94787-9512"
+      "input": "68905720860",
+      "output": "(68) 90572-0860"
     },
     {
-      "input": "2259461112",
-      "output": "(22) 5946-1112"
+      "input": "3829194855",
+      "output": "(38) 2919-4855"
     },
     {
-      "input": "55997973671",
-      "output": "(55) 99797-3671"
+      "input": "61960684396",
+      "output": "(61) 96068-4396"
     },
     {
       "input": "1",
@@ -155,36 +151,36 @@
   ],
   "origin": [
     {
-      "input": "3127468965",
+      "input": "2756574713",
+      "output": "ES"
+    },
+    {
+      "input": "4658448159",
+      "output": "PR"
+    },
+    {
+      "input": "4845948532",
+      "output": "SC"
+    },
+    {
+      "input": "88999453363",
+      "output": "CE"
+    },
+    {
+      "input": "4446847626",
+      "output": "PR"
+    },
+    {
+      "input": "68905720860",
+      "output": "AC"
+    },
+    {
+      "input": "3829194855",
       "output": "MG"
     },
     {
-      "input": "91925003287",
-      "output": "PA"
-    },
-    {
-      "input": "8156729321",
-      "output": "PE"
-    },
-    {
-      "input": "5334587160",
-      "output": "RS"
-    },
-    {
-      "input": "6551843683",
-      "output": "MT"
-    },
-    {
-      "input": "86947879512",
-      "output": "PI"
-    },
-    {
-      "input": "2259461112",
-      "output": "RJ"
-    },
-    {
-      "input": "55997973671",
-      "output": "RS"
+      "input": "61960684396",
+      "output": "DF"
     }
   ],
   "ufScoped": false,
