@@ -47,5 +47,14 @@ namespace Inovacc.Selo.Tests
                 Assert.Equal(output, Cnh.Format(input));
             }
         }
+
+        [Fact]
+        public void GenerateRoundTrip()
+        {
+            for (var i = 0; i < 100; i++)
+            {
+                Assert.True(Cnh.Validate(Cnh.Generate()));
+            }
+        }
     }
 }

@@ -10,6 +10,8 @@ namespace Inovacc.Selo
         private static readonly CheckDigit Dv1 = new CheckDigit { Weights = new[] { 1, 3, 4, 5, 6, 7, 8, 10 }, Rule = DVRule.RightmostDigit };
         private static readonly CheckDigit Dv2 = new CheckDigit { Weights = new[] { 3, 2, 10, 9, 8, 7, 6, 5, 4, 3, 2 }, Rule = DVRule.RightmostDigit };
 
+        private static readonly Random Rng = new Random();
+
         /// <summary>IeUfs lists the implemented federative units (SP only).</summary>
         public static readonly string[] IeUfs = { "SP" };
 
@@ -71,6 +73,38 @@ namespace Inovacc.Selo
             }
 
             throw new System.FormatException("ErrInvalidFormat");
+        }
+
+        private static readonly int[] W1 = { 1, 3, 4, 5, 6, 7, 8, 10 };
+        private static readonly int[] W2 = { 3, 2, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+
+        /// <summary>RightmostDv folds digits*weights to its rightmost decimal digit ((sum % 11) % 10).</summary>
+        private static int RightmostDv(int[] digits, int[] weights)
+        {
+            var sum = 0;
+            for (var i = 0; i < weights.Length; i++)
+            {
+                sum += digits[i] * weights[i];
+            }
+
+            return (sum % 11) % 10;
+        }
+
+        /// <summary>Generate returns a random valid SP IE in masked form (AAA.AAA.AAA.AAA).</summary>
+        public static string Generate()
+        {
+            var d = new int[12];
+            for (var i = 0; i < 8; i++)
+            {
+                d[i] = Rng.Next(10);
+            }
+
+            d[8] = RightmostDv(Slice(d, 0, 8), W1);
+            d[9] = Rng.Next(10);
+            d[10] = Rng.Next(10);
+            d[11] = RightmostDv(Slice(d, 0, 11), W2);
+            var s = string.Concat(Array.ConvertAll(d, x => x.ToString(System.Globalization.CultureInfo.InvariantCulture)));
+            return $"{s.Substring(0, 3)}.{s.Substring(3, 3)}.{s.Substring(6, 3)}.{s.Substring(9, 3)}";
         }
 
         private static int[] Slice(int[] xs, int from, int to)

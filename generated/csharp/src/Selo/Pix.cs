@@ -12,6 +12,8 @@ namespace Inovacc.Selo
         private static readonly Regex PhoneRe = new Regex(@"^\+55\d{10,11}$", RegexOptions.Compiled);
         private static readonly Regex Email = new Regex(@"^[A-Za-z0-9._%+\-]+@[A-Za-z0-9](?:[A-Za-z0-9\-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9\-]*[A-Za-z0-9])?)+$", RegexOptions.Compiled);
 
+        private static readonly Random Rng = new Random();
+
         /// <summary>DetectKind reports the PIX key kind, or null when value is not a key.</summary>
         public static string? DetectKind(string value)
         {
@@ -61,6 +63,30 @@ namespace Inovacc.Selo
             }
 
             return v;
+        }
+
+        /// <summary>Generate returns a random valid EVP (UUIDv4) PIX key.</summary>
+        public static string Generate()
+        {
+            var b = new byte[16];
+            for (var i = 0; i < 16; i++)
+            {
+                b[i] = (byte)Rng.Next(256);
+            }
+
+            b[6] = (byte)((b[6] & 0x0f) | 0x40);
+            b[8] = (byte)((b[8] & 0x3f) | 0x80);
+            var h = new string[16];
+            for (var i = 0; i < 16; i++)
+            {
+                h[i] = b[i].ToString("x2", System.Globalization.CultureInfo.InvariantCulture);
+            }
+
+            return string.Concat(h[0], h[1], h[2], h[3]) + "-" +
+                string.Concat(h[4], h[5]) + "-" +
+                string.Concat(h[6], h[7]) + "-" +
+                string.Concat(h[8], h[9]) + "-" +
+                string.Concat(h[10], h[11], h[12], h[13], h[14], h[15]);
         }
     }
 }

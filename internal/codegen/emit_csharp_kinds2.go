@@ -9,6 +9,10 @@ import (
 // RG/IE (UF-scoped), plate/pix (regex/composite), cep/phone (table lookup), and
 // voter_id (dual-DV). Each mirrors its TypeScript counterpart in
 // emit_ts_kinds2.go, translated faithfully to idiomatic C#.
+//
+// Each class also carries a static Generate() mirroring its TypeScript
+// counterpart's generate<Kind>() (same output shape), using the shared
+// System.Random source (csRngField, the C# analogue of TS Math.random()).
 
 // renderRG emits the UF-scoped RG class: 8 base digits + 1 check char
 // (10->'X', 11->'0'); SP and RJ share the algorithm.
@@ -20,7 +24,7 @@ func (e csharpEmitter) renderRG(plan KindPlan) string {
 	ufs := csStringArray(plan, []string{"SP", "RJ"})
 	fmt.Fprintf(&b, `        private static readonly CheckDigit Dv = %s;
 
-        /// <summary>RgUfs lists the implemented federative units (shared SP/RJ algorithm).</summary>
+`+csRngField+`        /// <summary>RgUfs lists the implemented federative units (shared SP/RJ algorithm).</summary>
         public static readonly string[] RgUfs = { %s };
 
         /// <summary>Parse strips formatting and returns the 8 base digits + check value, or null.</summary>
@@ -119,6 +123,21 @@ func (e csharpEmitter) renderRG(plan KindPlan) string {
             var d = string.Concat(Array.ConvertAll(p.Value.Base, x => x.ToString(System.Globalization.CultureInfo.InvariantCulture)));
             return $"{d.Substring(0, 2)}.{d.Substring(2, 3)}.{d.Substring(5, 3)}-{checkChar}";
         }
+
+        /// <summary>Generate returns a random valid SP-style RG in masked form (XX.XXX.XXX-C).</summary>
+        public static string Generate()
+        {
+            var baseDigits = new int[8];
+            for (var i = 0; i < 8; i++)
+            {
+                baseDigits[i] = Rng.Next(10);
+            }
+
+            var dv = Mod11.ComputeDigit(Mod11.WeightedSum(baseDigits, Dv.Weights), Dv);
+            var checkChar = Mod11.EncodeDigit(dv, Dv);
+            var d = string.Concat(Array.ConvertAll(baseDigits, x => x.ToString(System.Globalization.CultureInfo.InvariantCulture)));
+            return $"{d.Substring(0, 2)}.{d.Substring(2, 3)}.{d.Substring(5, 3)}-{checkChar}";
+        }
 `, dv, ufs, csFormatThrow("ErrInvalidFormat"))
 
 	csClassClose(&b)
@@ -138,7 +157,7 @@ func (e csharpEmitter) renderIE(plan KindPlan) string {
 	fmt.Fprintf(&b, `        private static readonly CheckDigit Dv1 = %s;
         private static readonly CheckDigit Dv2 = %s;
 
-        /// <summary>IeUfs lists the implemented federative units (SP only).</summary>
+`+csRngField+`        /// <summary>IeUfs lists the implemented federative units (SP only).</summary>
         public static readonly string[] IeUfs = { %s };
 
         /// <summary>SpValidate validates a 12-digit São Paulo IE.</summary>
@@ -201,6 +220,38 @@ func (e csharpEmitter) renderIE(plan KindPlan) string {
             %s
         }
 
+        private static readonly int[] W1 = { 1, 3, 4, 5, 6, 7, 8, 10 };
+        private static readonly int[] W2 = { 3, 2, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+
+        /// <summary>RightmostDv folds digits*weights to its rightmost decimal digit ((sum %% 11) %% 10).</summary>
+        private static int RightmostDv(int[] digits, int[] weights)
+        {
+            var sum = 0;
+            for (var i = 0; i < weights.Length; i++)
+            {
+                sum += digits[i] * weights[i];
+            }
+
+            return (sum %% 11) %% 10;
+        }
+
+        /// <summary>Generate returns a random valid SP IE in masked form (AAA.AAA.AAA.AAA).</summary>
+        public static string Generate()
+        {
+            var d = new int[12];
+            for (var i = 0; i < 8; i++)
+            {
+                d[i] = Rng.Next(10);
+            }
+
+            d[8] = RightmostDv(Slice(d, 0, 8), W1);
+            d[9] = Rng.Next(10);
+            d[10] = Rng.Next(10);
+            d[11] = RightmostDv(Slice(d, 0, 11), W2);
+            var s = string.Concat(Array.ConvertAll(d, x => x.ToString(System.Globalization.CultureInfo.InvariantCulture)));
+            return $"{s.Substring(0, 3)}.{s.Substring(3, 3)}.{s.Substring(6, 3)}.{s.Substring(9, 3)}";
+        }
+
         private static int[] Slice(int[] xs, int from, int to)
         {
             var n = to - from;
@@ -227,6 +278,7 @@ func (e csharpEmitter) renderPlate(_ KindPlan) string {
 	b.WriteString("    public static class Plate\n    {\n")
 	b.WriteString("        private static readonly Regex National = new Regex(\"^[A-Z]{3}-?[0-9]{4}$\", RegexOptions.Compiled);\n")
 	b.WriteString("        private static readonly Regex Mercosul = new Regex(\"^[A-Z]{3}[0-9][A-Z][0-9]{2}$\", RegexOptions.Compiled);\n\n")
+	b.WriteString(csRngField)
 	b.WriteString(`        /// <summary>Validate reports whether value is a national or Mercosul plate.</summary>
         public static bool Validate(string value)
         {
@@ -251,6 +303,48 @@ func (e csharpEmitter) renderPlate(_ KindPlan) string {
 
             ` + csFormatThrow("ErrInvalidFormat") + `
         }
+
+        private const string Letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        private static char RandomLetter()
+        {
+            return Letters[Rng.Next(26)];
+        }
+
+        private static char RandomDigit()
+        {
+            return (char)('0' + Rng.Next(10));
+        }
+
+        /// <summary>Generate returns a random valid plate (national or Mercosul).</summary>
+        public static string Generate()
+        {
+            var letters = new char[3];
+            for (var i = 0; i < 3; i++)
+            {
+                letters[i] = RandomLetter();
+            }
+
+            var prefix = new string(letters);
+            if (Rng.NextDouble() < 0.5)
+            {
+                var digits = new char[4];
+                for (var i = 0; i < 4; i++)
+                {
+                    digits[i] = RandomDigit();
+                }
+
+                return prefix + "-" + new string(digits);
+            }
+
+            var tail = new char[2];
+            for (var i = 0; i < 2; i++)
+            {
+                tail[i] = RandomDigit();
+            }
+
+            return prefix + RandomDigit() + RandomLetter() + new string(tail);
+        }
 `)
 
 	b.WriteString("    }\n}\n")
@@ -272,6 +366,7 @@ func (e csharpEmitter) renderPIX(_ KindPlan) string {
 	b.WriteString("        private static readonly Regex Evp = new Regex(\"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$\", RegexOptions.Compiled);\n")
 	b.WriteString("        private static readonly Regex PhoneRe = new Regex(@\"^\\+55\\d{10,11}$\", RegexOptions.Compiled);\n")
 	b.WriteString("        private static readonly Regex Email = new Regex(@\"^[A-Za-z0-9._%+\\-]+@[A-Za-z0-9](?:[A-Za-z0-9\\-]*[A-Za-z0-9])?(?:\\.[A-Za-z0-9](?:[A-Za-z0-9\\-]*[A-Za-z0-9])?)+$\", RegexOptions.Compiled);\n\n")
+	b.WriteString(csRngField)
 	b.WriteString(`        /// <summary>DetectKind reports the PIX key kind, or null when value is not a key.</summary>
         public static string? DetectKind(string value)
         {
@@ -322,6 +417,30 @@ func (e csharpEmitter) renderPIX(_ KindPlan) string {
 
             return v;
         }
+
+        /// <summary>Generate returns a random valid EVP (UUIDv4) PIX key.</summary>
+        public static string Generate()
+        {
+            var b = new byte[16];
+            for (var i = 0; i < 16; i++)
+            {
+                b[i] = (byte)Rng.Next(256);
+            }
+
+            b[6] = (byte)((b[6] & 0x0f) | 0x40);
+            b[8] = (byte)((b[8] & 0x3f) | 0x80);
+            var h = new string[16];
+            for (var i = 0; i < 16; i++)
+            {
+                h[i] = b[i].ToString("x2", System.Globalization.CultureInfo.InvariantCulture);
+            }
+
+            return string.Concat(h[0], h[1], h[2], h[3]) + "-" +
+                string.Concat(h[4], h[5]) + "-" +
+                string.Concat(h[6], h[7]) + "-" +
+                string.Concat(h[8], h[9]) + "-" +
+                string.Concat(h[10], h[11], h[12], h[13], h[14], h[15]);
+        }
 `)
 
 	b.WriteString("    }\n}\n")
@@ -335,6 +454,7 @@ func (e csharpEmitter) renderCEP(_ KindPlan) string {
 	var b strings.Builder
 	csClassOpen(&b, "Cep", "CEP validation, formatting, and UF origin.")
 
+	b.WriteString(csRngField)
 	b.WriteString(`        /// <summary>RangeFor returns the UF whose prefix range contains prefix, or null.</summary>
         private static string? RangeFor(int prefix)
         {
@@ -391,6 +511,16 @@ func (e csharpEmitter) renderCEP(_ KindPlan) string {
 
             return uf;
         }
+
+        /// <summary>Generate returns a random valid 8-digit CEP (unformatted).</summary>
+        public static string Generate()
+        {
+            var r = Data.CepRanges[Rng.Next(Data.CepRanges.Length)];
+            var prefix = r.From + Rng.Next(r.To - r.From + 1);
+            var suffix = Rng.Next(100000);
+            return prefix.ToString(System.Globalization.CultureInfo.InvariantCulture).PadLeft(3, '0') +
+                suffix.ToString(System.Globalization.CultureInfo.InvariantCulture).PadLeft(5, '0');
+        }
 `)
 
 	csClassClose(&b)
@@ -404,6 +534,7 @@ func (e csharpEmitter) renderPhone(_ KindPlan) string {
 	var b strings.Builder
 	csClassOpen(&b, "Phone", "Phone validation, formatting, and UF origin (DDD lookup).")
 
+	b.WriteString(csRngField)
 	b.WriteString(`        /// <summary>NationalNumber strips a +55/0055 country prefix, returning the rest, or null.</summary>
         private static string? NationalNumber(string d)
         {
@@ -493,6 +624,34 @@ func (e csharpEmitter) renderPhone(_ KindPlan) string {
 
             return uf;
         }
+
+        /// <summary>Generate returns a random valid Brazilian phone number (national digits only).</summary>
+        public static string Generate()
+        {
+            var ddds = new string[Data.DddToUf.Count];
+            Data.DddToUf.Keys.CopyTo(ddds, 0);
+            var ddd = ddds[Rng.Next(ddds.Length)];
+            if (Rng.NextDouble() < 0.5)
+            {
+                var sub = new char[9];
+                sub[0] = '9';
+                for (var i = 1; i < 9; i++)
+                {
+                    sub[i] = (char)('0' + Rng.Next(10));
+                }
+
+                return ddd + new string(sub);
+            }
+
+            var landline = new char[8];
+            landline[0] = (char)('0' + 2 + Rng.Next(4));
+            for (var i = 1; i < 8; i++)
+            {
+                landline[i] = (char)('0' + Rng.Next(10));
+            }
+
+            return ddd + new string(landline);
+        }
 `)
 
 	csClassClose(&b)
@@ -511,7 +670,7 @@ func (e csharpEmitter) renderVoterID(plan KindPlan) string {
 	fmt.Fprintf(&b, `        private static readonly CheckDigit Dv1 = %s;
         private static readonly CheckDigit Dv2 = %s;
 
-        /// <summary>ComputeDv1 computes the first check digit over the 8 sequence digits.</summary>
+`+csRngField+`        /// <summary>ComputeDv1 computes the first check digit over the 8 sequence digits.</summary>
         private static int ComputeDv1(string d)
         {
             var seq = Mod11.DigitsOf(d.Substring(0, 8));
@@ -582,6 +741,42 @@ func (e csharpEmitter) renderVoterID(plan KindPlan) string {
 `, dv1, dv2,
 		csFormatThrow("ErrInvalidLength"), csMaskExpr(plan.Mask, "d"),
 		csFormatThrow("ErrInvalidLength"), csFormatThrow("ErrInvalidFormat"))
+
+	b.WriteString(`
+        /// <summary>Generate returns a random valid 12-digit Título Eleitoral.</summary>
+        public static string Generate()
+        {
+            while (true)
+            {
+                var d = new int[12];
+                for (var i = 0; i < 8; i++)
+                {
+                    d[i] = Rng.Next(10);
+                }
+
+                var uf = 1 + Rng.Next(28);
+                d[8] = uf / 10;
+                d[9] = uf % 10;
+                var s = string.Concat(Array.ConvertAll(Slice(d, 0, 10), x => x.ToString(System.Globalization.CultureInfo.InvariantCulture)));
+                var dv1 = ComputeDv1(s);
+                d[10] = dv1;
+                d[11] = ComputeDv2(s, dv1);
+                var outv = string.Concat(Array.ConvertAll(d, x => x.ToString(System.Globalization.CultureInfo.InvariantCulture)));
+                if (!Mod11.AllEqual(outv))
+                {
+                    return outv;
+                }
+            }
+        }
+
+        private static int[] Slice(int[] xs, int from, int to)
+        {
+            var n = to - from;
+            var outv = new int[n];
+            Array.Copy(xs, from, outv, 0, n);
+            return outv;
+        }
+`)
 
 	csClassClose(&b)
 

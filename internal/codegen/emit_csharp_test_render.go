@@ -75,6 +75,13 @@ func (e csharpEmitter) renderTest(kind selo.Kind, _ KindPlan, _ Vector) string {
 		b.WriteString("        }\n")
 	}
 
+	// generate round-trip: 100 generated values must each validate.
+	b.WriteString("\n        [Fact]\n")
+	b.WriteString("        public void GenerateRoundTrip()\n        {\n")
+	b.WriteString("            for (var i = 0; i < 100; i++)\n            {\n")
+	fmt.Fprintf(&b, "                Assert.True(%s.Validate(%s.Generate()));\n", class, class)
+	b.WriteString("            }\n        }\n")
+
 	b.WriteString("    }\n}\n")
 
 	return b.String()

@@ -9,6 +9,8 @@ namespace Inovacc.Selo
     {
         private static readonly CheckDigit Dv = new CheckDigit { Weights = new[] { 2, 3, 4, 5, 6, 7, 8, 9 }, Rule = DVRule.ModRemainder, RemainderTo0 = new[] { 0, 1 } };
 
+        private static readonly Random Rng = new Random();
+
         /// <summary>Clean uppercases and keeps only [0-9A-Z], capped at 14 chars.</summary>
         private static string Clean(string value)
         {
@@ -81,6 +83,22 @@ namespace Inovacc.Selo
             }
 
             return $"{c.Substring(0, 2)}.{c.Substring(2, 3)}.{c.Substring(5, 3)}/{c.Substring(8, 4)}-{c.Substring(12, 2)}";
+        }
+        private const string Alphanum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        /// <summary>Generate returns a random valid alphanumeric CNPJ.</summary>
+        public static string Generate()
+        {
+            var baseChars = new char[12];
+            for (var i = 0; i < 12; i++)
+            {
+                baseChars[i] = Alphanum[Rng.Next(Alphanum.Length)];
+            }
+
+            var baseStr = new string(baseChars);
+            var dv1 = ComputeDv(baseStr);
+            var dv2 = ComputeDv(baseStr + dv1.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            return baseStr + dv1.ToString(System.Globalization.CultureInfo.InvariantCulture) + dv2.ToString(System.Globalization.CultureInfo.InvariantCulture);
         }
     }
 }

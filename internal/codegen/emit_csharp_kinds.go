@@ -11,6 +11,14 @@ import (
 // reducer; the irregular kinds (CNH coupled DVs, CNS sum-zero, CNPJ char-map)
 // carry bespoke fragments, exactly as the spec Notes flag and the TS reference
 // (emit_ts_kinds.go) does.
+//
+// Each class also carries a static Generate() that mirrors its TypeScript
+// counterpart's generate<Kind>() (same output shape), using a shared
+// System.Random source (the C# analogue of TS Math.random()).
+
+// csRngField is the per-class random source used by Generate(), the C# analogue
+// of the TS modules' Math.random(). Declared once per class that generates.
+const csRngField = "        private static readonly Random Rng = new Random();\n\n"
 
 // csMaskExpr converts a '#'/'X'-placeholder mask (e.g. "###.#####.##-#") into a
 // C# interpolated-string expression slicing the cleaned digit variable v, e.g.
@@ -75,7 +83,7 @@ func (e csharpEmitter) renderCPF(plan KindPlan) string {
 	fmt.Fprintf(&b, `        private static readonly CheckDigit Dv1 = %s;
         private static readonly CheckDigit Dv2 = %s;
 
-        /// <summary>Validate reports whether value is a valid CPF (formatted or not).</summary>
+`+csRngField+`        /// <summary>Validate reports whether value is a valid CPF (formatted or not).</summary>
         public static bool Validate(string value)
         {
             var d = Mod11.OnlyDigits(value);
@@ -124,6 +132,20 @@ func (e csharpEmitter) renderCPF(plan KindPlan) string {
             return region;
         }
 
+        /// <summary>Generate returns a random valid CPF in formatted form (XXX.XXX.XXX-XX).</summary>
+        public static string Generate()
+        {
+            var d = new int[11];
+            for (var i = 0; i < 9; i++)
+            {
+                d[i] = Rng.Next(10);
+            }
+
+            d[9] = Mod11.ComputeDigit(Mod11.WeightedSum(Slice(d, 0, 9), Dv1.Weights), Dv1);
+            d[10] = Mod11.ComputeDigit(Mod11.WeightedSum(Slice(d, 0, 10), Dv2.Weights), Dv2);
+            return Format(string.Concat(Array.ConvertAll(d, x => x.ToString(System.Globalization.CultureInfo.InvariantCulture))));
+        }
+
         private static int[] Slice(int[] xs, int from, int to)
         {
             var n = to - from;
@@ -155,7 +177,7 @@ func (e csharpEmitter) renderSimpleNumeric(plan KindPlan, kind interface{ String
 
 	fmt.Fprintf(&b, `        private static readonly CheckDigit Dv = %s;
 
-        /// <summary>Validate reports whether value is a valid %[2]s.</summary>
+`+csRngField+`        /// <summary>Validate reports whether value is a valid %[2]s.</summary>
         public static bool Validate(string value)
         {
             var d = Mod11.OnlyDigits(value);
@@ -186,6 +208,26 @@ func (e csharpEmitter) renderSimpleNumeric(plan KindPlan, kind interface{ String
             return %[6]s;
         }
 
+        /// <summary>Generate returns a random valid %[2]s in formatted form.</summary>
+        public static string Generate()
+        {
+            string outv;
+            do
+            {
+                var d = new int[%[4]d];
+                for (var i = 0; i < %[4]d; i++)
+                {
+                    d[i] = Rng.Next(10);
+                }
+
+                var dv = Mod11.ComputeDigit(Mod11.WeightedSum(d, Dv.Weights), Dv);
+                outv = string.Concat(Array.ConvertAll(d, x => x.ToString(System.Globalization.CultureInfo.InvariantCulture))) + dv.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            }
+            while (Mod11.AllEqual(outv));
+
+            return Format(outv);
+        }
+
         private static int[] Slice(int[] xs, int from, int to)
         {
             var n = to - from;
@@ -209,7 +251,7 @@ func (e csharpEmitter) renderRenavam(plan KindPlan) string {
 	dv := csCheckDigitLiteral(plan.Checks[0])
 	fmt.Fprintf(&b, `        private static readonly CheckDigit Dv = %s;
 
-        /// <summary>Validate reports whether value is a valid 11-digit RENAVAM.</summary>
+`+csRngField+`        /// <summary>Validate reports whether value is a valid 11-digit RENAVAM.</summary>
         public static bool Validate(string value)
         {
             var d = Mod11.OnlyDigits(value);
@@ -240,6 +282,26 @@ func (e csharpEmitter) renderRenavam(plan KindPlan) string {
             return d;
         }
 
+        /// <summary>Generate returns a random valid 11-digit RENAVAM.</summary>
+        public static string Generate()
+        {
+            string outv;
+            do
+            {
+                var d = new int[10];
+                for (var i = 0; i < 10; i++)
+                {
+                    d[i] = Rng.Next(10);
+                }
+
+                var dv = Mod11.ComputeDigit(Mod11.WeightedSum(d, Dv.Weights), Dv);
+                outv = string.Concat(Array.ConvertAll(d, x => x.ToString(System.Globalization.CultureInfo.InvariantCulture))) + dv.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            }
+            while (Mod11.AllEqual(outv));
+
+            return outv;
+        }
+
         private static int[] Slice(int[] xs, int from, int to)
         {
             var n = to - from;
@@ -261,6 +323,7 @@ func (e csharpEmitter) renderCNH(_ KindPlan) string {
 	var b strings.Builder
 	csClassOpen(&b, "Cnh", "CNH validation and formatting (coupled check digits).")
 
+	b.WriteString(csRngField)
 	b.WriteString(`        /// <summary>CheckDigits computes both coupled CNH check digits over the 9-digit base.</summary>
         private static (int Dv1, int Dv2) CheckDigits(string baseDigits)
         {
@@ -328,6 +391,27 @@ func (e csharpEmitter) renderCNH(_ KindPlan) string {
 
             return d;
         }
+
+        /// <summary>Generate returns a random valid 11-digit CNH.</summary>
+        public static string Generate()
+        {
+            string outv;
+            do
+            {
+                var baseDigits = new char[9];
+                for (var i = 0; i < 9; i++)
+                {
+                    baseDigits[i] = (char)('0' + Rng.Next(10));
+                }
+
+                var baseStr = new string(baseDigits);
+                var (dv1, dv2) = CheckDigits(baseStr);
+                outv = baseStr + dv1.ToString(System.Globalization.CultureInfo.InvariantCulture) + dv2.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            }
+            while (Mod11.AllEqual(outv));
+
+            return outv;
+        }
 `)
 
 	csClassClose(&b)
@@ -343,7 +427,7 @@ func (e csharpEmitter) renderCNS(plan KindPlan) string {
 	dv := csCheckDigitLiteral(plan.Checks[0])
 	fmt.Fprintf(&b, `        private static readonly CheckDigit Dv = %s;
 
-        /// <summary>Validate reports whether value is a well-formed CNS (sum %% 11 == 0).</summary>
+`+csRngField+`        /// <summary>Validate reports whether value is a well-formed CNS (sum %% 11 == 0).</summary>
         public static bool Validate(string value)
         {
             var d = Mod11.OnlyDigits(value);
@@ -380,6 +464,42 @@ func (e csharpEmitter) renderCNS(plan KindPlan) string {
         }
 `, dv, csFormatThrow("ErrInvalidLength"))
 
+	b.WriteString(`        private static readonly string[] CnsPrefixes = { "1", "2", "7", "8", "9" };
+
+        /// <summary>Generate returns a random valid 15-digit CNS.</summary>
+        public static string Generate()
+        {
+            while (true)
+            {
+                var d = new int[15];
+                d[0] = CnsPrefixes[Rng.Next(CnsPrefixes.Length)][0] - '0';
+                for (var i = 1; i < 14; i++)
+                {
+                    d[i] = Rng.Next(10);
+                }
+
+                var partial = 0;
+                for (var i = 0; i < 14; i++)
+                {
+                    partial += d[i] * (15 - i);
+                }
+
+                var last = (11 - (partial % 11)) % 11;
+                if (last == 10)
+                {
+                    continue;
+                }
+
+                d[14] = last;
+                var outv = string.Concat(Array.ConvertAll(d, x => x.ToString(System.Globalization.CultureInfo.InvariantCulture)));
+                if (!Mod11.AllEqual(outv))
+                {
+                    return outv;
+                }
+            }
+        }
+`)
+
 	csClassClose(&b)
 
 	return b.String()
@@ -394,7 +514,7 @@ func (e csharpEmitter) renderCNPJ(plan KindPlan) string {
 	dv := csCheckDigitLiteral(plan.Checks[0])
 	fmt.Fprintf(&b, `        private static readonly CheckDigit Dv = %s;
 
-        /// <summary>Clean uppercases and keeps only [0-9A-Z], capped at 14 chars.</summary>
+`+csRngField+`        /// <summary>Clean uppercases and keeps only [0-9A-Z], capped at 14 chars.</summary>
         private static string Clean(string value)
         {
             var sb = new System.Text.StringBuilder(14);
@@ -468,6 +588,24 @@ func (e csharpEmitter) renderCNPJ(plan KindPlan) string {
             return %s;
         }
 `, dv, csFormatThrow("ErrInvalidLength"), csMaskExpr(plan.Mask, "c"))
+
+	b.WriteString(`        private const string Alphanum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        /// <summary>Generate returns a random valid alphanumeric CNPJ.</summary>
+        public static string Generate()
+        {
+            var baseChars = new char[12];
+            for (var i = 0; i < 12; i++)
+            {
+                baseChars[i] = Alphanum[Rng.Next(Alphanum.Length)];
+            }
+
+            var baseStr = new string(baseChars);
+            var dv1 = ComputeDv(baseStr);
+            var dv2 = ComputeDv(baseStr + dv1.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            return baseStr + dv1.ToString(System.Globalization.CultureInfo.InvariantCulture) + dv2.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        }
+`)
 
 	csClassClose(&b)
 

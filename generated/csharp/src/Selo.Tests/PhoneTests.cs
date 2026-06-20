@@ -62,5 +62,14 @@ namespace Inovacc.Selo.Tests
         {
             Assert.Equal(output, Phone.Origin(input));
         }
+
+        [Fact]
+        public void GenerateRoundTrip()
+        {
+            for (var i = 0; i < 100; i++)
+            {
+                Assert.True(Phone.Validate(Phone.Generate()));
+            }
+        }
     }
 }

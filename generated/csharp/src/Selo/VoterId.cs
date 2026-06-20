@@ -10,6 +10,8 @@ namespace Inovacc.Selo
         private static readonly CheckDigit Dv1 = new CheckDigit { Weights = new[] { 2, 3, 4, 5, 6, 7, 8, 9 }, Rule = DVRule.ModRemainder, RemainderTo0 = new[] { 10, 11 } };
         private static readonly CheckDigit Dv2 = new CheckDigit { Weights = new[] { 7, 8, 9 }, Rule = DVRule.ModRemainder, RemainderTo0 = new[] { 10, 11 } };
 
+        private static readonly Random Rng = new Random();
+
         /// <summary>ComputeDv1 computes the first check digit over the 8 sequence digits.</summary>
         private static int ComputeDv1(string d)
         {
@@ -77,6 +79,40 @@ namespace Inovacc.Selo
             }
 
             return name;
+        }
+
+        /// <summary>Generate returns a random valid 12-digit Título Eleitoral.</summary>
+        public static string Generate()
+        {
+            while (true)
+            {
+                var d = new int[12];
+                for (var i = 0; i < 8; i++)
+                {
+                    d[i] = Rng.Next(10);
+                }
+
+                var uf = 1 + Rng.Next(28);
+                d[8] = uf / 10;
+                d[9] = uf % 10;
+                var s = string.Concat(Array.ConvertAll(Slice(d, 0, 10), x => x.ToString(System.Globalization.CultureInfo.InvariantCulture)));
+                var dv1 = ComputeDv1(s);
+                d[10] = dv1;
+                d[11] = ComputeDv2(s, dv1);
+                var outv = string.Concat(Array.ConvertAll(d, x => x.ToString(System.Globalization.CultureInfo.InvariantCulture)));
+                if (!Mod11.AllEqual(outv))
+                {
+                    return outv;
+                }
+            }
+        }
+
+        private static int[] Slice(int[] xs, int from, int to)
+        {
+            var n = to - from;
+            var outv = new int[n];
+            Array.Copy(xs, from, outv, 0, n);
+            return outv;
         }
     }
 }

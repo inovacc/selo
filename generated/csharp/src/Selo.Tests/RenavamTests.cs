@@ -47,5 +47,14 @@ namespace Inovacc.Selo.Tests
                 Assert.Equal(output, Renavam.Format(input));
             }
         }
+
+        [Fact]
+        public void GenerateRoundTrip()
+        {
+            for (var i = 0; i < 100; i++)
+            {
+                Assert.True(Renavam.Validate(Renavam.Generate()));
+            }
+        }
     }
 }

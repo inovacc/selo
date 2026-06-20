@@ -11,6 +11,8 @@ namespace Inovacc.Selo
         private static readonly Regex National = new Regex("^[A-Z]{3}-?[0-9]{4}$", RegexOptions.Compiled);
         private static readonly Regex Mercosul = new Regex("^[A-Z]{3}[0-9][A-Z][0-9]{2}$", RegexOptions.Compiled);
 
+        private static readonly Random Rng = new Random();
+
         /// <summary>Validate reports whether value is a national or Mercosul plate.</summary>
         public static bool Validate(string value)
         {
@@ -34,6 +36,48 @@ namespace Inovacc.Selo
             }
 
             throw new System.FormatException("ErrInvalidFormat");
+        }
+
+        private const string Letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        private static char RandomLetter()
+        {
+            return Letters[Rng.Next(26)];
+        }
+
+        private static char RandomDigit()
+        {
+            return (char)('0' + Rng.Next(10));
+        }
+
+        /// <summary>Generate returns a random valid plate (national or Mercosul).</summary>
+        public static string Generate()
+        {
+            var letters = new char[3];
+            for (var i = 0; i < 3; i++)
+            {
+                letters[i] = RandomLetter();
+            }
+
+            var prefix = new string(letters);
+            if (Rng.NextDouble() < 0.5)
+            {
+                var digits = new char[4];
+                for (var i = 0; i < 4; i++)
+                {
+                    digits[i] = RandomDigit();
+                }
+
+                return prefix + "-" + new string(digits);
+            }
+
+            var tail = new char[2];
+            for (var i = 0; i < 2; i++)
+            {
+                tail[i] = RandomDigit();
+            }
+
+            return prefix + RandomDigit() + RandomLetter() + new string(tail);
         }
     }
 }

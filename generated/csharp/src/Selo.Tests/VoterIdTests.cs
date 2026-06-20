@@ -62,5 +62,14 @@ namespace Inovacc.Selo.Tests
         {
             Assert.Equal(output, VoterId.Origin(input));
         }
+
+        [Fact]
+        public void GenerateRoundTrip()
+        {
+            for (var i = 0; i < 100; i++)
+            {
+                Assert.True(VoterId.Validate(VoterId.Generate()));
+            }
+        }
     }
 }

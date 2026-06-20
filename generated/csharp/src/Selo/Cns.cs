@@ -9,6 +9,8 @@ namespace Inovacc.Selo
     {
         private static readonly CheckDigit Dv = new CheckDigit { Weights = new[] { 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 }, Rule = DVRule.SumZero };
 
+        private static readonly Random Rng = new Random();
+
         /// <summary>Validate reports whether value is a well-formed CNS (sum % 11 == 0).</summary>
         public static bool Validate(string value)
         {
@@ -43,6 +45,40 @@ namespace Inovacc.Selo
             }
 
             return d;
+        }
+        private static readonly string[] CnsPrefixes = { "1", "2", "7", "8", "9" };
+
+        /// <summary>Generate returns a random valid 15-digit CNS.</summary>
+        public static string Generate()
+        {
+            while (true)
+            {
+                var d = new int[15];
+                d[0] = CnsPrefixes[Rng.Next(CnsPrefixes.Length)][0] - '0';
+                for (var i = 1; i < 14; i++)
+                {
+                    d[i] = Rng.Next(10);
+                }
+
+                var partial = 0;
+                for (var i = 0; i < 14; i++)
+                {
+                    partial += d[i] * (15 - i);
+                }
+
+                var last = (11 - (partial % 11)) % 11;
+                if (last == 10)
+                {
+                    continue;
+                }
+
+                d[14] = last;
+                var outv = string.Concat(Array.ConvertAll(d, x => x.ToString(System.Globalization.CultureInfo.InvariantCulture)));
+                if (!Mod11.AllEqual(outv))
+                {
+                    return outv;
+                }
+            }
         }
     }
 }

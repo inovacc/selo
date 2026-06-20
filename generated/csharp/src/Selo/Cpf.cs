@@ -10,6 +10,8 @@ namespace Inovacc.Selo
         private static readonly CheckDigit Dv1 = new CheckDigit { Weights = new[] { 10, 9, 8, 7, 6, 5, 4, 3, 2 }, Rule = DVRule.ModRemainder, RemainderTo0 = new[] { 10, 11 }, MultiplyBy10 = true };
         private static readonly CheckDigit Dv2 = new CheckDigit { Weights = new[] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 }, Rule = DVRule.ModRemainder, RemainderTo0 = new[] { 10, 11 }, MultiplyBy10 = true };
 
+        private static readonly Random Rng = new Random();
+
         /// <summary>Validate reports whether value is a valid CPF (formatted or not).</summary>
         public static bool Validate(string value)
         {
@@ -57,6 +59,20 @@ namespace Inovacc.Selo
             }
 
             return region;
+        }
+
+        /// <summary>Generate returns a random valid CPF in formatted form (XXX.XXX.XXX-XX).</summary>
+        public static string Generate()
+        {
+            var d = new int[11];
+            for (var i = 0; i < 9; i++)
+            {
+                d[i] = Rng.Next(10);
+            }
+
+            d[9] = Mod11.ComputeDigit(Mod11.WeightedSum(Slice(d, 0, 9), Dv1.Weights), Dv1);
+            d[10] = Mod11.ComputeDigit(Mod11.WeightedSum(Slice(d, 0, 10), Dv2.Weights), Dv2);
+            return Format(string.Concat(Array.ConvertAll(d, x => x.ToString(System.Globalization.CultureInfo.InvariantCulture))));
         }
 
         private static int[] Slice(int[] xs, int from, int to)
