@@ -53,3 +53,20 @@ export function originVoterId(value) {
   if (name === undefined) throw new Error("ErrInvalidFormat");
   return name;
 }
+
+/** generateVoterId returns a random valid 12-digit Título Eleitoral. */
+export function generateVoterId() {
+  while (true) {
+    const d = new Array(12).fill(0);
+    for (let i = 0; i < 8; i++) d[i] = Math.floor(Math.random() * 10);
+    const uf = 1 + Math.floor(Math.random() * 28);
+    d[8] = Math.floor(uf / 10);
+    d[9] = uf % 10;
+    const s = d.slice(0, 10).join("");
+    const dv1 = voterDV1(s);
+    d[10] = dv1;
+    d[11] = voterDV2(s, dv1);
+    const out = d.join("");
+    if (!allEqual(out)) return out;
+  }
+}

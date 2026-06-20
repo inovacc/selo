@@ -3,35 +3,35 @@
   "group": "F",
   "validate": [
     {
-      "input": "68978057",
+      "input": "79709551",
       "valid": true
     },
     {
-      "input": "72999460",
+      "input": "62050245",
       "valid": true
     },
     {
-      "input": "28528092",
+      "input": "69207330",
       "valid": true
     },
     {
-      "input": "57086901",
+      "input": "49518928",
       "valid": true
     },
     {
-      "input": "74159764",
+      "input": "69399198",
       "valid": true
     },
     {
-      "input": "69708152",
+      "input": "58127284",
       "valid": true
     },
     {
-      "input": "77901689",
+      "input": "67450386",
       "valid": true
     },
     {
-      "input": "29901866",
+      "input": "06607601",
       "valid": true
     },
     {
@@ -51,6 +51,10 @@
       "valid": false
     },
     {
+      "input": "0660760",
+      "valid": false
+    },
+    {
       "input": "1234567",
       "valid": false
     },
@@ -59,67 +63,63 @@
       "valid": false
     },
     {
-      "input": "2852809",
+      "input": "4951892",
       "valid": false
     },
     {
-      "input": "2990186",
+      "input": "5812728",
       "valid": false
     },
     {
-      "input": "5708690",
+      "input": "6205024",
       "valid": false
     },
     {
-      "input": "6897805",
+      "input": "6745038",
       "valid": false
     },
     {
-      "input": "6970815",
+      "input": "6920733",
       "valid": false
     },
     {
-      "input": "7299946",
+      "input": "6939919",
       "valid": false
     },
     {
-      "input": "7415976",
+      "input": "7970955",
       "valid": false
     },
     {
-      "input": "7790168",
+      "input": "Z2050245",
       "valid": false
     },
     {
-      "input": "Z2999460",
+      "input": "Z6607601",
       "valid": false
     },
     {
-      "input": "Z4159764",
+      "input": "Z7450386",
       "valid": false
     },
     {
-      "input": "Z7086901",
+      "input": "Z8127284",
       "valid": false
     },
     {
-      "input": "Z7901689",
+      "input": "Z9207330",
       "valid": false
     },
     {
-      "input": "Z8528092",
+      "input": "Z9399198",
       "valid": false
     },
     {
-      "input": "Z8978057",
+      "input": "Z9518928",
       "valid": false
     },
     {
-      "input": "Z9708152",
-      "valid": false
-    },
-    {
-      "input": "Z9901866",
+      "input": "Z9709551",
       "valid": false
     },
     {
@@ -133,36 +133,36 @@
   ],
   "format": [
     {
-      "input": "68978057",
-      "output": "68978-057"
+      "input": "79709551",
+      "output": "79709-551"
     },
     {
-      "input": "72999460",
-      "output": "72999-460"
+      "input": "62050245",
+      "output": "62050-245"
     },
     {
-      "input": "28528092",
-      "output": "28528-092"
+      "input": "69207330",
+      "output": "69207-330"
     },
     {
-      "input": "57086901",
-      "output": "57086-901"
+      "input": "49518928",
+      "output": "49518-928"
     },
     {
-      "input": "74159764",
-      "output": "74159-764"
+      "input": "69399198",
+      "output": "69399-198"
     },
     {
-      "input": "69708152",
-      "output": "69708-152"
+      "input": "58127284",
+      "output": "58127-284"
     },
     {
-      "input": "77901689",
-      "output": "77901-689"
+      "input": "67450386",
+      "output": "67450-386"
     },
     {
-      "input": "29901866",
-      "output": "29901-866"
+      "input": "06607601",
+      "output": "06607-601"
     },
     {
       "input": "1",
@@ -171,36 +171,36 @@
   ],
   "origin": [
     {
-      "input": "68978057",
-      "output": "AP"
+      "input": "79709551",
+      "output": "MS"
     },
     {
-      "input": "72999460",
-      "output": "GO"
+      "input": "62050245",
+      "output": "CE"
     },
     {
-      "input": "28528092",
-      "output": "RJ"
-    },
-    {
-      "input": "57086901",
-      "output": "AL"
-    },
-    {
-      "input": "74159764",
-      "output": "GO"
-    },
-    {
-      "input": "69708152",
+      "input": "69207330",
       "output": "AM"
     },
     {
-      "input": "77901689",
-      "output": "TO"
+      "input": "49518928",
+      "output": "SE"
     },
     {
-      "input": "29901866",
-      "output": "ES"
+      "input": "69399198",
+      "output": "RR"
+    },
+    {
+      "input": "58127284",
+      "output": "PB"
+    },
+    {
+      "input": "67450386",
+      "output": "PA"
+    },
+    {
+      "input": "06607601",
+      "output": "SP"
     }
   ],
   "ufScoped": false,

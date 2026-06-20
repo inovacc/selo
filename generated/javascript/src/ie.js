@@ -46,3 +46,23 @@ export function formatIE(value) {
   }
   throw new Error("ErrInvalidFormat");
 }
+const IE_W1 = [1, 3, 4, 5, 6, 7, 8, 10];
+const IE_W2 = [3, 2, 10, 9, 8, 7, 6, 5, 4, 3, 2];
+
+function ieRightmostDV(digits, weights) {
+  let sum = 0;
+  for (let i = 0; i < weights.length; i++) sum += digits[i] * weights[i];
+  return (sum % 11) % 10;
+}
+
+/** generateIE returns a random valid SP IE in masked form (AAA.AAA.AAA.AAA). */
+export function generateIE() {
+  const d = new Array(12).fill(0);
+  for (let i = 0; i < 8; i++) d[i] = Math.floor(Math.random() * 10);
+  d[8] = ieRightmostDV(d.slice(0, 8), IE_W1);
+  d[9] = Math.floor(Math.random() * 10);
+  d[10] = Math.floor(Math.random() * 10);
+  d[11] = ieRightmostDV(d.slice(0, 11), IE_W2);
+  const s = d.join("");
+  return `${s.slice(0, 3)}.${s.slice(3, 6)}.${s.slice(6, 9)}.${s.slice(9, 12)}`;
+}

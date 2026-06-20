@@ -15,35 +15,35 @@
       "valid": true
     },
     {
-      "input": "59594005700",
+      "input": "86235547102",
       "valid": true
     },
     {
-      "input": "78722056610",
+      "input": "20482531800",
       "valid": true
     },
     {
-      "input": "16857557985",
+      "input": "94775359312",
       "valid": true
     },
     {
-      "input": "08431745444",
+      "input": "20039479650",
       "valid": true
     },
     {
-      "input": "04767180317",
+      "input": "01758617063",
       "valid": true
     },
     {
-      "input": "72248629591",
+      "input": "70964235919",
       "valid": true
     },
     {
-      "input": "56712964121",
+      "input": "55993925540",
       "valid": true
     },
     {
-      "input": "47967356233",
+      "input": "44463932270",
       "valid": true
     },
     {
@@ -59,19 +59,11 @@
       "valid": false
     },
     {
-      "input": "0476718031",
+      "input": "0175861706",
       "valid": false
     },
     {
-      "input": "04767180318",
-      "valid": false
-    },
-    {
-      "input": "0843174544",
-      "valid": false
-    },
-    {
-      "input": "08431745445",
+      "input": "01758617064",
       "valid": false
     },
     {
@@ -87,19 +79,27 @@
       "valid": false
     },
     {
-      "input": "1685755798",
+      "input": "2003947965",
       "valid": false
     },
     {
-      "input": "16857557986",
+      "input": "20039479651",
       "valid": false
     },
     {
-      "input": "4796735623",
+      "input": "2048253180",
       "valid": false
     },
     {
-      "input": "47967356234",
+      "input": "20482531801",
+      "valid": false
+    },
+    {
+      "input": "4446393227",
+      "valid": false
+    },
+    {
+      "input": "44463932271",
       "valid": false
     },
     {
@@ -119,39 +119,51 @@
       "valid": false
     },
     {
-      "input": "5671296412",
+      "input": "5599392554",
       "valid": false
     },
     {
-      "input": "56712964122",
+      "input": "55993925541",
       "valid": false
     },
     {
-      "input": "5959400570",
+      "input": "7096423591",
       "valid": false
     },
     {
-      "input": "59594005701",
+      "input": "70964235910",
       "valid": false
     },
     {
-      "input": "7224862959",
+      "input": "8623554710",
       "valid": false
     },
     {
-      "input": "72248629592",
+      "input": "86235547103",
       "valid": false
     },
     {
-      "input": "7872205661",
+      "input": "9477535931",
       "valid": false
     },
     {
-      "input": "78722056611",
+      "input": "94775359313",
       "valid": false
     },
     {
-      "input": "Z2248629591",
+      "input": "Z0039479650",
+      "valid": false
+    },
+    {
+      "input": "Z0482531800",
+      "valid": false
+    },
+    {
+      "input": "Z0964235919",
+      "valid": false
+    },
+    {
+      "input": "Z1758617063",
       "valid": false
     },
     {
@@ -167,31 +179,19 @@
       "valid": false
     },
     {
-      "input": "Z4767180317",
+      "input": "Z4463932270",
       "valid": false
     },
     {
-      "input": "Z6712964121",
+      "input": "Z4775359312",
       "valid": false
     },
     {
-      "input": "Z6857557985",
+      "input": "Z5993925540",
       "valid": false
     },
     {
-      "input": "Z7967356233",
-      "valid": false
-    },
-    {
-      "input": "Z8431745444",
-      "valid": false
-    },
-    {
-      "input": "Z8722056610",
-      "valid": false
-    },
-    {
-      "input": "Z9594005700",
+      "input": "Z6235547102",
       "valid": false
     },
     {
@@ -213,36 +213,36 @@
       "output": "123.456.789-09"
     },
     {
-      "input": "59594005700",
-      "output": "595.940.057-00"
+      "input": "86235547102",
+      "output": "862.355.471-02"
     },
     {
-      "input": "78722056610",
-      "output": "787.220.566-10"
+      "input": "20482531800",
+      "output": "204.825.318-00"
     },
     {
-      "input": "16857557985",
-      "output": "168.575.579-85"
+      "input": "94775359312",
+      "output": "947.753.593-12"
     },
     {
-      "input": "08431745444",
-      "output": "084.317.454-44"
+      "input": "20039479650",
+      "output": "200.394.796-50"
     },
     {
-      "input": "04767180317",
-      "output": "047.671.803-17"
+      "input": "01758617063",
+      "output": "017.586.170-63"
     },
     {
-      "input": "72248629591",
-      "output": "722.486.295-91"
+      "input": "70964235919",
+      "output": "709.642.359-19"
     },
     {
-      "input": "56712964121",
-      "output": "567.129.641-21"
+      "input": "55993925540",
+      "output": "559.939.255-40"
     },
     {
-      "input": "47967356233",
-      "output": "479.673.562-33"
+      "input": "44463932270",
+      "output": "444.639.322-70"
     },
     {
       "input": "1",
@@ -263,35 +263,35 @@
       "output": "Paraná and Santa Catarina"
     },
     {
-      "input": "59594005700",
-      "output": "Rio de Janeiro and Espírito Santo"
-    },
-    {
-      "input": "78722056610",
-      "output": "Minas Gerais"
-    },
-    {
-      "input": "16857557985",
-      "output": "Paraná and Santa Catarina"
-    },
-    {
-      "input": "08431745444",
-      "output": "Pernambuco, Rio Grande do Norte, Paraíba, and Alagoas"
-    },
-    {
-      "input": "04767180317",
-      "output": "Ceará, Maranhão, and Piauí"
-    },
-    {
-      "input": "72248629591",
-      "output": "Bahia and Sergipe"
-    },
-    {
-      "input": "56712964121",
+      "input": "86235547102",
       "output": "Federal District, Goiás, Mato Grosso do Sul, and Tocantins"
     },
     {
-      "input": "47967356233",
+      "input": "20482531800",
+      "output": "São Paulo"
+    },
+    {
+      "input": "94775359312",
+      "output": "Ceará, Maranhão, and Piauí"
+    },
+    {
+      "input": "20039479650",
+      "output": "Minas Gerais"
+    },
+    {
+      "input": "01758617063",
+      "output": "Rio Grande do Sul"
+    },
+    {
+      "input": "70964235919",
+      "output": "Paraná and Santa Catarina"
+    },
+    {
+      "input": "55993925540",
+      "output": "Bahia and Sergipe"
+    },
+    {
+      "input": "44463932270",
       "output": "Pará, Amazonas, Acre, Amapá, Rondônia, and Roraima"
     }
   ],
