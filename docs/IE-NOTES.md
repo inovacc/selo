@@ -1,6 +1,9 @@
 # Inscrição Estadual (IE) — research log & roadmap
 
-> Status as of 2026-06-19 (plan 006, design/spike). **First batch shipped: SP only.**
+> Status as of 2026-06-20 (v1.6.0). **Shipped: SP, MG, RS, PR (4 UFs).** RJ
+> researched again and **kept blocked** (see below). First batch (SP) shipped in
+> plan 006; MG/RS/PR added in v1.6.0 after a fresh, adversarially-verified research
+> spike (the per-UF algorithms, samples, and sources are folded into this doc).
 > IE has no national standard — each of the 27 federative units defines its own
 > length(s), weights, mod, and check-digit rule(s); several accept multiple formats.
 > This is the single biggest gap in the Brazilian-document Go ecosystem
@@ -40,15 +43,17 @@ message (fixed in v1.2.0) — `ValidateUF` returns `ErrUFNotImplemented` and the
 | UF | Status | Notes |
 |----|--------|-------|
 | SP | **ready** ✅ | 12 digits; two check digits (pos 9 and 12), mod-11 "rightmost digit" rule. Implemented + tested. |
-| MG | needs-research | 13 digits, mod-11; algorithm is unusually involved (zero-padded UF prefix, two DVs). Found descriptions but not ≥2 independently-verifiable samples — defer. |
-| RJ | needs-research | 8 digits, single DV, weights 2..7 mod 11. Plausible algorithm located; need ≥2 sourced samples to verify before shipping. |
-| RS | needs-research | 10 digits, single DV mod 11. Need authoritative algorithm + samples. |
-| PR | needs-research | 10 digits, two DVs mod 11 (PR Fazenda publishes the general DV method). Need ≥2 sourced samples. |
+| MG | **ready** ✅ | 13 digits; D1 digit-sum method (zero inserted after municipio, alternating 1,2 weights), D2 mod-11. Official SINTEGRA-MG worked example anchors it. |
+| RS | **ready** ✅ | 10 digits; single mod-11 DV, weights `[2,9,8,7,6,5,4,3,2]`. Official SINTEGRA-RS worked example anchors it. |
+| PR | **ready** ✅ | 10 digits; two mod-11 DVs (DV2 folds in `2·DV1`). Official SEFA-PR reference routine + worked example anchor it. |
+| RJ | **blocked** ⛔ | 8 digits, single DV, `DV = 11-(sum mod 11)`, 10/11→0. The official SINTEGRA-RJ page publishes the rule and format but **NOT the weight vector**. The vector `[2,7,6,5,4,3,2]` and every sample come only from community impls; validating those samples with that same vector is circular, so it fails the authoritative-algorithm bar. Re-add once an official-anchored algorithm or sample appears. |
 
-Only **SP** met the "authoritative algorithm + ≥2 verified samples" bar within this spike.
-The other four first-batch candidates are deferred (not implemented) rather than shipped
-unverified — per the plan, shipping SP alone verified is success; shipping wrong ones is
-failure.
+**SP, MG, RS, and PR** meet the "authoritative algorithm + ≥2 independently-verified
+samples" bar — each anchored by an OFFICIAL worked example (SINTEGRA-MG/RS, SEFA-PR) that is
+itself a verified sample, plus independent reference-impl corroboration. The fresh research
+(MG/RS/PR/RJ) was adversarially verified: every cited check digit was re-derived from the
+stated algorithm and matched, and published negative controls reject. **RJ alone stays
+blocked** — shipping it would mean trusting a weight vector no authoritative source publishes.
 
 ## SP — verified algorithm
 
@@ -79,18 +84,56 @@ Both independently published, both check digits verified by hand:
 > confirmed real-company registrations (real IE numbers aren't publicly verifiable for
 > privacy reasons). The SEFAZ-SP example is as authoritative as the source gets.
 
+## MG, RS, PR — verified algorithms (v1.6.0)
+
+Added after a fresh research spike whose every sample was re-derived and adversarially
+verified. Each is anchored by an OFFICIAL worked example (which doubles as a pinned sample)
+plus independent reference-impl corroboration (Thiagocfn/InscricaoEstadual PHP,
+Printi/gammasoft JS). Samples are pinned in `TestIE_AuthoritativeSamples` /
+`TestIE_ValidateUF` (with published negative controls).
+
+### MG — 13 digits, format `AAA.AAA.AAA/AAAA`
+3 municipio + 6 inscrição + 2 ordem + 2 DV.
+- **D1 (digit-sum method)**: insert a `0` right after the 3-digit municipio code (→ 12
+  digits), multiply left→right by alternating weights `1,2,1,2,…`, sum the **digits** of
+  each product; `D1 = next-multiple-of-ten(total) − total`.
+- **D2 (mod-11)**: over the 11 base digits + D1 (12 digits), weights left→right
+  `[3,2,11,10,9,8,7,6,5,4,3,2]`; `D2 = 11 − (sum mod 11)`, remainder 0/1 → 0.
+- Sources: SINTEGRA-MG <http://www.sintegra.gov.br/Cad_Estados/cad_MG.html>; Thiagocfn; Printi.
+- Samples: `0623079040081` (official, D1=8 D2=1), `4333908330177`, `7023259570005`.
+
+### RS — 10 digits, format `AAA/AAAAAAA`
+3 municipio + 6 empresa + 1 DV. Single mod-11 DV: weights left→right `[2,9,8,7,6,5,4,3,2]`
+over the first 9 digits; `DV = 11 − (sum mod 11)`, result 10/11 → 0.
+- Sources: SINTEGRA-RS <http://www.sintegra.gov.br/Cad_Estados/cad_RS.html>; Thiagocfn; Printi.
+- Samples: `2243658792` (official, DV=2), `0305169149`, `0963205056`.
+
+### PR — 10 digits, format `AAA.AAAAA-AA`
+8 base + 2 DV. Both mod-11: DV1 weights `[3,2,7,6,5,4,3,2]`; DV2 weights `[4,3,2,7,6,5,4,3]`
+**plus `2·DV1` added to the sum**; each `DV = 11 − (sum mod 11)`, result 10/11 → 0.
+- Sources: SEFA-PR <https://www.fazenda.pr.gov.br/Pagina/calculo-digito-verificador> (algorithm
+  + worked example); Thiagocfn.
+- Samples: `1234567850` (official, DV1=5 DV2=0), `4447953604`.
+
+### Multi-language codegen parity gap
+The Go library validates SP/MG/RS/PR IE, but the multi-language code generator
+(`internal/codegen`) still emits **SP-only** IE (`spec.go` KindIE). MG's digit-sum D1 method
+isn't expressible by the current `CheckDigit`/`DVRule` model — extending codegen IE needs a
+new DV rule and is tracked as a separate follow-up (does not block the Go library).
+
 ## Generation & format coverage
-- **SP**: constructive `Generate` (random base + computed DVs) and `Format` mask both
-  implemented and round-trip tested.
+- **SP, MG, RS, PR**: constructive `Generate`/`GenerateRand` (random base + computed DVs) and
+  `Format` masks all implemented and round-trip tested.
 - Other UFs: when added, generation is optional — leave `generate: nil` and document the
   limitation rather than fake it.
 
 ## Remaining-UF roadmap (follow-up plans)
 Ship in batches, each gated by the same "authoritative source + ≥2 verified samples" rule.
-Suggested next batch (highest population/value): **MG, RJ, RS, PR** (finish the first-batch
-five), then BA, PE, CE, GO, SC, DF, ES, … through the remaining 26 UFs.
+First batch (SP, MG, RS, PR) is done; **RJ is blocked** on an official weight vector. Next
+batch (highest population/value): BA, PE, CE, GO, SC, DF, ES, … through the remaining UFs.
 
-- [ ] MG  [ ] RJ  [ ] RS  [ ] PR  — finish first batch
+- [x] SP  [x] MG  [x] RS  [x] PR  — ✅ shipped
+- [ ] RJ  — ⛔ blocked (official page omits the weight vector; see Per-UF status)
 - [ ] BA  [ ] PE  [ ] CE  [ ] GO  [ ] SC  [ ] DF  [ ] ES  [ ] PA  [ ] MA  [ ] MT
 - [ ] MS  [ ] PB  [ ] RN  [ ] AL  [ ] PI  [ ] AM  [ ] SE  [ ] RO  [ ] TO  [ ] AC
 - [ ] AP  [ ] RR
@@ -99,5 +142,8 @@ Per-UF many states accept multiple formats and a few use mod 10 — shape each `
 accordingly (the `lengths []int` field already supports multi-length UFs).
 
 ## Follow-up
-- Once IE matures, consider adding an `IE` field to `GenPerson` (`person.go`) for the
-  person's UF (currently absent) — a natural extension.
+- ✅ `GeneratePerson` carries a UF-consistent `IE` for the implemented UFs (SP/MG/RS/PR),
+  generated for the person's own UF (`person.go`).
+- Close the codegen parity gap: teach `internal/codegen` to emit MG/RS/PR IE (needs a
+  digit-sum DV rule for MG); until then the generated targets validate SP IE only.
+- Source an official-anchored RJ algorithm/sample to unblock RJ.
