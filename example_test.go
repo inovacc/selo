@@ -50,3 +50,26 @@ func ExamplePIX_Validate() {
 	fmt.Println(NewPIX().Validate("52998224725"))
 	// Output: true
 }
+
+// ExampleDetect shows auto-detecting a document's kind from its raw string.
+func ExampleDetect() {
+	kind, ok := Detect("529.982.247-25")
+	fmt.Println(kind, ok)
+	// Output: cpf true
+}
+
+// ExampleValidate uses the registry to validate by kind without constructing a
+// concrete type.
+func ExampleValidate() {
+	ok, err := Validate(KindCPF, "52998224725")
+	fmt.Println(ok, err)
+	// Output: true <nil>
+}
+
+// ExampleGeneratePerson generates a deterministic, UF-consistent synthetic
+// Brazilian identity suitable for test fixtures. WithSeed makes it reproducible.
+func ExampleGeneratePerson() {
+	p := GeneratePerson(WithUF(UFSP), WithSeed(42))
+	fmt.Println(p.UF)
+	// Output: SP
+}

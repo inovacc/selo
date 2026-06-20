@@ -37,3 +37,31 @@ func FuzzPISValidate(f *testing.F) {
 func FuzzRENAVAMValidate(f *testing.F) {
 	fuzzNoPanic(f, NewRenavam(), "12345678900", "00000000001", "abc", "")
 }
+
+func FuzzCEPValidate(f *testing.F) {
+	fuzzNoPanic(f, NewCEP(), "01310-100", "01310100", "00000000", "abc", "")
+}
+
+func FuzzPhoneValidate(f *testing.F) {
+	fuzzNoPanic(f, NewPhone(), "11987654321", "(11) 98765-4321", "0", "abc", "")
+}
+
+func FuzzPlateValidate(f *testing.F) {
+	fuzzNoPanic(f, NewPlate(), "ABC1D23", "ABC-1234", "abc", "")
+}
+
+// FuzzDetect guards the auto-detection entry points against panics on arbitrary
+// input — they sit in front of every Validate path, so robustness here matters.
+func FuzzDetect(f *testing.F) {
+	for _, s := range []string{
+		"52998224725", "39591842000010", "01310-100", "11987654321",
+		"ABC1D23", "test@example.com", "", "??", "12345",
+	} {
+		f.Add(s)
+	}
+
+	f.Fuzz(func(_ *testing.T, s string) {
+		_, _ = Detect(s)
+		_, _ = DetectPIXKind(s)
+	})
+}
