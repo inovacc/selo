@@ -106,12 +106,15 @@ func (c *CEP) Origin(value string) (string, error) {
 	return uf.String(), nil
 }
 
-// Generate returns a random, valid 8-digit CEP (unformatted) by picking a
-// real UF prefix range and filling the remaining 5 digits at random.
-func (c *CEP) Generate() string {
-	r := cepPrefixRanges[rand.IntN(len(cepPrefixRanges))]
-	prefix := r.from + rand.IntN(r.to-r.from+1)
-	suffix := rand.IntN(100000) // 0..99999
+// GenerateRand returns a valid 8-digit CEP using the supplied random source.
+func (c *CEP) GenerateRand(r *rand.Rand) string {
+	rng := cepPrefixRanges[r.IntN(len(cepPrefixRanges))]
+	prefix := rng.from + r.IntN(rng.to-rng.from+1)
+	suffix := r.IntN(100000)
 
 	return fmt.Sprintf("%03d%05d", prefix, suffix)
 }
+
+// Generate returns a random, valid 8-digit CEP (unformatted) by picking a
+// real UF prefix range and filling the remaining 5 digits at random.
+func (c *CEP) Generate() string { return c.GenerateRand(newRand()) }

@@ -150,30 +150,33 @@ func (p *Phone) Origin(value string) (string, error) {
 	return uf.String(), nil
 }
 
-// Generate returns a random valid Brazilian phone number (unformatted national
-// digits). It picks a real DDD and randomly emits a 9-digit mobile (leading 9)
-// or an 8-digit landline (leading 2-5).
-func (p *Phone) Generate() string {
-	ddd := ddds[rand.IntN(len(ddds))]
+// GenerateRand returns a valid Brazilian phone number using the supplied random source.
+func (p *Phone) GenerateRand(r *rand.Rand) string {
+	ddd := ddds[r.IntN(len(ddds))]
 
 	var sb strings.Builder
 	fmt.Fprintf(&sb, "%02d", ddd)
 
-	if rand.IntN(2) == 0 {
+	if r.IntN(2) == 0 {
 		// 9-digit mobile: leading 9 + 8 random digits.
 		sb.WriteByte('9')
 
 		for range 8 {
-			sb.WriteByte(byte('0' + rand.IntN(10)))
+			sb.WriteByte(byte('0' + r.IntN(10)))
 		}
 	} else {
 		// 8-digit landline: leading 2-5 + 7 random digits.
-		sb.WriteByte(byte('2' + rand.IntN(4)))
+		sb.WriteByte(byte('2' + r.IntN(4)))
 
 		for range 7 {
-			sb.WriteByte(byte('0' + rand.IntN(10)))
+			sb.WriteByte(byte('0' + r.IntN(10)))
 		}
 	}
 
 	return sb.String()
 }
+
+// Generate returns a random valid Brazilian phone number (unformatted national
+// digits). It picks a real DDD and randomly emits a 9-digit mobile (leading 9)
+// or an 8-digit landline (leading 2-5).
+func (p *Phone) Generate() string { return p.GenerateRand(newRand()) }

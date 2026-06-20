@@ -97,16 +97,16 @@ func allEqualBytes(s string) bool {
 	return true
 }
 
-// Generate returns a syntactically valid random Título Eleitoral (12 digits).
-func (v *VoterID) Generate() string {
+// GenerateRand returns a syntactically valid Título Eleitoral using the supplied random source.
+func (v *VoterID) GenerateRand(r *rand.Rand) string {
 	for {
 		var d [VoterIDLength]byte
 
 		for i := range 8 {
-			d[i] = byte('0' + rand.IntN(10))
+			d[i] = byte('0' + r.IntN(10))
 		}
 
-		uf := rand.IntN(28) + 1 // 1..28
+		uf := r.IntN(28) + 1 // 1..28
 		d[8] = byte('0' + uf/10)
 		d[9] = byte('0' + uf%10)
 
@@ -121,6 +121,9 @@ func (v *VoterID) Generate() string {
 		}
 	}
 }
+
+// Generate returns a syntactically valid random Título Eleitoral (12 digits).
+func (v *VoterID) Generate() string { return v.GenerateRand(newRand()) }
 
 // Format returns the voter ID grouped as "SSSS SSSS UUDD".
 func (v *VoterID) Format(value string) (string, error) {

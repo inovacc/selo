@@ -38,13 +38,12 @@ func (c *CNH) Validate(value string) bool {
 	return dv1 == int(d[9]-'0') && dv2 == int(d[10]-'0')
 }
 
-// Generate returns a random, valid, 11-digit CNH number.
-// It uses math/rand/v2 top-level funcs (goroutine-safe) and rejects all-equal results.
-func (c *CNH) Generate() string {
+// GenerateRand returns a valid 11-digit CNH number using the supplied random source.
+func (c *CNH) GenerateRand(r *rand.Rand) string {
 	for {
 		var b [CnhLength]byte
 		for i := range 9 {
-			b[i] = byte('0' + rand.IntN(10))
+			b[i] = byte('0' + r.IntN(10))
 		}
 
 		dv1, dv2 := cnhCheckDigits(string(b[:9]))
@@ -57,6 +56,10 @@ func (c *CNH) Generate() string {
 		}
 	}
 }
+
+// Generate returns a random, valid, 11-digit CNH number.
+// It uses math/rand/v2 top-level funcs (goroutine-safe) and rejects all-equal results.
+func (c *CNH) Generate() string { return c.GenerateRand(newRand()) }
 
 // Format returns the cleaned 11-digit CNH string (CNH has no official separator mask).
 // It returns ErrInvalidLength (wrapped with %w) when value has the wrong digit count.

@@ -1,8 +1,9 @@
 package selo
 
 import (
-	"crypto/rand"
+	cryptorand "crypto/rand"
 	"fmt"
+	"math/rand/v2"
 	"regexp"
 	"strings"
 )
@@ -107,12 +108,44 @@ func (p *PIX) Format(value string) (string, error) {
 	return v, nil
 }
 
+// GenerateRand returns a UUIDv4-shaped EVP PIX key using the supplied random source
+// (deterministic; for test fixtures). Uses math/rand/v2, not crypto/rand.
+func (p *PIX) GenerateRand(r *rand.Rand) string {
+	var b [16]byte
+	for i := range 16 {
+		b[i] = byte(r.IntN(256))
+	}
+
+	// Set version (4) and variant (10xx) bits per RFC 4122.
+	b[6] = (b[6] & 0x0f) | 0x40
+	b[8] = (b[8] & 0x3f) | 0x80
+
+	const hexdigits = "0123456789abcdef"
+
+	var out [36]byte
+
+	pos := 0
+
+	for i, by := range b {
+		if i == 4 || i == 6 || i == 8 || i == 10 {
+			out[pos] = '-'
+			pos++
+		}
+
+		out[pos] = hexdigits[by>>4]
+		out[pos+1] = hexdigits[by&0x0f]
+		pos += 2
+	}
+
+	return string(out[:])
+}
+
 // Generate returns a random EVP (Endereço Virtual de Pagamento) PIX key: a canonical
 // lowercase UUIDv4, which is itself always a valid PIX key. Uses crypto/rand so generated
 // keys are unpredictable (PIX EVP keys are bank-assigned random identifiers).
 func (p *PIX) Generate() string {
 	var b [16]byte
-	if _, err := rand.Read(b[:]); err != nil {
+	if _, err := cryptorand.Read(b[:]); err != nil {
 		// crypto/rand.Read never fails on supported platforms; fall back deterministically.
 		return "00000000-0000-4000-8000-000000000000"
 	}

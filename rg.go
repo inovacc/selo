@@ -161,14 +161,11 @@ func (r *RG) Format(value string) (string, error) {
 	return string(buf), nil
 }
 
-// Generate returns a syntactically valid, SP-style RG in masked form
-// XX.XXX.XXX-C. The 8 base digits are random; the check character is computed
-// via the SP/RJ mod-11 algorithm ('X' when the DV is 10). It satisfies the
-// Document interface.
-func (r *RG) Generate() string {
+// GenerateRand returns a valid SP-style RG in masked form using the supplied random source.
+func (r *RG) GenerateRand(rng *rand.Rand) string {
 	var base [RGBaseLength]int
 	for i := range RGBaseLength {
-		base[i] = rand.IntN(10)
+		base[i] = rng.IntN(10)
 	}
 
 	dv := r.checkDigit(base)
@@ -196,3 +193,9 @@ func (r *RG) Generate() string {
 
 	return string(buf)
 }
+
+// Generate returns a syntactically valid, SP-style RG in masked form
+// XX.XXX.XXX-C. The 8 base digits are random; the check character is computed
+// via the SP/RJ mod-11 algorithm ('X' when the DV is 10). It satisfies the
+// Document interface.
+func (r *RG) Generate() string { return r.GenerateRand(newRand()) }

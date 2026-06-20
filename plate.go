@@ -64,29 +64,32 @@ func (p *Plate) ValidateMercosul(value string) bool {
 	return IsMercosulPlate(value)
 }
 
-// Generate returns a random valid plate. When Mercosul is true it emits the
-// ABC1D23 pattern; otherwise the national ABC1234 pattern (no dash).
-func (p *Plate) Generate() string {
+// GenerateRand returns a valid plate using the supplied random source.
+func (p *Plate) GenerateRand(r *rand.Rand) string {
 	var sb strings.Builder
 	for range 3 {
-		sb.WriteByte(byte('A' + rand.IntN(26)))
+		sb.WriteByte(byte('A' + r.IntN(26)))
 	}
 
 	if p.Mercosul {
-		sb.WriteByte(byte('0' + rand.IntN(10)))
-		sb.WriteByte(byte('A' + rand.IntN(26)))
-		sb.WriteByte(byte('0' + rand.IntN(10)))
-		sb.WriteByte(byte('0' + rand.IntN(10)))
+		sb.WriteByte(byte('0' + r.IntN(10)))
+		sb.WriteByte(byte('A' + r.IntN(26)))
+		sb.WriteByte(byte('0' + r.IntN(10)))
+		sb.WriteByte(byte('0' + r.IntN(10)))
 
 		return sb.String()
 	}
 
 	for range 4 {
-		sb.WriteByte(byte('0' + rand.IntN(10)))
+		sb.WriteByte(byte('0' + r.IntN(10)))
 	}
 
 	return sb.String()
 }
+
+// Generate returns a random valid plate. When Mercosul is true it emits the
+// ABC1D23 pattern; otherwise the national ABC1234 pattern (no dash).
+func (p *Plate) Generate() string { return p.GenerateRand(newRand()) }
 
 // Format canonicalizes a plate: national plates gain the dash (ABC-1234),
 // Mercosul plates are returned uppercased without a dash (ABC1D23). Returns
