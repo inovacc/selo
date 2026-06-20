@@ -160,12 +160,7 @@ func (e *IE) Generate() string { return e.GenerateRand(newRand()) }
 // digit of (weighted sum mod 11). A remainder of 10 therefore yields 0. weights
 // must not be longer than d.
 func ieRightmostDV(d string, weights []int) int {
-	sum := 0
-	for i, w := range weights {
-		sum += int(d[i]-'0') * w
-	}
-
-	return (sum % 11) % 10
+	return (ieWeightedSum(d, weights) % 11) % 10
 }
 
 // --- São Paulo (SP) -----------------------------------------------------------
