@@ -45,3 +45,14 @@ export function formatCNH(value) {
   if (d.length !== 11) throw new Error("ErrInvalidLength");
   return d;
 }
+
+/** generateCNH returns a random valid 11-digit CNH. */
+export function generateCNH() {
+  let out;
+  do {
+    const base = Array.from({ length: 9 }, () => Math.floor(Math.random() * 10)).join("");
+    const [dv1, dv2] = cnhCheckDigits(base);
+    out = base + dv1 + dv2;
+  } while (allEqual(out));
+  return out;
+}

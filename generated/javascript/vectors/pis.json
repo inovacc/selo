@@ -3,35 +3,35 @@
   "group": "A",
   "validate": [
     {
-      "input": "20804260081",
+      "input": "03230556846",
       "valid": true
     },
     {
-      "input": "52972620306",
+      "input": "44153072972",
       "valid": true
     },
     {
-      "input": "02598790787",
+      "input": "32824239740",
       "valid": true
     },
     {
-      "input": "99675151200",
+      "input": "38462115981",
       "valid": true
     },
     {
-      "input": "50062370916",
+      "input": "22320657079",
       "valid": true
     },
     {
-      "input": "67346828393",
+      "input": "06887245896",
       "valid": true
     },
     {
-      "input": "13986353410",
+      "input": "49303007160",
       "valid": true
     },
     {
-      "input": "19769831290",
+      "input": "42956516292",
       "valid": true
     },
     {
@@ -47,11 +47,19 @@
       "valid": false
     },
     {
-      "input": "0259879078",
+      "input": "0323055684",
       "valid": false
     },
     {
-      "input": "02598790788",
+      "input": "03230556847",
+      "valid": false
+    },
+    {
+      "input": "0688724589",
+      "valid": false
+    },
+    {
+      "input": "06887245897",
       "valid": false
     },
     {
@@ -59,91 +67,83 @@
       "valid": false
     },
     {
-      "input": "1398635341",
+      "input": "2232065707",
       "valid": false
     },
     {
-      "input": "13986353411",
+      "input": "22320657070",
       "valid": false
     },
     {
-      "input": "1976983129",
+      "input": "3282423974",
       "valid": false
     },
     {
-      "input": "19769831291",
+      "input": "32824239741",
       "valid": false
     },
     {
-      "input": "2080426008",
+      "input": "3846211598",
       "valid": false
     },
     {
-      "input": "20804260082",
+      "input": "38462115982",
       "valid": false
     },
     {
-      "input": "5006237091",
+      "input": "4295651629",
       "valid": false
     },
     {
-      "input": "50062370917",
+      "input": "42956516293",
       "valid": false
     },
     {
-      "input": "5297262030",
+      "input": "4415307297",
       "valid": false
     },
     {
-      "input": "52972620307",
+      "input": "44153072973",
       "valid": false
     },
     {
-      "input": "6734682839",
+      "input": "4930300716",
       "valid": false
     },
     {
-      "input": "67346828394",
+      "input": "49303007161",
       "valid": false
     },
     {
-      "input": "9967515120",
+      "input": "Z2320657079",
       "valid": false
     },
     {
-      "input": "99675151201",
+      "input": "Z2824239740",
       "valid": false
     },
     {
-      "input": "Z0062370916",
+      "input": "Z2956516292",
       "valid": false
     },
     {
-      "input": "Z0804260081",
+      "input": "Z3230556846",
       "valid": false
     },
     {
-      "input": "Z2598790787",
+      "input": "Z4153072972",
       "valid": false
     },
     {
-      "input": "Z2972620306",
+      "input": "Z6887245896",
       "valid": false
     },
     {
-      "input": "Z3986353410",
+      "input": "Z8462115981",
       "valid": false
     },
     {
-      "input": "Z7346828393",
-      "valid": false
-    },
-    {
-      "input": "Z9675151200",
-      "valid": false
-    },
-    {
-      "input": "Z9769831290",
+      "input": "Z9303007160",
       "valid": false
     },
     {
@@ -153,36 +153,36 @@
   ],
   "format": [
     {
-      "input": "20804260081",
-      "output": "208.04260.08-1"
+      "input": "03230556846",
+      "output": "032.30556.84-6"
     },
     {
-      "input": "52972620306",
-      "output": "529.72620.30-6"
+      "input": "44153072972",
+      "output": "441.53072.97-2"
     },
     {
-      "input": "02598790787",
-      "output": "025.98790.78-7"
+      "input": "32824239740",
+      "output": "328.24239.74-0"
     },
     {
-      "input": "99675151200",
-      "output": "996.75151.20-0"
+      "input": "38462115981",
+      "output": "384.62115.98-1"
     },
     {
-      "input": "50062370916",
-      "output": "500.62370.91-6"
+      "input": "22320657079",
+      "output": "223.20657.07-9"
     },
     {
-      "input": "67346828393",
-      "output": "673.46828.39-3"
+      "input": "06887245896",
+      "output": "068.87245.89-6"
     },
     {
-      "input": "13986353410",
-      "output": "139.86353.41-0"
+      "input": "49303007160",
+      "output": "493.03007.16-0"
     },
     {
-      "input": "19769831290",
-      "output": "197.69831.29-0"
+      "input": "42956516292",
+      "output": "429.56516.29-2"
     },
     {
       "input": "1",

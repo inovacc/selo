@@ -3,35 +3,35 @@
   "group": "D",
   "validate": [
     {
-      "input": "DCW3562",
+      "input": "LXQ2182",
       "valid": true
     },
     {
-      "input": "SMI8168",
+      "input": "ZEK1410",
       "valid": true
     },
     {
-      "input": "JUH8610",
+      "input": "APP2552",
       "valid": true
     },
     {
-      "input": "JQQ1277",
+      "input": "CZK3933",
       "valid": true
     },
     {
-      "input": "IUT3833",
+      "input": "COX0762",
       "valid": true
     },
     {
-      "input": "WOX8118",
+      "input": "BFI5436",
       "valid": true
     },
     {
-      "input": "PYA5529",
+      "input": "BUQ3873",
       "valid": true
     },
     {
-      "input": "PTH2384",
+      "input": "LSV5368",
       "valid": true
     },
     {
@@ -71,67 +71,67 @@
       "valid": false
     },
     {
-      "input": "DCW356",
+      "input": "APP255",
       "valid": false
     },
     {
-      "input": "DCWZ562",
+      "input": "APPZ552",
       "valid": false
     },
     {
-      "input": "IUT383",
+      "input": "BFI543",
       "valid": false
     },
     {
-      "input": "IUTZ833",
+      "input": "BFIZ436",
       "valid": false
     },
     {
-      "input": "JQQ127",
+      "input": "BUQ387",
       "valid": false
     },
     {
-      "input": "JQQZ277",
+      "input": "BUQZ873",
       "valid": false
     },
     {
-      "input": "JUH861",
+      "input": "COX076",
       "valid": false
     },
     {
-      "input": "JUHZ610",
+      "input": "COXZ762",
       "valid": false
     },
     {
-      "input": "PTH238",
+      "input": "CZK393",
       "valid": false
     },
     {
-      "input": "PTHZ384",
+      "input": "CZKZ933",
       "valid": false
     },
     {
-      "input": "PYA552",
+      "input": "LSV536",
       "valid": false
     },
     {
-      "input": "PYAZ529",
+      "input": "LSVZ368",
       "valid": false
     },
     {
-      "input": "SMI816",
+      "input": "LXQ218",
       "valid": false
     },
     {
-      "input": "SMIZ168",
+      "input": "LXQZ182",
       "valid": false
     },
     {
-      "input": "WOX811",
+      "input": "ZEK141",
       "valid": false
     },
     {
-      "input": "WOXZ118",
+      "input": "ZEKZ410",
       "valid": false
     },
     {
@@ -145,36 +145,36 @@
   ],
   "format": [
     {
-      "input": "DCW3562",
-      "output": "DCW-3562"
+      "input": "LXQ2182",
+      "output": "LXQ-2182"
     },
     {
-      "input": "SMI8168",
-      "output": "SMI-8168"
+      "input": "ZEK1410",
+      "output": "ZEK-1410"
     },
     {
-      "input": "JUH8610",
-      "output": "JUH-8610"
+      "input": "APP2552",
+      "output": "APP-2552"
     },
     {
-      "input": "JQQ1277",
-      "output": "JQQ-1277"
+      "input": "CZK3933",
+      "output": "CZK-3933"
     },
     {
-      "input": "IUT3833",
-      "output": "IUT-3833"
+      "input": "COX0762",
+      "output": "COX-0762"
     },
     {
-      "input": "WOX8118",
-      "output": "WOX-8118"
+      "input": "BFI5436",
+      "output": "BFI-5436"
     },
     {
-      "input": "PYA5529",
-      "output": "PYA-5529"
+      "input": "BUQ3873",
+      "output": "BUQ-3873"
     },
     {
-      "input": "PTH2384",
-      "output": "PTH-2384"
+      "input": "LSV5368",
+      "output": "LSV-5368"
     },
     {
       "input": "1",

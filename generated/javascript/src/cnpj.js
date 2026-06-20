@@ -49,3 +49,14 @@ export function formatCNPJ(value) {
   if (c.length !== 14) throw new Error("ErrInvalidLength");
   return `${c.slice(0, 2)}.${c.slice(2, 5)}.${c.slice(5, 8)}/${c.slice(8, 12)}-${c.slice(12, 14)}`;
 }
+const CNPJ_ALPHANUM = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+/** generateCNPJ returns a random valid alphanumeric CNPJ. */
+export function generateCNPJ() {
+  const base = Array.from({ length: 12 }, () =>
+    CNPJ_ALPHANUM[Math.floor(Math.random() * CNPJ_ALPHANUM.length)]
+  ).join("");
+  const dv1 = cnpjDV(base);
+  const dv2 = cnpjDV(base + String(dv1));
+  return base + dv1 + dv2;
+}
