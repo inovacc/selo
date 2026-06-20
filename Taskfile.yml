@@ -39,9 +39,25 @@ tasks:
     cmds:
       - goreleaser build --snapshot --clean
 
-  build-prod:
+  release:check:
+    desc: Validate .goreleaser.yaml (no build)
     cmds:
-      - goreleaser --snapshot --skip-publish --rm-dist
+      - goreleaser check
+
+  release:snapshot:
+    desc: Build a local snapshot release into ./dist (no publish, no tag needed)
+    cmds:
+      - goreleaser release --snapshot --clean
+
+  release:
+    desc: Publish a real release (requires a pushed v* tag + GITHUB_TOKEN)
+    cmds:
+      - goreleaser release --clean
+
+  build-prod:
+    desc: Deprecated alias for release:snapshot
+    cmds:
+      - task: release:snapshot
 
   gen:ts:
     desc: Emit the TypeScript target into generated/typescript (all 13 kinds)

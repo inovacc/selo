@@ -42,6 +42,9 @@ fabric.properties
 .scripts/
 .claude/
 
+# GoReleaser build output
+dist/
+
 # Local AI-tooling routing config (context-mode/omni/rtk/kody); not part of the
 # selo project — kept out of the public repo.
 /CLAUDE.md
