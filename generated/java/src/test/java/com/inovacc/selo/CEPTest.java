@@ -3,6 +3,7 @@ package com.inovacc.selo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,6 +53,13 @@ class CEPTest {
         for (JsonNode c : origin) {
             String input = c.get("input").asText();
             assertEquals(c.get("output").asText(), CEP.origin(input), "origin " + input);
+        }
+    }
+
+    @Test
+    void generate() {
+        for (int i = 0; i < 100; i++) {
+            assertTrue(CEP.validate(CEP.generate()), "generated value must validate");
         }
     }
 }

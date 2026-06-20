@@ -14,7 +14,8 @@ import (
 // (10->'X', 11->'0'); SP and RJ share the algorithm.
 func (e javaEmitter) renderRG(plan KindPlan) string {
 	var b strings.Builder
-	javaClassOpen(&b, "RG", "RG validates and formats a Brazilian RG (SP/RJ shared algorithm).")
+	javaClassOpen(&b, "RG", "RG validates and formats a Brazilian RG (SP/RJ shared algorithm).",
+		"java.util.Random")
 
 	dv := checkDigitNew(plan.Checks[0])
 	ufs := javaStringArray([]string{"SP", "RJ"})
@@ -104,6 +105,23 @@ func (e javaEmitter) renderRG(plan KindPlan) string {
         String s = d.toString();
         return s.substring(0, 2) + "." + s.substring(2, 5) + "." + s.substring(5, 8) + "-" + checkChar;
     }
+
+    /** generate returns a random valid SP-style RG in masked form (XX.XXX.XXX-C). */
+    public static String generate() {
+        Random rng = new Random();
+        int[] base = new int[8];
+        for (int i = 0; i < 8; i++) {
+            base[i] = rng.nextInt(10);
+        }
+        int dv = Mod11.computeDigit(Mod11.weightedSum(base, DV.weights), DV);
+        String checkChar = Mod11.encodeDigit(dv, DV);
+        StringBuilder sb = new StringBuilder();
+        for (int v : base) {
+            sb.append(v);
+        }
+        String d = sb.toString();
+        return d.substring(0, 2) + "." + d.substring(2, 5) + "." + d.substring(5, 8) + "-" + checkChar;
+    }
 }
 `, dv, ufs, javaThrow("ErrInvalidFormat"))
 
@@ -114,7 +132,8 @@ func (e javaEmitter) renderRG(plan KindPlan) string {
 // non-adjacent positions 9 and 12.
 func (e javaEmitter) renderIE(plan KindPlan) string {
 	var b strings.Builder
-	javaClassOpen(&b, "IE", "IE validates and formats a Brazilian Inscricao Estadual (SP only).")
+	javaClassOpen(&b, "IE", "IE validates and formats a Brazilian Inscricao Estadual (SP only).",
+		"java.util.Random")
 
 	dv1 := checkDigitNew(plan.Checks[0])
 	dv2 := checkDigitNew(plan.Checks[1])
@@ -167,6 +186,37 @@ func (e javaEmitter) renderIE(plan KindPlan) string {
         }
         %s
     }
+
+    private static final int[] IE_W1 = {1, 3, 4, 5, 6, 7, 8, 10};
+    private static final int[] IE_W2 = {3, 2, 10, 9, 8, 7, 6, 5, 4, 3, 2};
+
+    /** ieRightmostDV folds a weighted sum to its rightmost digit ((sum %% 11) %% 10). */
+    private static int ieRightmostDV(int[] digits, int[] weights) {
+        int sum = 0;
+        for (int i = 0; i < weights.length; i++) {
+            sum += digits[i] * weights[i];
+        }
+        return (sum %% 11) %% 10;
+    }
+
+    /** generate returns a random valid SP IE in masked form (AAA.AAA.AAA.AAA). */
+    public static String generate() {
+        Random rng = new Random();
+        int[] d = new int[12];
+        for (int i = 0; i < 8; i++) {
+            d[i] = rng.nextInt(10);
+        }
+        d[8] = ieRightmostDV(Mod11.slice(d, 0, 8), IE_W1);
+        d[9] = rng.nextInt(10);
+        d[10] = rng.nextInt(10);
+        d[11] = ieRightmostDV(Mod11.slice(d, 0, 11), IE_W2);
+        StringBuilder sb = new StringBuilder();
+        for (int v : d) {
+            sb.append(v);
+        }
+        String s = sb.toString();
+        return s.substring(0, 3) + "." + s.substring(3, 6) + "." + s.substring(6, 9) + "." + s.substring(9, 12);
+    }
 }
 `, dv1, dv2, ufs, javaThrow("ErrInvalidFormat"))
 
@@ -178,6 +228,7 @@ func (e javaEmitter) renderPlate(_ KindPlan) string {
 	var b strings.Builder
 	b.WriteString(javaHeaderComment())
 	b.WriteString("package com.inovacc.selo;\n\n")
+	b.WriteString("import java.util.Random;\n")
 	b.WriteString("import java.util.regex.Pattern;\n\n")
 	b.WriteString("/** Plate validates and formats a Brazilian vehicle plate (national + Mercosul). */\n")
 	b.WriteString("public final class Plate {\n")
@@ -204,6 +255,21 @@ func (e javaEmitter) renderPlate(_ KindPlan) string {
         }
         %s
     }
+
+    private static final String PLATE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    /** generate returns a random valid plate (national or Mercosul). */
+    public static String generate() {
+        Random rng = new Random();
+        String letters = "" + PLATE_LETTERS.charAt(rng.nextInt(26))
+                + PLATE_LETTERS.charAt(rng.nextInt(26))
+                + PLATE_LETTERS.charAt(rng.nextInt(26));
+        if (rng.nextDouble() < 0.5) {
+            return letters + "-" + rng.nextInt(10) + rng.nextInt(10) + rng.nextInt(10) + rng.nextInt(10);
+        }
+        return letters + rng.nextInt(10) + PLATE_LETTERS.charAt(rng.nextInt(26))
+                + rng.nextInt(10) + rng.nextInt(10);
+    }
 }
 `, javaThrow("ErrInvalidFormat"))
 
@@ -216,6 +282,7 @@ func (e javaEmitter) renderPIX(_ KindPlan) string {
 	var b strings.Builder
 	b.WriteString(javaHeaderComment())
 	b.WriteString("package com.inovacc.selo;\n\n")
+	b.WriteString("import java.util.Random;\n")
 	b.WriteString("import java.util.regex.Pattern;\n\n")
 	b.WriteString("/** PIX validates and formats a Brazilian PIX key (composite key). */\n")
 	b.WriteString("public final class PIX {\n")
@@ -262,6 +329,23 @@ func (e javaEmitter) renderPIX(_ KindPlan) string {
         }
         return v;
     }
+
+    /** generate returns a random valid EVP (UUIDv4) PIX key. */
+    public static String generate() {
+        Random rng = new Random();
+        int[] b = new int[16];
+        for (int i = 0; i < 16; i++) {
+            b[i] = rng.nextInt(256);
+        }
+        b[6] = (b[6] & 0x0f) | 0x40;
+        b[8] = (b[8] & 0x3f) | 0x80;
+        String[] h = new String[16];
+        for (int i = 0; i < 16; i++) {
+            h[i] = String.format("%%02x", b[i]);
+        }
+        return h[0] + h[1] + h[2] + h[3] + "-" + h[4] + h[5] + "-" + h[6] + h[7]
+                + "-" + h[8] + h[9] + "-" + h[10] + h[11] + h[12] + h[13] + h[14] + h[15];
+    }
 }
 `, javaThrow("ErrInvalidLength"))
 
@@ -272,7 +356,8 @@ func (e javaEmitter) renderPIX(_ KindPlan) string {
 // format, and UF origin from the embedded CEP_RANGES table.
 func (e javaEmitter) renderCEP(_ KindPlan) string {
 	var b strings.Builder
-	javaClassOpen(&b, "CEP", "CEP validates, formats, and resolves the UF of a Brazilian CEP.")
+	javaClassOpen(&b, "CEP", "CEP validates, formats, and resolves the UF of a Brazilian CEP.",
+		"java.util.Random")
 
 	fmt.Fprintf(&b, `    /** cepRangeFor returns the UF whose prefix range contains prefix, or null. */
     private static String cepRangeFor(int prefix) {
@@ -315,6 +400,15 @@ func (e javaEmitter) renderCEP(_ KindPlan) string {
         }
         return uf;
     }
+
+    /** generate returns a random valid 8-digit CEP (unformatted). */
+    public static String generate() {
+        Random rng = new Random();
+        Data.UFRange r = Data.CEP_RANGES.get(rng.nextInt(Data.CEP_RANGES.size()));
+        int prefix = r.from() + rng.nextInt(r.to() - r.from() + 1);
+        int suffix = rng.nextInt(100000);
+        return String.format("%%03d%%05d", prefix, suffix);
+    }
 }
 `, javaThrow("ErrInvalidLength"), javaThrow("ErrInvalidLength"), javaThrow("ErrInvalidFormat"))
 
@@ -325,7 +419,8 @@ func (e javaEmitter) renderCEP(_ KindPlan) string {
 // DDD->UF validation, mobile/landline mask, and DDD origin.
 func (e javaEmitter) renderPhone(_ KindPlan) string {
 	var b strings.Builder
-	javaClassOpen(&b, "Phone", "Phone validates, formats, and resolves the UF of a Brazilian phone number.")
+	javaClassOpen(&b, "Phone", "Phone validates, formats, and resolves the UF of a Brazilian phone number.",
+		"java.util.ArrayList", "java.util.List", "java.util.Random")
 
 	fmt.Fprintf(&b, `    /** nationalNumber strips a +55/0055 country prefix, returning the rest. */
     private static String nationalNumber(String d) {
@@ -389,6 +484,26 @@ func (e javaEmitter) renderPhone(_ KindPlan) string {
         }
         return uf;
     }
+
+    /** generate returns a random valid Brazilian phone number (national digits only). */
+    public static String generate() {
+        Random rng = new Random();
+        List<String> ddds = new ArrayList<>(Data.DDD_TO_UF.keySet());
+        String ddd = ddds.get(rng.nextInt(ddds.size()));
+        if (rng.nextDouble() < 0.5) {
+            StringBuilder sub = new StringBuilder("9");
+            for (int i = 0; i < 8; i++) {
+                sub.append(rng.nextInt(10));
+            }
+            return ddd + sub;
+        }
+        int first = 2 + rng.nextInt(4);
+        StringBuilder sub = new StringBuilder(String.valueOf(first));
+        for (int i = 0; i < 7; i++) {
+            sub.append(rng.nextInt(10));
+        }
+        return ddd + sub;
+    }
 }
 `, javaThrow("ErrInvalidLength"), javaThrow("ErrInvalidFormat"),
 		javaThrow("ErrInvalidLength"), javaThrow("ErrInvalidFormat"))
@@ -400,7 +515,8 @@ func (e javaEmitter) renderPhone(_ KindPlan) string {
 // the 8 sequence digits; DV2 over [ufDigit0, ufDigit1, dv1]; UF code 01..28.
 func (e javaEmitter) renderVoterID(plan KindPlan) string {
 	var b strings.Builder
-	javaClassOpen(&b, "VoterId", "VoterId validates, formats, and resolves the region of a Titulo Eleitoral.")
+	javaClassOpen(&b, "VoterId", "VoterId validates, formats, and resolves the region of a Titulo Eleitoral.",
+		"java.util.Random")
 
 	dv1 := checkDigitNew(plan.Checks[0])
 	dv2 := checkDigitNew(plan.Checks[1])
@@ -458,6 +574,36 @@ func (e javaEmitter) renderVoterID(plan KindPlan) string {
             %s
         }
         return name;
+    }
+
+    /** generate returns a random valid 12-digit Titulo Eleitoral. */
+    public static String generate() {
+        Random rng = new Random();
+        while (true) {
+            int[] d = new int[12];
+            for (int i = 0; i < 8; i++) {
+                d[i] = rng.nextInt(10);
+            }
+            int uf = 1 + rng.nextInt(28);
+            d[8] = uf / 10;
+            d[9] = uf %% 10;
+            StringBuilder seqSb = new StringBuilder();
+            for (int i = 0; i < 10; i++) {
+                seqSb.append(d[i]);
+            }
+            String s = seqSb.toString();
+            int dvOne = voterDV1(s);
+            d[10] = dvOne;
+            d[11] = voterDV2(s, dvOne);
+            StringBuilder sb = new StringBuilder();
+            for (int v : d) {
+                sb.append(v);
+            }
+            String out = sb.toString();
+            if (!Mod11.allEqual(out)) {
+                return out;
+            }
+        }
     }
 }
 `, dv1, dv2, javaThrow("ErrInvalidLength"),
