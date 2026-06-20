@@ -136,9 +136,6 @@ states instead of SP/RJ.
 
 ## Hardening / Tech Debt
 
-- **Per-call `SilenceUsage` inconsistency** — `runFormat`/`runOrigin` set
-  `cmd.SilenceUsage = true` per-call while `runValidate`/`runFrom` rely on the root-level
-  flag. Cosmetic; pick one approach. **Value: L, Effort: S.**
 - **Go 1.25 requirement (release note, not debt).** Adding the MCP `go-sdk` (v1.6.1)
   bumped `go.mod`'s go directive from 1.24.0 → 1.25.0 (the sdk requires it). Documented as a
   consumer-visible minimum in the README and CHANGELOG.
@@ -156,6 +153,9 @@ states instead of SP/RJ.
   install locally for parity (`go vet` is the local fallback).
 - **CLI `--uf` "not implemented" message — ✅ v1.2.0.** UF-scoped kinds (RG/IE) now surface the
   real reason instead of a bare "invalid".
+- **Per-call `SilenceUsage` unified — ✅ v1.4.0.** Removed the redundant per-call
+  `cmd.SilenceUsage = true` assignments in `detect`/`format`/`origin`; the root command's flag
+  governs (Cobra inherits it).
 
 ---
 

@@ -93,7 +93,7 @@ func TestGenUnknownKindExitsNonZero(t *testing.T) {
 // lockstep with the codegen package.
 func TestGenAllSupportedLangsKnown(t *testing.T) {
 	assert.Equal(t,
-		[]string{"ts", "js", "ruby", "java", "csharp", "python"},
+		[]string{"ts", "js", "ruby", "java", "csharp", "python", "php"},
 		codegen.SupportedLangStrings())
 }
 

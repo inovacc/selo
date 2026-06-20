@@ -141,8 +141,24 @@ tasks:
             echo "python not found; skipping pytest (generated Python still emitted)"
           fi
 
+  gen:php:
+    desc: Emit the PHP target into generated/php (all 13 kinds)
+    cmds:
+      - go run ./cmd/selo gen --lang php --kind all --out generated/php
+
+  gen:verify:php:
+    desc: Emit the PHP target, then install deps and run the PHPUnit suite (needs php + composer)
+    cmds:
+      - task: gen:php
+      - cmd: |
+          if command -v php >/dev/null 2>&1 && command -v composer >/dev/null 2>&1; then
+            cd generated/php && composer install && vendor/bin/phpunit
+          else
+            echo "php/composer not found; skipping PHPUnit (generated PHP still emitted)"
+          fi
+
   gen:all:
-    desc: Emit all six language targets
+    desc: Emit all seven language targets
     cmds:
       - task: gen:ts
       - task: gen:js
@@ -150,3 +166,4 @@ tasks:
       - task: gen:java
       - task: gen:csharp
       - task: gen:python
+      - task: gen:php

@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"math/rand/v2"
 	"strings"
 
 	sdk "github.com/inovacc/selo"
@@ -20,6 +21,7 @@ type kindFlags struct {
 	uf       string
 	count    int
 	bulk     int
+	seed     int64
 }
 
 // newKindCmd builds the Cobra subcommand for a single registered document kind.
@@ -59,6 +61,7 @@ func newKindCmd(kind sdk.Kind) *cobra.Command {
 	cmd.Flags().StringVarP(&f.from, "from", "f", "", "Validate many values from file or '-' for stdin")
 	cmd.Flags().IntVarP(&f.count, "count", "n", 0, "When generating, how many values to output")
 	cmd.Flags().IntVarP(&f.bulk, "bulk", "b", 0, "Bulk-generate this many values (implies --generate)")
+	cmd.Flags().Int64Var(&f.seed, "seed", 0, "Pin the random seed for deterministic --generate/--bulk output")
 
 	if _, ok := doc.(sdk.OriginResolver); ok {
 		cmd.Flags().StringVar(&f.origin, "origin", "", "Resolve origin/region of a single "+upper+" value")
@@ -91,7 +94,13 @@ func runKind(cmd *cobra.Command, doc sdk.Document, f *kindFlags) error {
 			n = f.bulk
 		}
 
-		return runGenerate(cmd, doc, n)
+		var seeded *rand.Rand
+		if cmd.Flags().Changed("seed") {
+			// One shared source so a batch is reproducible yet still distinct.
+			seeded = sdk.NewSeededRand(f.seed)
+		}
+
+		return runGenerate(cmd, doc, n, seeded)
 	case f.from != "":
 		return runFrom(cmd, doc, f.from)
 	case f.format != "":
@@ -130,7 +139,7 @@ func (f *kindFlags) validateCombo() error {
 	return nil
 }
 
-func runGenerate(cmd *cobra.Command, doc sdk.Document, count int) error {
+func runGenerate(cmd *cobra.Command, doc sdk.Document, count int, seeded *rand.Rand) error {
 	if count <= 0 {
 		count = 1
 	}
@@ -140,7 +149,19 @@ func runGenerate(cmd *cobra.Command, doc sdk.Document, count int) error {
 	defer func() { _ = w.Flush() }()
 
 	for i := 0; i < count; i++ {
-		value := doc.Generate()
+		var value string
+
+		if seeded != nil {
+			v, err := sdk.GenerateRand(doc.Kind(), seeded)
+			if err != nil {
+				return err
+			}
+
+			value = v
+		} else {
+			value = doc.Generate()
+		}
+
 		if formatted, err := doc.Format(value); err == nil {
 			_, _ = fmt.Fprintln(w, formatted)
 		} else {

@@ -36,20 +36,22 @@ PIX keys (CPF/CNPJ/email/phone/EVP).
   compile-time signature-parity guard.
 
 ### Synthetic data
-- **`GeneratePerson`** — one coherent fake identity carrying every document type, all valid and
-  UF-consistent; options `WithUF`, `WithSeed`/`WithRand`, `WithVehicle`, `WithCompany`, `Formatted`.
+- **`GeneratePerson`** — one coherent fake identity carrying every document type (RG and IE for SP),
+  all valid and UF-consistent; options `WithUF`, `WithSeed`/`WithRand`, `WithVehicle`, `WithCompany`,
+  `Formatted`.
 
 ### Code generation
 - **`selo gen`** (and the MCP `generate_code` tool) — emit standalone validate/format/origin/generate
-  code for all 13 kinds in **TypeScript, JavaScript, Ruby, Java, C#, and Python**, each with
+  code for all 13 kinds in **TypeScript, JavaScript, Ruby, Java, C#, Python, and PHP**, each with
   Go-produced golden vectors and a runnable test suite; a CI matrix verifies every target on its real
   toolchain ([CODEGEN.md](CODEGEN.md)).
 
 ### Deterministic generation
 - **Seedable generation** — `WithSeed(int64)` / `WithRand(*rand.Rand)` on `GeneratePerson`, the
   `RandGenerator` interface (`GenerateRand(*rand.Rand)`) on every document type, and the registry
-  `GenerateRand(kind, r)` helper; exposed at the CLI (`selo person --seed`) and MCP
-  (`generate_person` `seed`). Same seed → identical output.
+  `GenerateRand(kind, r)` helper; exposed across the CLI (`selo person --seed`, `selo <kind>
+  --generate/--bulk --seed`) and MCP (`generate_person` and `generate_document` `seed`). Same seed →
+  identical output.
 
 ## In progress
 - **Inscrição Estadual breadth** — SP shipped; MG/RJ/RS/PR + remaining UFs pending verified
@@ -59,6 +61,4 @@ PIX keys (CPF/CNPJ/email/phone/EVP).
 - **Multi-state RG** — extend RG beyond SP where per-UF check-digit rules are documented. RJ was
   removed in v1.3.0 (its algorithm differs from SP); re-adding it (or any UF) is blocked on an
   authoritative algorithm + ≥2 verifiable samples.
-- **More codegen targets** — additional languages beyond the current six (e.g. Go, Kotlin, Rust).
-- **IE field in `GeneratePerson`** — include the person's UF Inscrição Estadual once IE coverage
-  is broad enough.
+- **More codegen targets** — additional languages beyond the current seven (e.g. Go, Kotlin, Rust).

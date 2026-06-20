@@ -37,12 +37,17 @@ func TestGeneratePerson_Consistency(t *testing.T) {
 			assert.NoError(t, err)
 			assert.Equal(t, string(uf), cepUF, "cep origin")
 
-			// RG only for the implemented UF (SP).
+			// RG and IE only for the implemented UF (SP).
 			if uf == UFSP {
 				assert.NotEmpty(t, p.RG)
 				assert.Truef(t, NewRG().Validate(p.RG), "RG %q", p.RG)
+				assert.NotEmpty(t, p.IE)
+				ieOK, ieErr := NewIE().ValidateUF(p.IE, UFSP)
+				assert.NoError(t, ieErr)
+				assert.Truef(t, ieOK, "IE %q", p.IE)
 			} else {
 				assert.Empty(t, p.RG)
+				assert.Empty(t, p.IE)
 			}
 
 			// PIX keys are all valid; identity fields populated.

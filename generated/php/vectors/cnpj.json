@@ -1,0 +1,234 @@
+{
+  "kind": "cnpj",
+  "group": "C",
+  "validate": [
+    {
+      "input": "39.591.842/0000-10",
+      "valid": true
+    },
+    {
+      "input": "M5ZG2FL144JX82",
+      "valid": true
+    },
+    {
+      "input": "6XLK5BMIFF6622",
+      "valid": true
+    },
+    {
+      "input": "709AHU89379981",
+      "valid": true
+    },
+    {
+      "input": "XC1K3IDGN2C030",
+      "valid": true
+    },
+    {
+      "input": "T21FBI9312Z673",
+      "valid": true
+    },
+    {
+      "input": "EOZC0Z9103F206",
+      "valid": true
+    },
+    {
+      "input": "6CM6JMT9184832",
+      "valid": true
+    },
+    {
+      "input": "UM243Z1PKLP520",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "111111",
+      "valid": false
+    },
+    {
+      "input": "1111111",
+      "valid": false
+    },
+    {
+      "input": "11111111",
+      "valid": false
+    },
+    {
+      "input": "111111111",
+      "valid": false
+    },
+    {
+      "input": "11111111111",
+      "valid": false
+    },
+    {
+      "input": "11111111111111",
+      "valid": false
+    },
+    {
+      "input": "39.591.842/0000-1",
+      "valid": false
+    },
+    {
+      "input": "39.591.842/0000-11",
+      "valid": false
+    },
+    {
+      "input": "6CM6JMT918483",
+      "valid": false
+    },
+    {
+      "input": "6CM6JMT9184833",
+      "valid": false
+    },
+    {
+      "input": "6XLK5BMIFF662",
+      "valid": false
+    },
+    {
+      "input": "6XLK5BMIFF6623",
+      "valid": false
+    },
+    {
+      "input": "709AHU8937998",
+      "valid": false
+    },
+    {
+      "input": "709AHU89379982",
+      "valid": false
+    },
+    {
+      "input": "EOZC0Z9103F20",
+      "valid": false
+    },
+    {
+      "input": "EOZC0Z9103F207",
+      "valid": false
+    },
+    {
+      "input": "EOZCZZ9103F206",
+      "valid": false
+    },
+    {
+      "input": "M5ZG2FL144JX8",
+      "valid": false
+    },
+    {
+      "input": "M5ZG2FL144JX83",
+      "valid": false
+    },
+    {
+      "input": "MZZG2FL144JX82",
+      "valid": false
+    },
+    {
+      "input": "T21FBI9312Z67",
+      "valid": false
+    },
+    {
+      "input": "T21FBI9312Z674",
+      "valid": false
+    },
+    {
+      "input": "TZ1FBI9312Z673",
+      "valid": false
+    },
+    {
+      "input": "UM243Z1PKLP52",
+      "valid": false
+    },
+    {
+      "input": "UM243Z1PKLP521",
+      "valid": false
+    },
+    {
+      "input": "UMZ43Z1PKLP520",
+      "valid": false
+    },
+    {
+      "input": "XC1K3IDGN2C03",
+      "valid": false
+    },
+    {
+      "input": "XC1K3IDGN2C031",
+      "valid": false
+    },
+    {
+      "input": "XCZK3IDGN2C030",
+      "valid": false
+    },
+    {
+      "input": "Z09AHU89379981",
+      "valid": false
+    },
+    {
+      "input": "Z9.591.842/0000-10",
+      "valid": false
+    },
+    {
+      "input": "ZCM6JMT9184832",
+      "valid": false
+    },
+    {
+      "input": "ZXLK5BMIFF6622",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "39.591.842/0000-10",
+      "output": "39.591.842/0000-10"
+    },
+    {
+      "input": "M5ZG2FL144JX82",
+      "output": "M5.ZG2.FL1/44JX-82"
+    },
+    {
+      "input": "6XLK5BMIFF6622",
+      "output": "6X.LK5.BMI/FF66-22"
+    },
+    {
+      "input": "709AHU89379981",
+      "output": "70.9AH.U89/3799-81"
+    },
+    {
+      "input": "XC1K3IDGN2C030",
+      "output": "XC.1K3.IDG/N2C0-30"
+    },
+    {
+      "input": "T21FBI9312Z673",
+      "output": "T2.1FB.I93/12Z6-73"
+    },
+    {
+      "input": "EOZC0Z9103F206",
+      "output": "EO.ZC0.Z91/03F2-06"
+    },
+    {
+      "input": "6CM6JMT9184832",
+      "output": "6C.M6J.MT9/1848-32"
+    },
+    {
+      "input": "UM243Z1PKLP520",
+      "output": "UM.243.Z1P/KLP5-20"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalid"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

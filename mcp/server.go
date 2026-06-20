@@ -7,6 +7,7 @@ import (
 	"github.com/inovacc/selo/internal/codegen"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"log/slog"
+	"math/rand/v2"
 	"os"
 	"strings"
 )
@@ -37,6 +38,7 @@ type ValidateOutput struct {
 type GenerateInput struct {
 	Kind  string `json:"kind" jsonschema:"document kind to generate"`
 	Count int    `json:"count,omitempty" jsonschema:"how many values to generate, defaults to 1"`
+	Seed  int64  `json:"seed,omitempty" jsonschema:"pin the random seed for deterministic, reproducible output; 0 (omitted) means random"`
 }
 
 // GenerateOutput is the typed output for the generate_document tool.
@@ -91,7 +93,7 @@ type PersonOutput struct {
 
 // GenerateCodeInput is the typed input for the generate_code tool.
 type GenerateCodeInput struct {
-	Lang string `json:"lang" jsonschema:"target language: ts, js, ruby, java, csharp, or python"`
+	Lang string `json:"lang" jsonschema:"target language: ts, js, ruby, java, csharp, python, or php"`
 	Kind string `json:"kind" jsonschema:"document kind to generate code for, e.g. cpf"`
 }
 
@@ -177,9 +179,25 @@ func generateHandler(_ context.Context, _ *mcp.CallToolRequest, in GenerateInput
 		count = 1
 	}
 
+	var seeded *rand.Rand
+	if in.Seed != 0 {
+		// One shared source so a count batch is reproducible yet still distinct.
+		seeded = selo.NewSeededRand(in.Seed)
+	}
+
 	values := make([]string, 0, count)
 	for i := 0; i < count; i++ {
-		v, err := selo.Generate(selo.Kind(in.Kind))
+		var (
+			v   string
+			err error
+		)
+
+		if seeded != nil {
+			v, err = selo.GenerateRand(selo.Kind(in.Kind), seeded)
+		} else {
+			v, err = selo.Generate(selo.Kind(in.Kind))
+		}
+
 		if err != nil {
 			return errResult[GenerateOutput](err.Error())
 		}
@@ -347,7 +365,7 @@ func NewServer(version string) *mcp.Server {
 
 	mcp.AddTool(srv, &mcp.Tool{
 		Name:        "generate_code",
-		Description: "Generate validate/format/origin code (with golden vectors and a test) for a Brazilian document kind in a target language (ts, js, ruby, java, csharp, python).",
+		Description: "Generate validate/format/origin/generate code (with golden vectors and a test) for a Brazilian document kind in a target language (ts, js, ruby, java, csharp, python, php).",
 	}, generateCodeHandler)
 
 	return srv

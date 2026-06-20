@@ -115,6 +115,10 @@ func printPerson(w io.Writer, p sdk.Person) {
 		_, _ = fmt.Fprintf(w, "RG:      %s\n", p.RG)
 	}
 
+	if p.IE != "" {
+		_, _ = fmt.Fprintf(w, "IE:      %s\n", p.IE)
+	}
+
 	_, _ = fmt.Fprintf(w, "CNH:     %s\n", p.CNH)
 	_, _ = fmt.Fprintf(w, "PIS:     %s\n", p.PIS)
 	_, _ = fmt.Fprintf(w, "RENAVAM: %s\n", p.Renavam)

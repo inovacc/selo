@@ -76,7 +76,19 @@ document toolkit, and the post-build hardening (advisor plans 001–006).
 - **Test Coverage:** 94.2% total (core 92.5%, compat 94.6%, cmd/selo 89.3%, mcp 93.3%,
   internal/codegen 95.6%).
 
-## v1.5.0 — Breadth — 🔜 PLANNED
+## v1.5.0 — Seed everywhere + IE-in-Person + a 7th codegen language — 🔜 RELEASING (2026-06-20)
+- **Goal:** finish seedable generation across all surfaces, enrich synthetic identities, and widen
+  codegen reach.
+- Shipped:
+  - ✅ `--seed` on the per-kind `selo <kind> --generate/--bulk` CLI and the MCP `generate_document`
+    tool (seed previously reached only `person`/`generate_person`).
+  - ✅ Inscrição Estadual added to `GeneratePerson` for SP (UF-consistent, seedable).
+  - ✅ **PHP** codegen target (7th language) — full validate/format/origin/generate for all 13
+    kinds, Go-produced golden vectors + a PHPUnit suite (678 tests) + a CI-matrix lane.
+  - ✅ ADR-0003 documenting the multi-language code-generation architecture.
+- **Test Coverage:** ≥85% per package (maintained).
+
+## v1.6.0 — Breadth — 🔜 PLANNED
 - **Goal:** broaden UF coverage once authoritative sources are obtained.
 - Candidate scope (each gated by an authoritative algorithm + ≥2 verifiable samples):
   - Inscrição Estadual next batch (MG, RJ, RS, PR), then the remaining UFs.

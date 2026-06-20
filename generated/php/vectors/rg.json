@@ -1,0 +1,261 @@
+{
+  "kind": "rg",
+  "group": "A",
+  "validate": [
+    {
+      "input": "24.678.131-2",
+      "valid": true
+    },
+    {
+      "input": "29.465.327-2",
+      "valid": true
+    },
+    {
+      "input": "10.000.006-X",
+      "valid": true
+    },
+    {
+      "input": "71.604.783-4",
+      "valid": true
+    },
+    {
+      "input": "98.667.868-5",
+      "valid": true
+    },
+    {
+      "input": "52.472.777-6",
+      "valid": true
+    },
+    {
+      "input": "08.249.059-4",
+      "valid": true
+    },
+    {
+      "input": "00.018.665-X",
+      "valid": true
+    },
+    {
+      "input": "06.584.173-6",
+      "valid": true
+    },
+    {
+      "input": "45.292.248-3",
+      "valid": true
+    },
+    {
+      "input": "64.602.669-0",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "00.018.665-",
+      "valid": false
+    },
+    {
+      "input": "00.018.666-X",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "06.584.173-",
+      "valid": false
+    },
+    {
+      "input": "06.584.173-7",
+      "valid": false
+    },
+    {
+      "input": "08.249.059-",
+      "valid": false
+    },
+    {
+      "input": "08.249.059-5",
+      "valid": false
+    },
+    {
+      "input": "10.000.006-",
+      "valid": false
+    },
+    {
+      "input": "10.000.007-X",
+      "valid": false
+    },
+    {
+      "input": "11111111",
+      "valid": false
+    },
+    {
+      "input": "111111111",
+      "valid": false
+    },
+    {
+      "input": "24.678.131-",
+      "valid": false
+    },
+    {
+      "input": "24.678.131-3",
+      "valid": false
+    },
+    {
+      "input": "29.465.327-",
+      "valid": false
+    },
+    {
+      "input": "29.465.327-3",
+      "valid": false
+    },
+    {
+      "input": "45.292.248-",
+      "valid": false
+    },
+    {
+      "input": "45.292.248-4",
+      "valid": false
+    },
+    {
+      "input": "52.472.777-",
+      "valid": false
+    },
+    {
+      "input": "52.472.777-7",
+      "valid": false
+    },
+    {
+      "input": "64.602.669-",
+      "valid": false
+    },
+    {
+      "input": "64.602.669-1",
+      "valid": false
+    },
+    {
+      "input": "71.604.783-",
+      "valid": false
+    },
+    {
+      "input": "71.604.783-5",
+      "valid": false
+    },
+    {
+      "input": "98.667.868-",
+      "valid": false
+    },
+    {
+      "input": "98.667.868-6",
+      "valid": false
+    },
+    {
+      "input": "Z0.000.006-X",
+      "valid": false
+    },
+    {
+      "input": "Z0.018.665-X",
+      "valid": false
+    },
+    {
+      "input": "Z1.604.783-4",
+      "valid": false
+    },
+    {
+      "input": "Z2.472.777-6",
+      "valid": false
+    },
+    {
+      "input": "Z4.602.669-0",
+      "valid": false
+    },
+    {
+      "input": "Z4.678.131-2",
+      "valid": false
+    },
+    {
+      "input": "Z5.292.248-3",
+      "valid": false
+    },
+    {
+      "input": "Z6.584.173-6",
+      "valid": false
+    },
+    {
+      "input": "Z8.249.059-4",
+      "valid": false
+    },
+    {
+      "input": "Z8.667.868-5",
+      "valid": false
+    },
+    {
+      "input": "Z9.465.327-2",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "24.678.131-2",
+      "output": "24.678.131-2"
+    },
+    {
+      "input": "29.465.327-2",
+      "output": "29.465.327-2"
+    },
+    {
+      "input": "10.000.006-X",
+      "output": "10.000.006-X"
+    },
+    {
+      "input": "71.604.783-4",
+      "output": "71.604.783-4"
+    },
+    {
+      "input": "98.667.868-5",
+      "output": "98.667.868-5"
+    },
+    {
+      "input": "52.472.777-6",
+      "output": "52.472.777-6"
+    },
+    {
+      "input": "08.249.059-4",
+      "output": "08.249.059-4"
+    },
+    {
+      "input": "00.018.665-X",
+      "output": "00.018.665-X"
+    },
+    {
+      "input": "06.584.173-6",
+      "output": "06.584.173-6"
+    },
+    {
+      "input": "45.292.248-3",
+      "output": "45.292.248-3"
+    },
+    {
+      "input": "64.602.669-0",
+      "output": "64.602.669-0"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidFormat"
+    }
+  ],
+  "ufScoped": true,
+  "ufs": [
+    "SP"
+  ],
+  "generateRoundTrip": 100
+}

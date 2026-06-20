@@ -146,14 +146,14 @@ Logs go to stderr; the protocol runs on stdin/stdout.
 
 Generate validators in other languages from the *same verified algorithms*. `selo gen` emits
 **validate / format / origin / generate** code for all 13 kinds in **TypeScript, JavaScript, Ruby,
-Java, C#, and Python**, each shipped with Go-produced golden test vectors and a runnable test suite:
+Java, C#, Python, and PHP**, each shipped with Go-produced golden test vectors and a runnable test suite:
 
 ```bash
 selo gen --lang ts     --kind cpf --out ./out      # one kind, one language
 selo gen --lang python --kind all --out ./generated/python   # all 13 kinds
 ```
 
-Supported languages: `ts`, `js`, `ruby`, `java`, `csharp`, `python`. A CI matrix runs each target's golden
+Supported languages: `ts`, `js`, `ruby`, `java`, `csharp`, `python`, `php`. A CI matrix runs each target's golden
 vectors on real toolchains, so a wrong port fails its own tests. The MCP `generate_code` tool
 returns the same file set. Full details in [`docs/CODEGEN.md`](docs/CODEGEN.md).
 

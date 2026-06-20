@@ -1,0 +1,184 @@
+{
+  "kind": "phone",
+  "group": "F",
+  "validate": [
+    {
+      "input": "4542744275",
+      "valid": true
+    },
+    {
+      "input": "8927287509",
+      "valid": true
+    },
+    {
+      "input": "9439364538",
+      "valid": true
+    },
+    {
+      "input": "88970513099",
+      "valid": true
+    },
+    {
+      "input": "43966029827",
+      "valid": true
+    },
+    {
+      "input": "86912758633",
+      "valid": true
+    },
+    {
+      "input": "18966926112",
+      "valid": true
+    },
+    {
+      "input": "4626478773",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "(00) 1234-5678",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "0099999999",
+      "valid": false
+    },
+    {
+      "input": "11111111111",
+      "valid": false
+    },
+    {
+      "input": "11912345",
+      "valid": false
+    },
+    {
+      "input": "454274427",
+      "valid": false
+    },
+    {
+      "input": "462647877",
+      "valid": false
+    },
+    {
+      "input": "892728750",
+      "valid": false
+    },
+    {
+      "input": "943936453",
+      "valid": false
+    },
+    {
+      "input": "999999999999",
+      "valid": false
+    },
+    {
+      "input": "Z3966029827",
+      "valid": false
+    },
+    {
+      "input": "Z439364538",
+      "valid": false
+    },
+    {
+      "input": "Z542744275",
+      "valid": false
+    },
+    {
+      "input": "Z626478773",
+      "valid": false
+    },
+    {
+      "input": "Z927287509",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "4542744275",
+      "output": "(45) 4274-4275"
+    },
+    {
+      "input": "8927287509",
+      "output": "(89) 2728-7509"
+    },
+    {
+      "input": "9439364538",
+      "output": "(94) 3936-4538"
+    },
+    {
+      "input": "88970513099",
+      "output": "(88) 97051-3099"
+    },
+    {
+      "input": "43966029827",
+      "output": "(43) 96602-9827"
+    },
+    {
+      "input": "86912758633",
+      "output": "(86) 91275-8633"
+    },
+    {
+      "input": "18966926112",
+      "output": "(18) 96692-6112"
+    },
+    {
+      "input": "4626478773",
+      "output": "(46) 2647-8773"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidLength"
+    }
+  ],
+  "origin": [
+    {
+      "input": "4542744275",
+      "output": "PR"
+    },
+    {
+      "input": "8927287509",
+      "output": "PI"
+    },
+    {
+      "input": "9439364538",
+      "output": "PA"
+    },
+    {
+      "input": "88970513099",
+      "output": "CE"
+    },
+    {
+      "input": "43966029827",
+      "output": "PR"
+    },
+    {
+      "input": "86912758633",
+      "output": "PI"
+    },
+    {
+      "input": "18966926112",
+      "output": "SP"
+    },
+    {
+      "input": "4626478773",
+      "output": "PR"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

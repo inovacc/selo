@@ -16,6 +16,7 @@ type Person struct {
 	UF      UF       `json:"uf"`
 	CPF     string   `json:"cpf"`
 	RG      string   `json:"rg,omitempty"` // only when UF is SP (the implemented RG algorithm); else ""
+	IE      string   `json:"ie,omitempty"` // Inscrição Estadual; only when the UF has a verified IE algorithm (currently SP)
 	CNH     string   `json:"cnh"`
 	PIS     string   `json:"pis"`
 	Renavam string   `json:"renavam"`
@@ -176,6 +177,14 @@ func GeneratePerson(opts ...PersonOption) Person {
 		rg = NewRG().GenerateRand(r)
 	}
 
+	// IE is UF-scoped; populate it only when the person's UF has a verified IE
+	// algorithm (currently SP), generating for that specific UF so it stays
+	// UF-consistent even as more UFs are added.
+	ie := ""
+	if algo, ok := ieTable[uf]; ok && algo.generateRand != nil {
+		ie = algo.generateRand(r)
+	}
+
 	pix := []string{
 		cpf,                       // CPF key
 		"+55" + onlyDigits(phone), // phone key (E.164)
@@ -185,7 +194,7 @@ func GeneratePerson(opts ...PersonOption) Person {
 
 	p := Person{
 		Name: name, Email: email, UF: uf,
-		CPF: cpf, RG: rg, CNH: cnh, PIS: pis, Renavam: renavam,
+		CPF: cpf, RG: rg, IE: ie, CNH: cnh, PIS: pis, Renavam: renavam,
 		VoterID: voter, CNS: cns, CEP: cep, Phone: phone, PIXKeys: pix,
 	}
 

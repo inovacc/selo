@@ -1,0 +1,240 @@
+{
+  "kind": "voter_id",
+  "group": "F",
+  "validate": [
+    {
+      "input": "869782882666",
+      "valid": true
+    },
+    {
+      "input": "201109532003",
+      "valid": true
+    },
+    {
+      "input": "375109711341",
+      "valid": true
+    },
+    {
+      "input": "318683711074",
+      "valid": true
+    },
+    {
+      "input": "691391482631",
+      "valid": true
+    },
+    {
+      "input": "326442002364",
+      "valid": true
+    },
+    {
+      "input": "287953971210",
+      "valid": true
+    },
+    {
+      "input": "080811082160",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "08081108216",
+      "valid": false
+    },
+    {
+      "input": "080811082161",
+      "valid": false
+    },
+    {
+      "input": "111111111111",
+      "valid": false
+    },
+    {
+      "input": "12345678",
+      "valid": false
+    },
+    {
+      "input": "1234567890123",
+      "valid": false
+    },
+    {
+      "input": "20110953200",
+      "valid": false
+    },
+    {
+      "input": "201109532004",
+      "valid": false
+    },
+    {
+      "input": "28795397121",
+      "valid": false
+    },
+    {
+      "input": "287953971211",
+      "valid": false
+    },
+    {
+      "input": "31868371107",
+      "valid": false
+    },
+    {
+      "input": "318683711075",
+      "valid": false
+    },
+    {
+      "input": "32644200236",
+      "valid": false
+    },
+    {
+      "input": "326442002365",
+      "valid": false
+    },
+    {
+      "input": "37510971134",
+      "valid": false
+    },
+    {
+      "input": "375109711342",
+      "valid": false
+    },
+    {
+      "input": "69139148263",
+      "valid": false
+    },
+    {
+      "input": "691391482632",
+      "valid": false
+    },
+    {
+      "input": "86978288266",
+      "valid": false
+    },
+    {
+      "input": "869782882667",
+      "valid": false
+    },
+    {
+      "input": "Z01109532003",
+      "valid": false
+    },
+    {
+      "input": "Z18683711074",
+      "valid": false
+    },
+    {
+      "input": "Z26442002364",
+      "valid": false
+    },
+    {
+      "input": "Z69782882666",
+      "valid": false
+    },
+    {
+      "input": "Z75109711341",
+      "valid": false
+    },
+    {
+      "input": "Z80811082160",
+      "valid": false
+    },
+    {
+      "input": "Z87953971210",
+      "valid": false
+    },
+    {
+      "input": "Z91391482631",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "869782882666",
+      "output": "8697 8288 2666"
+    },
+    {
+      "input": "201109532003",
+      "output": "2011 0953 2003"
+    },
+    {
+      "input": "375109711341",
+      "output": "3751 0971 1341"
+    },
+    {
+      "input": "318683711074",
+      "output": "3186 8371 1074"
+    },
+    {
+      "input": "691391482631",
+      "output": "6913 9148 2631"
+    },
+    {
+      "input": "326442002364",
+      "output": "3264 4200 2364"
+    },
+    {
+      "input": "287953971210",
+      "output": "2879 5397 1210"
+    },
+    {
+      "input": "080811082160",
+      "output": "0808 1108 2160"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalidLength"
+    }
+  ],
+  "origin": [
+    {
+      "input": "869782882666",
+      "output": "Roraima"
+    },
+    {
+      "input": "201109532003",
+      "output": "Distrito Federal"
+    },
+    {
+      "input": "375109711341",
+      "output": "Pará"
+    },
+    {
+      "input": "318683711074",
+      "output": "Goiás"
+    },
+    {
+      "input": "691391482631",
+      "output": "Roraima"
+    },
+    {
+      "input": "326442002364",
+      "output": "Rondônia"
+    },
+    {
+      "input": "287953971210",
+      "output": "Paraíba"
+    },
+    {
+      "input": "080811082160",
+      "output": "Sergipe"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}

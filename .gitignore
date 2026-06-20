@@ -56,3 +56,6 @@ generated/**/__pycache__/
 generated/**/*.egg-info/
 generated/**/.pytest_cache/
 generated/**/.venv/
+generated/**/vendor/
+generated/**/composer.lock
+generated/**/.phpunit.result.cache

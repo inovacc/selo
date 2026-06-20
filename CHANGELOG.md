@@ -8,6 +8,27 @@ All notable changes to this project are documented here. The format is based on
 > (module `github.com/inovacc/selo`) in the 1.1.0 line. The `v1.0.0` tag predates the rename and
 > points at the original `brdoc` code; `github.com/inovacc/selo` is first installable at **v1.1.0**.
 
+## [1.5.0] - 2026-06-20
+
+Seedable generation across every generate surface, Inscrição Estadual in synthetic people, and a
+seventh code-generation target (PHP).
+
+### Added
+- **PHP code-generation target (7th language).** `selo gen --lang php` emits
+  validate / format / origin / generate for all 13 kinds as a PSR-4 Composer package with a
+  Go-produced golden-vector PHPUnit suite (678 tests), verified by a CI-matrix lane on a real PHP
+  toolchain. The MCP `generate_code` tool now offers `php`. See [CODEGEN.md](docs/CODEGEN.md).
+- **`--seed` on per-kind generation.** `selo <kind> --generate` / `--bulk --seed N` and the MCP
+  `generate_document` `seed` field now produce deterministic, reproducible output (a batch shares one
+  seeded source — reproducible yet still distinct), completing the seedable surface begun in v1.4.0.
+- **Inscrição Estadual in `GeneratePerson`.** A person whose UF has a verified IE algorithm
+  (currently SP) now carries a UF-consistent `IE` field (seedable like the rest of the identity).
+- **ADR-0003** documenting the multi-language code-generation architecture.
+
+### Changed
+- Docs reconciled with the above (ROADMAP / MILESTONES / FEATURES / BACKLOG / ISSUES); the resolved
+  `SilenceUsage` item moved to BACKLOG "Resolved".
+
 ## [1.4.0] - 2026-06-19
 
 Seed exposed at the CLI/MCP surfaces, a sixth code-generation target (Python), and CLI/doc polish.
@@ -177,6 +198,7 @@ Superseded by the `selo` rebrand in 1.1.0. See the entries below for the early h
 - `Fixed` for any bug fixes
 - `Security` in case of vulnerabilities
 
+[1.5.0]: https://github.com/inovacc/selo/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/inovacc/selo/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/inovacc/selo/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/inovacc/selo/compare/v1.1.0...v1.2.0

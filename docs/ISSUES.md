@@ -34,8 +34,8 @@ The default `Generate()` / `GeneratePerson()` paths use `math/rand/v2`'s global,
 source. For reproducible fixtures use the seeded API (shipped v1.3.0): `GeneratePerson(WithSeed(n))`
 or `WithRand(r)`, the registry `GenerateRand(kind, r)` helper, and the `RandGenerator` interface
 (`GenerateRand(*rand.Rand)`) on every document type — the same seed yields identical output. The
-same seed is available at the CLI (`selo person --seed N`) and MCP (`generate_person` `seed`)
-surfaces (v1.4.0).
+same seed is available across the CLI (`selo person --seed`, `selo <kind> --generate/--bulk --seed`)
+and MCP (`generate_person`, `generate_document` `seed`) surfaces (v1.4.0–v1.5.0).
 
 ### `Generate` returns masked output
 For consistency with the existing RG/IE generators, `Generate()` returns the canonical masked form

@@ -39,8 +39,8 @@ per-UF algorithms plus ≥2 verifiable samples.
 
 ## Phase 5 — Synthetic data (GenPerson) — ✅ COMPLETE
 - [COMPLETE] `GeneratePerson` — one coherent fake identity carrying every document type, all
-  valid and sharing a UF (CPF region, voter-ID code, phone DDD, CEP agree). Options:
-  `WithUF`, `WithVehicle`, `WithCompany`.
+  valid and sharing a UF (CPF region, voter-ID code, phone DDD, CEP agree; RG and IE for SP).
+  Options: `WithUF`, `WithSeed`/`WithRand`, `WithVehicle`, `WithCompany`, `Formatted`.
 
 ## Phase 6 — Breadth & polish — 🚧 IN PROGRESS
 - [COMPLETE] Repo hygiene: `.gitattributes` enforces LF repo-wide (settled the CRLF/CI noise).
@@ -51,9 +51,10 @@ per-UF algorithms plus ≥2 verifiable samples.
 - [BLOCKED] **Multi-state RG** — RJ was demoted to `ErrUFNotImplemented` in v1.3.0 (its
   check-digit algorithm differs from SP); re-adding RJ or any other UF is blocked on an
   authoritative per-UF algorithm plus ≥2 verifiable samples.
-- [COMPLETE] **Reproducible `GenPerson`** — `WithSeed(int64)` / `WithRand(*rand.Rand)` shipped in
-  v1.3.0 for deterministic fixtures; `--seed` reaches the CLI (`selo person`) and MCP
-  (`generate_person`) surfaces in v1.4.0.
+- [COMPLETE] **Reproducible generation** — `WithSeed(int64)` / `WithRand(*rand.Rand)` and the
+  `RandGenerator` interface shipped in v1.3.0; `--seed` reaches `selo person` + `generate_person`
+  (v1.4.0) and the per-kind `selo <kind> --generate/--bulk` + the `generate_document` MCP tool
+  (v1.5.0).
 - [PLANNED] Remove the deprecated `ValidateDocument` after 2026-07-18 (see BACKLOG).
 
 ## Phase 7 — Multi-language code generation — ✅ COMPLETE
@@ -61,11 +62,13 @@ per-UF algorithms plus ≥2 verifiable samples.
   JavaScript, Ruby, Java, and C#**, each with Go-produced golden vectors and a runnable test suite.
 - [COMPLETE] `internal/codegen` framework (spec + golden vectors + data tables + per-language
   emitters), the `selo gen` CLI, and the MCP `generate_code` tool.
-- [COMPLETE] CI matrix (`codegen.yml`) verifies every target on real toolchains (all 5 green).
-- [COMPLETE] Cross-language `generate()` parity — all 5 targets emit `generate<Kind>()` for every
+- [COMPLETE] CI matrix (`codegen.yml`) verifies every target on real toolchains (all 7 green).
+- [COMPLETE] Cross-language `generate()` parity — all targets emit `generate<Kind>()` for every
   one of the 13 kinds with generate→validate round-trip tests, CI-matrix verified (v1.3.0).
 - [COMPLETE] **Python** target (6th language) — validate/format/origin/generate for all 13 kinds,
   Go-produced golden vectors + a pytest suite (686 tests) + a CI-matrix lane (v1.4.0).
+- [COMPLETE] **PHP** target (7th language) — full parity for all 13 kinds, golden vectors + a
+  PHPUnit suite (678 tests) + a CI-matrix lane (v1.5.0).
 - See [CODEGEN.md](CODEGEN.md).
 
 ## Test Coverage

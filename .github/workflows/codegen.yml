@@ -26,7 +26,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        lang: [ts, js, ruby, java, csharp, python]
+        lang: [ts, js, ruby, java, csharp, python, php]
     steps:
       - uses: actions/checkout@v4
 
@@ -61,6 +61,12 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Set up PHP
+        if: ${{ matrix.lang == 'php' }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
       - name: Verify TypeScript vectors
         if: ${{ matrix.lang == 'ts' }}
         working-directory: generated/typescript
@@ -93,3 +99,8 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e . pytest
           python -m pytest -q
+
+      - name: Verify PHP vectors
+        if: ${{ matrix.lang == 'php' }}
+        working-directory: generated/php
+        run: composer install && vendor/bin/phpunit

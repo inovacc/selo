@@ -1,0 +1,300 @@
+{
+  "kind": "cpf",
+  "group": "A",
+  "validate": [
+    {
+      "input": "529.982.247-25",
+      "valid": true
+    },
+    {
+      "input": "52998224725",
+      "valid": true
+    },
+    {
+      "input": "12345678909",
+      "valid": true
+    },
+    {
+      "input": "23798500460",
+      "valid": true
+    },
+    {
+      "input": "01934031020",
+      "valid": true
+    },
+    {
+      "input": "66924019927",
+      "valid": true
+    },
+    {
+      "input": "49937593204",
+      "valid": true
+    },
+    {
+      "input": "43217774884",
+      "valid": true
+    },
+    {
+      "input": "94425075323",
+      "valid": true
+    },
+    {
+      "input": "90052471004",
+      "valid": true
+    },
+    {
+      "input": "60881468266",
+      "valid": true
+    },
+    {
+      "input": "!!!!!!!!!!!",
+      "valid": false
+    },
+    {
+      "input": "0",
+      "valid": false
+    },
+    {
+      "input": "000000000000000000",
+      "valid": false
+    },
+    {
+      "input": "0193403102",
+      "valid": false
+    },
+    {
+      "input": "01934031021",
+      "valid": false
+    },
+    {
+      "input": "11111111111",
+      "valid": false
+    },
+    {
+      "input": "1234567890",
+      "valid": false
+    },
+    {
+      "input": "12345678900",
+      "valid": false
+    },
+    {
+      "input": "2379850046",
+      "valid": false
+    },
+    {
+      "input": "23798500461",
+      "valid": false
+    },
+    {
+      "input": "4321777488",
+      "valid": false
+    },
+    {
+      "input": "43217774885",
+      "valid": false
+    },
+    {
+      "input": "4993759320",
+      "valid": false
+    },
+    {
+      "input": "49937593205",
+      "valid": false
+    },
+    {
+      "input": "529.982.247-2",
+      "valid": false
+    },
+    {
+      "input": "529.982.247-26",
+      "valid": false
+    },
+    {
+      "input": "5299822472",
+      "valid": false
+    },
+    {
+      "input": "52998224726",
+      "valid": false
+    },
+    {
+      "input": "6088146826",
+      "valid": false
+    },
+    {
+      "input": "60881468267",
+      "valid": false
+    },
+    {
+      "input": "6692401992",
+      "valid": false
+    },
+    {
+      "input": "66924019928",
+      "valid": false
+    },
+    {
+      "input": "9005247100",
+      "valid": false
+    },
+    {
+      "input": "90052471005",
+      "valid": false
+    },
+    {
+      "input": "9442507532",
+      "valid": false
+    },
+    {
+      "input": "94425075324",
+      "valid": false
+    },
+    {
+      "input": "Z0052471004",
+      "valid": false
+    },
+    {
+      "input": "Z0881468266",
+      "valid": false
+    },
+    {
+      "input": "Z1934031020",
+      "valid": false
+    },
+    {
+      "input": "Z2345678909",
+      "valid": false
+    },
+    {
+      "input": "Z29.982.247-25",
+      "valid": false
+    },
+    {
+      "input": "Z2998224725",
+      "valid": false
+    },
+    {
+      "input": "Z3217774884",
+      "valid": false
+    },
+    {
+      "input": "Z3798500460",
+      "valid": false
+    },
+    {
+      "input": "Z4425075323",
+      "valid": false
+    },
+    {
+      "input": "Z6924019927",
+      "valid": false
+    },
+    {
+      "input": "Z9937593204",
+      "valid": false
+    },
+    {
+      "input": "abc",
+      "valid": false
+    }
+  ],
+  "format": [
+    {
+      "input": "529.982.247-25",
+      "output": "529.982.247-25"
+    },
+    {
+      "input": "52998224725",
+      "output": "529.982.247-25"
+    },
+    {
+      "input": "12345678909",
+      "output": "123.456.789-09"
+    },
+    {
+      "input": "23798500460",
+      "output": "237.985.004-60"
+    },
+    {
+      "input": "01934031020",
+      "output": "019.340.310-20"
+    },
+    {
+      "input": "66924019927",
+      "output": "669.240.199-27"
+    },
+    {
+      "input": "49937593204",
+      "output": "499.375.932-04"
+    },
+    {
+      "input": "43217774884",
+      "output": "432.177.748-84"
+    },
+    {
+      "input": "94425075323",
+      "output": "944.250.753-23"
+    },
+    {
+      "input": "90052471004",
+      "output": "900.524.710-04"
+    },
+    {
+      "input": "60881468266",
+      "output": "608.814.682-66"
+    },
+    {
+      "input": "1",
+      "error": "ErrInvalid"
+    }
+  ],
+  "origin": [
+    {
+      "input": "529.982.247-25",
+      "output": "Rio de Janeiro and Espírito Santo"
+    },
+    {
+      "input": "52998224725",
+      "output": "Rio de Janeiro and Espírito Santo"
+    },
+    {
+      "input": "12345678909",
+      "output": "Paraná and Santa Catarina"
+    },
+    {
+      "input": "23798500460",
+      "output": "Pernambuco, Rio Grande do Norte, Paraíba, and Alagoas"
+    },
+    {
+      "input": "01934031020",
+      "output": "Rio Grande do Sul"
+    },
+    {
+      "input": "66924019927",
+      "output": "Paraná and Santa Catarina"
+    },
+    {
+      "input": "49937593204",
+      "output": "Pará, Amazonas, Acre, Amapá, Rondônia, and Roraima"
+    },
+    {
+      "input": "43217774884",
+      "output": "São Paulo"
+    },
+    {
+      "input": "94425075323",
+      "output": "Ceará, Maranhão, and Piauí"
+    },
+    {
+      "input": "90052471004",
+      "output": "Rio Grande do Sul"
+    },
+    {
+      "input": "60881468266",
+      "output": "Pará, Amazonas, Acre, Amapá, Rondônia, and Roraima"
+    }
+  ],
+  "ufScoped": false,
+  "generateRoundTrip": 100
+}
