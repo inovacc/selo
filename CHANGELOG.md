@@ -8,9 +8,12 @@ All notable changes to this project are documented here. The format is based on
 > (module `github.com/inovacc/selo`) in the 1.1.0 line. The `v1.0.0` tag predates the rename and
 > points at the original `brdoc` code; `github.com/inovacc/selo` is first installable at **v1.1.0**.
 
-## [Unreleased]
+## [1.3.0] - 2026-06-19
 
 ### Added
+- **Cross-language `generate()` parity.** Every code-generation target (TypeScript, JavaScript,
+  Ruby, Java, C#) now emits a `generate<Kind>()` for all 13 kinds alongside validate/format/origin,
+  each with a generate→validate round-trip test verified by the CI matrix on real toolchains.
 - **Seedable / deterministic generation.** A `RandGenerator` capability interface
   (`GenerateRand(r *math/rand/v2.Rand) string`) implemented by every document type, a registry
   `GenerateRand(kind, r)` helper, and `GeneratePerson` `WithSeed(int64)` / `WithRand(*rand.Rand)`
@@ -150,6 +153,7 @@ Superseded by the `selo` rebrand in 1.1.0. See the entries below for the early h
 - `Fixed` for any bug fixes
 - `Security` in case of vulnerabilities
 
+[1.3.0]: https://github.com/inovacc/selo/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/inovacc/selo/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/inovacc/selo/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/inovacc/selo/releases/tag/v1.0.0
